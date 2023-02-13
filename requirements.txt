@@ -1,0 +1,6 @@
+requests==2.26.0
+uvicorn==0.20.0
+fastapi==0.63.0
+fastapi-utils==0.2.1
+python-dotenv==0.21.1
+pytz==2022.7.1
