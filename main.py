@@ -13,6 +13,7 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Re
 
 import lib_data
 import lib_json
+import lib_rpc
 from lib_logger import logger
 
 load_dotenv()
@@ -38,6 +39,13 @@ def update_data():
 @app.get('/api/v1/data', tags=[])
 def get_jsonfile_data():
     return lib_json.get_jsonfile_data('jsondata.json')
+
+@app.on_event("startup")
+@repeat_every(seconds=15)
+def rpc_getinfo():
+    try:
+        rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport)
+        logger.info(rpc.getinfo())
 
 
 if __name__ == '__main__':
