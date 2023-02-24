@@ -1,0 +1,27 @@
+{
+    "KIP0001": {
+        "categories": {
+            "aur_poll" : {
+                "title": "Proposed changes to Komodo's Active User Reward?",
+                "options": {
+                    "Yes": {
+                        "address": "RG3ZbRGyeUjSrJ2NUSqjXxeX1a6UB43bBo",
+                        "qr_code": "",
+                        "text": "Reduce the active user reward amount to 0.01% APR in order to decrease the KMD total supply over time."
+                    },
+                    "No": {
+                        "address": "RPxCpK4fKakagFqg58gbZpmcenwb9J2mZb",
+                        "qr_code": "",
+                        "text": "Keep the status quo (Users who currently hold at least 10 KMD in a non-custodial wallet can claim the 5% active user reward)."
+                    }
+                }
+            }
+        },
+        "snapshot_at": 1678147199,
+        "airdrop_at": 1678147199,
+        "starts_at": 1678147199,
+        "ends_at": 1679356799,
+        "first_overtime_block": null,
+        "final_ntx_block": null
+    }
+}
