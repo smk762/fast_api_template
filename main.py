@@ -159,7 +159,7 @@ def rpc_getinfo():
     for i in polls:
         if abs(polls[i]["ends_at"] - time.time()) < 120:
             try:
-                rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport)
+                rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport, rpcip)
                 info = rpc.getinfo()
                 if info["tiptime"] > polls[i]["ends_at"] and not polls[i]["first_overtime_block"]:
                     polls[i]["first_overtime_block"] = info["longestchain"]
@@ -178,7 +178,7 @@ def rpc_getinfo():
 @repeat_every(seconds=60)
 def rpc_getinfo():
     try:
-        rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport)
+        rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport, rpcip)
         logger.info(rpc.getinfo())
     except:
         logger.warning("RPC not responding!")    
