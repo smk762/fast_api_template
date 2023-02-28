@@ -16,6 +16,8 @@ from lib_logger import logger
 load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
+RPCIP = os.getenv("KMD_RPCIP")
+API_PORT = int(os.getenv("FASTAPI_PORT"))
 
 
 tags_metadata = []
@@ -186,6 +188,6 @@ def rpc_getinfo():
 
 if __name__ == '__main__':
     if SSL_KEY != "" and SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=8080, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT, reload=True)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT, reload=True)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, reload=True)
