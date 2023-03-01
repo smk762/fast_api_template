@@ -21,8 +21,20 @@ API_PORT = int(os.getenv("FASTAPI_PORT"))
 
 
 tags_metadata = []
+cors_origins = [
+    "http://localhost:3000",
+    "https://vote.komodoplatform.com",
+    "http://vote.komodoplatform.com"
+]
 app = FastAPI(openapi_tags=tags_metadata)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 @repeat_every(seconds=15)
