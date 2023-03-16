@@ -23,6 +23,19 @@ SSL_CERT = os.getenv("SSL_CERT")
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
 
+cors_origins = [
+    "http://localhost:3000",
+    "https://vote.komodoplatform.com",
+    "http://vote.komodoplatform.com"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 @repeat_every(seconds=15)
