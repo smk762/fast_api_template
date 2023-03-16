@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
+import lib_sqlite
 import lib_data
 import lib_json
 from lib_logger import logger
@@ -18,21 +19,18 @@ from lib_logger import logger
 load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
-
+API_PORT = os.getenv("API_PORT")
+if not API_PORT:
+    API_PORT = 8999
 
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
 
 
 @app.on_event("startup")
-@repeat_every(seconds=15)
+@repeat_every(seconds=600)
 def update_data():
-    try:
-        data = lib_data.get_data()
-        lib_json.write_jsonfile_data('jsondata.json', data)
-    except Exception as e:
-        logger.info(f"Error in [update_data]: {e}")
-        return {"Error: ": str(e)}
+    update_electrums_status()
 
 
 @app.get('/api/v1/data', tags=[])
@@ -40,8 +38,15 @@ def get_jsonfile_data():
     return lib_json.get_jsonfile_data('jsondata.json')
 
 
+@app.get('/api/v1/electrums_status', tags=[])
+def get_electrums_status():
+    data = lib_sqlite.get_electrum_status_data()
+    resp = [{k: item[k] for k in item.keys()} for item in data]
+    return resp
+
+
 if __name__ == '__main__':
     if SSL_KEY != "" and SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=8080, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=8080)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT)
