@@ -148,7 +148,9 @@ if __name__ == '__main__':
         if sys.argv[1] == "create_tables":
             create_tables()
     else:
-        conn = get_sqlite("electrum_status.db")
-        cursor = conn.cursor()
+        data = get_electrum_status_data()
+        resp = [{k: item[k] for k in item.keys()} for item in data]
+        for row in resp:
+            print(str(row))
 
 
