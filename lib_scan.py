@@ -58,7 +58,10 @@ def thread_electrum(coin, url, port, ssl, method, params):
             update_electrum_row_failed(row)
             #print(f"<<<< Failed: {row}")
         elif isinstance(resp, dict):
-            resp = json.dumps(resp)
+            if "result" in resp:
+                resp = json.dumps(resp["result"])
+            else:
+                resp = json.dumps(resp)
             row = (coin, f"{url}:{port}", ssl, "OK", resp, now)
             update_electrum_row(row)
             #print(f">>>> OK: {row}")

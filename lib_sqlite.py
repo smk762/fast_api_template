@@ -126,7 +126,7 @@ def get_electrum_status_data():
     conn = get_sqlite("electrum_status.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    rows = cursor.execute("SELECT * FROM electrum_status").fetchall()
+    rows = cursor.execute("SELECT * FROM electrum_status ORDER BY coin").fetchall()
     return rows
 
 def create_tables():
