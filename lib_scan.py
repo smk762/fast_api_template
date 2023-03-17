@@ -48,33 +48,27 @@ class scan_thread(threading.Thread):
 def thread_electrum(coin, url, port, ssl, method, params):
     rpc = ElectrumConnection(url, port, ssl)
     now = int(time.time())
+    resp = rpc.version()
     try:
-        resp = rpc.version()
-    except Exception as e:
-        resp = None
-        row = (coin, f"{url}:{port}", "Failing", str(e))
-        update_electrum_row_failed(row)
-        print(f"Failed: {row}")
-    if resp:
-        try:
-            if isinstance(resp, OSError) or isinstance(resp, ConnectionResetError) or isinstance(resp, ConnectionRefusedError):
-                resp = str(resp)
-                row = (coin, f"{url}:{port}", "Failing", resp)
-                update_electrum_row_failed(row)
-                print(f"Failed: {row}")
-            elif isinstance(resp, dict):
-                resp = json.dumps(resp)
-                row = (coin, f"{url}:{port}", "OK", resp, now)
-                update_electrum_row(row)
-                # print(f"OK: {row}")
-
-        except Exception as e:
-            print(f">>>>> {coin} {row}: {e}" 'Failed')
-            resp = str(resp)
-            row = (coin, f"{url}:{port}", "Failing", resp)
+        if isinstance(resp, str) or isinstance(resp, OSError) or isinstance(resp, ConnectionResetError) \
+             or isinstance(resp, ConnectionRefusedError) or isinstance(resp, socket.gaierror) \
+             or isinstance(resp, json.decoder.JSONDecodeError):
+            resp = str(resp).replace("'", "")
+            row = (coin, f"{url}:{port}", ssl, "Failing", resp)
+            update_electrum_row_failed(row)
+            #print(f"<<<< Failed: {row}")
+        elif isinstance(resp, dict):
+            resp = json.dumps(resp)
+            row = (coin, f"{url}:{port}", ssl, "OK", resp, now)
             update_electrum_row(row)
-        
+            #print(f">>>> OK: {row}")
 
+    except Exception as e:
+        resp = str(resp)
+        row = (coin, f"{url}:{port}", ssl, "Failing", resp)
+        update_electrum_row_failed(row)
+        #print(f"<<<< Failed: {row} {e}")
+        
 
 def update_electrums_status():
     electrum_dict = get_repo_electrums()
@@ -103,10 +97,10 @@ def scan_electrums(electrum_dict):
             if "protocol" in electrum:
                 if electrum["protocol"] == "SSL":
                     ssl_list.append(coin)
-                    thread_list.append(scan_thread(coin, url, port, True, "blockchain.block.headers", [1,2]))
+                    thread_list.append(scan_thread(coin, url, port, True, "server.version"))
                     continue
             non_ssl_list.append(coin)
-            thread_list.append(scan_thread(coin, url, port, False, "blockchain.block.headers", [1,2]))
+            thread_list.append(scan_thread(coin, url, port, False, "server.version"))
 
     # for coin in electrum_dict:
     #     for electrum in electrum_dict[coin]:

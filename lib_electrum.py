@@ -33,19 +33,27 @@ class ElectrumConnection():
 
     def rpc(self, method, params=[]):
         params = [params] if not isinstance(params, list) else params
-        if self.ssl:
-            context = ssl.create_default_context()
-            try:
+        try:
+            if self.ssl:
+                context = ssl.create_default_context()
                 with socket.create_connection((self.url, self.port)) as sock:
                     with context.wrap_socket(sock, server_hostname=self.url) as ssock:
                         ssock.send(json.dumps({"id": 0, "method": method, "params": params}).encode() + b'\n')
-                        return json.loads(ssock.recv(99999)[:-1].decode())
-            except Exception as e:
-                return e
-        else:
-            with socket.create_connection((self.url, self.port)) as sock:
-                sock.send(json.dumps({"id": 0, "method": method, "params": params}).encode() + b'\n')
-                return json.loads(sock.recv(99999)[:-1].decode())
+                        data = ssock.recv(99999)[:-1].decode()
+                        try:
+                            return json.loads(data)
+                        except Exception as e:
+                            return data
+            else:
+                with socket.create_connection((self.url, self.port)) as sock:
+                    sock.send(json.dumps({"id": 0, "method": method, "params": params}).encode() + b'\n')
+                    data = sock.recv(99999)[:-1].decode()
+                    try:
+                        return json.loads(data)
+                    except Exception as e:
+                        return data
+        except Exception as e:
+            return str(e)
 
     def version(self):
         return self.rpc("server.version")

@@ -14,6 +14,7 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Re
 import lib_sqlite
 import lib_data
 import lib_json
+import lib_scan
 from lib_logger import logger
 
 load_dotenv()
@@ -43,7 +44,12 @@ app.add_middleware(
 @app.on_event("startup")
 @repeat_every(seconds=600)
 def update_data():
-    update_electrums_status()
+    try:
+        logger.info("Updating electrum status")
+        lib_scan.update_electrums_status()
+        logger.info("Electrum status updated!")
+    except Exception as e:
+        logger.error(f"Electrum status update Failed! {e}")
 
 
 @app.get('/api/v1/data', tags=[])

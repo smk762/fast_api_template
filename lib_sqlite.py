@@ -91,26 +91,36 @@ def view_table_info(cursor, table):
 
 
 def update_electrum_row(row):
-    sql = f"INSERT INTO electrum_status \
-                (coin, electrum, status, response, last_connection) \
-            VALUES (?, ?, ?, ?, ?) \
-            ON CONFLICT (electrum) DO UPDATE \
-            SET status='{row[2]}', response='{row[3]}', last_connection='{row[4]}';"
-    conn = get_sqlite("electrum_status.db")
-    cursor = conn.cursor()
-    cursor.execute(sql, row)
-    conn.commit()
+    try:
+        sql = f"INSERT INTO electrum_status \
+                    (coin, electrum, ssl, status, response, last_connection) \
+                VALUES (?, ?, ?, ?, ?, ?) \
+                ON CONFLICT (electrum) DO UPDATE \
+                SET status='{row[3]}', response='{row[4]}', last_connection='{row[5]}';"
+        conn = get_sqlite("electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql, row)
+        conn.commit()
+    except Exception as e:
+        print(e)
+        print(sql)
+
 
 def update_electrum_row_failed(row):
-    sql = f"INSERT INTO electrum_status \
-                (coin, electrum, status, response) \
-            VALUES (?, ?, ?, ?) \
-            ON CONFLICT (electrum) DO UPDATE \
-            SET status='{row[2]}', response='{row[3]}';"
-    conn = get_sqlite("electrum_status.db")
-    cursor = conn.cursor()
-    cursor.execute(sql, row)
-    conn.commit()
+    try:
+        sql = f"INSERT INTO electrum_status \
+                    (coin, electrum, ssl, status, response) \
+                VALUES (?, ?, ?, ?, ?) \
+                ON CONFLICT (electrum) DO UPDATE \
+                SET status='{row[3]}', response='{row[4]}';"
+        conn = get_sqlite("electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql, row)
+        conn.commit()
+    except Exception as e:
+        print(e)
+        print(sql)
+
 
 def get_electrum_status_data():
     conn = get_sqlite("electrum_status.db")
@@ -119,20 +129,24 @@ def get_electrum_status_data():
     rows = cursor.execute("SELECT * FROM electrum_status").fetchall()
     return rows
 
+def create_tables():
+    sql = "CREATE TABLE electrum_status (   \
+        id INTEGER PRIMARY KEY,              \
+        coin TEXT NOT NULL,                   \
+        electrum TEXT NOT NULL UNIQUE,         \
+        ssl BOOLEAN NOT NULL,         \
+        status TEXT,                            \
+        response TEXT,                           \
+        last_connection INTEGER);"
+    conn = get_sqlite("electrum_status.db")
+    cursor = conn.cursor()
+    cursor.execute(sql)
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == "create_tables":
-            sql = "CREATE TABLE electrum_status (   \
-                id INTEGER PRIMARY KEY,              \
-                coin TEXT NOT NULL,                   \
-                electrum TEXT NOT NULL UNIQUE,         \
-                status TEXT,                            \
-                response TEXT,                           \
-                last_connection INTEGER);"
-            conn = get_sqlite("electrum_status.db")
-            cursor = conn.cursor()
-            cursor.execute(sql)
+            create_tables()
     else:
         conn = get_sqlite("electrum_status.db")
         cursor = conn.cursor()
