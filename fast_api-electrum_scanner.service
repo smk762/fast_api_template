@@ -1,0 +1,27 @@
+[Unit]
+Description=fastapi-electrum_scanner
+Wants=network-online.target
+After=network-online.target
+Conflicts=getty@tty1.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+WorkingDirectory=/home/atomic/fast_api_docker
+ExecStart=/usr/bin/python3 /home/atomic/fast_api_docker/main.py
+
+# Logs path
+StandardOutput=append:/home/atomic/logs/fastapi-electrum_scanner.log
+StandardError=append:/home/atomic/logs/fastapi-electrum_scanner.log
+
+User=atomic
+Group=atomic
+Type=simple
+TimeoutStopSec=30min
+Restart=on-failure
+RestartSec=10s
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
+
