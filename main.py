@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import time
 import uvicorn
 import requests
 from dotenv import load_dotenv
@@ -8,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
-import lib_data
+import lib_poll
 import lib_json
 import lib_rpc
 from lib_logger import logger
@@ -18,29 +19,25 @@ SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
 RPCIP = os.getenv("KMD_RPCIP")
 API_PORT = int(os.getenv("FASTAPI_PORT"))
-
+BALANCES = {}
+CURRENT_BLOCK = {}
 
 tags_metadata = []
-cors_origins = [
-    "http://localhost:3000",
-    "https://vote.komodoplatform.com",
-    "http://vote.komodoplatform.com"
-]
 app = FastAPI(openapi_tags=tags_metadata)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+#app.add_middleware(
+#    CORSMiddleware,
+#    allow_origins=["*"],
+#    allow_credentials=True,
+#    allow_methods=["*"],
+#    allow_headers=["*"],
+#)
 
 @app.on_event("startup")
 @repeat_every(seconds=15)
 def update_data():
     try:
-        data = lib_data.get_data()
+        data = lib_poll.get_data()
         lib_json.write_jsonfile_data('jsondata.json', data)
     except Exception as e:
         logger.info(f"Error in [update_data]: {e}")
@@ -50,7 +47,7 @@ def update_data():
 @app.get('/api/v1/polls_list', tags=[])
 def get_polls_list():
     polls = lib_json.get_jsonfile_data('poll_config.json')
-    statuses = lib_data.get_polls_statuses(polls)
+    statuses = lib_poll.get_polls_statuses(polls)
     return statuses
 
 
@@ -77,7 +74,7 @@ def get_poll_status(chain: str):
     polls = lib_json.get_jsonfile_data('poll_config.json')
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
-    statuses = lib_data.get_polls_statuses(polls)
+    statuses = lib_poll.get_polls_statuses(polls)
     status = {}
     for i in statuses:
         if chain in statuses[i]:
@@ -104,28 +101,29 @@ def get_poll_category_info(chain: str, category: str):
 
 @app.get("/api/v1/polls/{chain}/{category}/tally", tags=[])
 def get_poll_tally(chain: str, category: str):
-    return {}
+    options = lib_poll.get_poll_options(chain, category)
+    if "error" in options: return options
+    for option in options:
+        address = options[option]["address"]
+        if address in BALANCES:
+            votes = BALANCES[address]
+        else:
+            votes = 0
+        options[option].update({"votes": votes})
+    return options
 
 
 @app.get("/api/v1/polls/{chain}/{category}/options", tags=[])
 def get_poll_options(chain: str, category: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
-    if chain not in polls.keys():
-        return {"error": f"{chain} does not exist!"}
-    if category not in polls[chain]["categories"].keys():
-        return {"error": f"{chain} has no {category} category!"}
-    options = polls[chain]["categories"][category]["options"]
+    options = lib_poll.get_poll_options(chain, category)
     return options
 
 
 @app.get("/api/v1/polls/{chain}/{category}/addresses", tags=[])
 def get_poll_options_addresses(chain: str, category: str):
     polls = lib_json.get_jsonfile_data('poll_config.json')
-    if chain not in polls.keys():
-        return {"error": f"{chain} does not exist!"}
-    if category not in polls[chain]["categories"].keys():
-        return {"error": f"{chain} has no {category} category!"}
-    options = polls[chain]["categories"][category]["options"]
+    options = lib_poll.get_poll_options(chain, category)
+    if "error" in options: return options
     addresses = {}
     for option in options:
         addresses.update({option: options[option]["address"]})
@@ -134,12 +132,8 @@ def get_poll_options_addresses(chain: str, category: str):
 
 @app.get("/api/v1/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
-    if chain not in polls.keys():
-        return {"error": f"{chain} does not exist!"}
-    if category not in polls[chain]["categories"].keys():
-        return {"error": f"{chain} has no {category} category!"}
-    options = polls[chain]["categories"][category]["options"]
+    options = lib_poll.get_poll_options(chain, category)
+    if "error" in options: return options
     qr_codes = {}
     for option in options:
         qr_codes.update({option: options[option]["qr_code"]})
@@ -148,12 +142,8 @@ def get_poll_options_qr_codes(chain: str, category: str):
 
 @app.get("/api/v1/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
-    if chain not in polls.keys():
-        return {"error": f"{chain} does not exist!"}
-    if category not in polls[chain]["categories"].keys():
-        return {"error": f"{chain} has no {category} category!"}
-    options = polls[chain]["categories"][category]["options"]
+    options = lib_poll.get_poll_options(chain, category)
+    if "error" in options: return options
     option_text = {}
     for option in options:
         option_text.update({option: options[option]["text"]})
@@ -167,35 +157,30 @@ def get_all_polls():
 
 # TODO: RPC per chain
 @app.on_event("startup")
-@repeat_every(seconds=10)
-def rpc_getinfo():
-    polls = lib_json.get_jsonfile_data('poll_config.json')
-    for i in polls:
-        if abs(polls[i]["ends_at"] - time.time()) < 120:
-            try:
-                rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport, rpcip)
-                info = rpc.getinfo()
-                if info["tiptime"] > polls[i]["ends_at"] and not polls[i]["first_overtime_block"]:
-                    polls[i]["first_overtime_block"] = info["longestchain"]
-                    last_ntx = requests.get(f"https://stats.kmd.io/api/source/coin_last_ntx/?coin={i}&season=Season_6").json()["results"]
-                    ac_ntx_height = last_ntx["ac_ntx_height"]
-                    if ac_ntx_height > polls[i]["first_overtime_block"] and not polls[i]["final_ntx_block"]:
-                        polls[i]["final_ntx_block"] = ac_ntx_height
-
-                    lib_json.write_jsonfile_data('poll_config.json', polls)
-
-            except Exception as e:
-                logger.warning(f"RPC not responding! {e}")
+@repeat_every(seconds=5)
+def update_poll_data():
+    try:
+        logger.info("Updating poll data...")
+        polls = lib_json.get_jsonfile_data('poll_config.json')
+        logger.info(polls)
+        lib_poll.update_balances(polls, BALANCES)
+        for chain in polls:
+            lib_poll.check_polls_overtime(polls, chain)
+    except Exception as e:
+        logger.warning(f"Error in [update_poll_data]: {e}")
+        
 
 
 @app.on_event("startup")
 @repeat_every(seconds=60)
 def rpc_getinfo():
     try:
-        rpc = lib_rpc.get_rpc(rpcuser, rpcpass, rpcport, rpcip)
-        logger.info(rpc.getinfo())
-    except:
-        logger.warning("RPC not responding!")    
+        polls = lib_json.get_jsonfile_data('poll_config.json')
+        for chain in polls:
+            rpc = lib_rpc.get_rpc(chain)
+            logger.info(rpc.getinfo())
+    except Exception as e:
+        logger.warning(f"RPC (getinfo) not responding: {e}")
 
 
 if __name__ == '__main__':
