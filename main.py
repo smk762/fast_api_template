@@ -19,19 +19,16 @@ load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
 
+CORS_ORIGINS = []
+if os.getenv("CORS_ORIGINS"):
+    CORS_ORIGINS = os.getenv("CORS_ORIGINS").split(" ")
 
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
 
-cors_origins = [
-    "http://localhost:3000",
-    "https://vote.komodoplatform.com",
-    "http://vote.komodoplatform.com"
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
