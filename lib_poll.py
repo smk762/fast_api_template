@@ -59,7 +59,7 @@ def get_balance_data(explorer, address):
     return balance
 
 
-def update_balances(polls, polls_v2):
+def update_balances(polls, polls_v2, final_block=0):
     try:
         for chain in polls:
             sync_height = get_sync_data(polls[chain]['explorer'])["height"]
@@ -69,7 +69,15 @@ def update_balances(polls, polls_v2):
                     address = polls[chain]["categories"][category]["options"][option]["address"]
                     logger.info(f"Getting {chain} balance for {address}")
 
-                    if not polls[chain]["final_ntx_block"]:
+                    if final_block != 0:
+                        rpc = lib_rpc.get_rpc(chain)
+                        balance_data = rpc.getaddressdeltas({"addresses": [address], "start":1, "end": final_block})
+                        balance = 0
+                        for i in balance_data:
+                            balance += i["satoshis"]
+                        polls[chain]["categories"][category]["options"][option].update({"votes": balance/100000000})
+                        polls_v2[chain]["categories"][category]["options"][option].update({"votes": balance/100000000})
+                    elif not polls[chain]["final_ntx_block"]:
                         balance = get_balance_data(explorer, address)
                         polls[chain]["categories"][category]["options"][option].update({"votes": balance})
                         polls_v2[chain]["categories"][category]["options"][option].update({"votes": balance})
@@ -141,6 +149,7 @@ def update_polls():
                                     polls[chain]["status"] = "historical"
                                     polls_v2[chain]["overtime_ended_at"] = block_time
                                     polls_v2[chain]["status"] = "historical"
+                                    update_balances(polls, polls_v2, i)
                                     lib_json.write_jsonfile_data('poll_config.json', polls)
                                     lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
                                     return
@@ -163,3 +172,15 @@ if __name__ == '__main__':
     tx_info = rpc.getrawtransaction("dfc390cf85a40dac5c4b3ec6540f32ba229610a14039cb1f30afec9cdddf8c34", 1)
     print(is_ntx(tx_info))
     assert not is_ntx(tx_info)
+
+    balance_data = rpc.getaddressdeltas({"addresses": ["RReduceRewardsXXXXXXXXXXXXXXUxPxuC"], "start":1, "end": 19925})
+    balance = 0
+    for i in balance_data:
+        balance += i["satoshis"]
+    print(balance/100000000)
+
+    balance_data = rpc.getaddressdeltas({"addresses": ["RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF"], "start":1, "end": 19925})
+    balance = 0
+    for i in balance_data:
+        balance += i["satoshis"]
+    print(balance/100000000)
