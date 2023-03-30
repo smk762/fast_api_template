@@ -4,12 +4,7 @@ import lib_rpc
 import lib_json
 from lib_logger import logger
 
-def get_data():
-    return {"Hello": "World"}
-
-
 def get_poll_options(chain, category):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     if category not in polls[chain]["categories"].keys():
@@ -22,6 +17,7 @@ def get_polls_statuses(polls):
     status = {
         "historical": [],
         "active": [],
+        "overtime": [],
         "upcoming": []
     }
     for i in polls:
@@ -29,8 +25,10 @@ def get_polls_statuses(polls):
             status["upcoming"].append(i)
         elif polls[i]["ends_at"] > now:
             status["active"].append(i)
-        else:
+        elif polls[i]["overtime_ended_at"]:
             status["historical"].append(i)
+        else:
+            status["overtime"].append(i)
     return status
 
 
@@ -41,7 +39,6 @@ def get_notary_addresses():
 
 
 def is_ntx(tx_info):
-    
     vouts = tx_info["vout"]
     vins = tx_info["vin"]
     if len(vouts) == 2 and len(vins) == 13:
@@ -53,61 +50,124 @@ def is_ntx(tx_info):
     return False
 
 
-def check_polls_overtime(polls, chain):
+def get_balance_data(explorer, address):
+    balance_data = requests.get(f"{explorer}/insight-api-komodo/addr/{address}").json()
+    balance = balance_data["balance"]
+    # params = {"addresses": [address]}
+    # r = rpc.getaddressbalance(params)
+    # balance = r["balance"]/100000000
+    return balance
+
+
+def update_balances(polls, polls_v2):
     try:
-        if not polls[chain]["final_ntx_block"]:
+        for chain in polls:
+            sync_height = get_sync_data(polls[chain]['explorer'])["height"]
+            explorer = polls[chain]["explorer"]
+            for category in polls[chain]["categories"]:
+                for option in polls[chain]["categories"][category]["options"]:
+                    address = polls[chain]["categories"][category]["options"][option]["address"]
+                    logger.info(f"Getting {chain} balance for {address}")
 
-            now = int(time.time())
-            ends_at = polls[chain]["ends_at"]
+                    if not polls[chain]["final_ntx_block"]:
+                        balance = get_balance_data(explorer, address)
+                        polls[chain]["categories"][category]["options"][option].update({"votes": balance})
+                        polls_v2[chain]["categories"][category]["options"][option].update({"votes": balance})
+                    elif sync_height <= polls[chain]["final_ntx_block"]["height"]:
+                        balance = get_balance_data(explorer, address)
+                        polls[chain]["categories"][category]["options"][option].update({"votes": balance})
+                        polls_v2[chain]["categories"][category]["options"][option].update({"votes": balance})
+                    else:
+                        logger.info(f"Not updating {chain} votes, poll is over.")
 
+    except Exception as e:
+        logger.warning(f"Error in [update_balances] for {chain}: {e}")
+
+
+def update_polls():
+    try:
+        polls = lib_json.get_jsonfile_data('poll_config.json')
+        polls_v2 = lib_json.get_jsonfile_data('poll_config_v2.json')
+        now = int(time.time())
+        for chain in polls:
             rpc = lib_rpc.get_rpc(chain)
             info = rpc.getinfo()
+            polls[chain]["updated_time"] = now
+            polls_v2[chain]["updated_time"] = now
             blocktip = info["longestchain"]
-            if info["tiptime"] > polls[chain]["ends_at"] and not polls[chain]["first_overtime_block"]:
-                polls[chain]["first_overtime_block"] = blocktip
+            blockinfo = rpc.getblock(str(blocktip))
+            block_time = blockinfo["time"]
+            block_txids = blockinfo["tx"]
+            block_hash = blockinfo["hash"]
+            polls[chain]["current_block"] = blocktip
+            polls_v2[chain]["current_block"] = {
+                "height": blocktip,
+                "hash": block_hash,
+                "time": block_time,
+            }
+            if not polls[chain]["final_ntx_block"]:
+                update_balances(polls, polls_v2)
+                ends_at = polls[chain]["ends_at"]
 
-            if polls[chain]["first_overtime_block"]:
-                if blocktip >= polls[chain]["first_overtime_block"]:
-                    logger.info(f"longestchain: {blocktip}")
-                    for i in range(polls[chain]["first_overtime_block"], blocktip):
-                        block_txids = rpc.getblock(str(i))["tx"]
+                if info["tiptime"] > polls[chain]["ends_at"] and not polls[chain]["first_overtime_block"]:
+                    polls[chain]["first_overtime_block"] = blocktip
+                    polls_v2[chain]["first_overtime_block"] = {
+                        "height": blocktip,
+                        "hash": block_hash,
+                        "time": block_time,
+                    }
 
-                        for txid in block_txids:
-                            tx_info = rpc.getrawtransaction(txid, 1)
-                            if is_ntx(tx_info):
-                                polls[chain]["final_ntx_block"] = i
-                                lib_json.write_jsonfile_data('poll_config.json', polls)
-                                return
-            lib_json.write_jsonfile_data('poll_config.json', polls)
+                if polls[chain]["first_overtime_block"]:
+                    polls[chain]["status"] = "overtime"
+                    polls_v2[chain]["status"] = "overtime"
+                    if blocktip >= polls[chain]["first_overtime_block"]["height"]:
+                        logger.info(f"longestchain: {blocktip}")
+                        for i in range(polls[chain]["first_overtime_block"]["height"], blocktip):
+
+                            for txid in block_txids:
+                                tx_info = rpc.getrawtransaction(txid, 1)
+                                if is_ntx(tx_info):
+                                    blockinfo = rpc.getblock(str(i))
+                                    polls[chain]["final_ntx_block"] = i
+                                    polls_v2[chain]["final_ntx_block"] = {
+                                        "height": i,
+                                        "hash": blockinfo["hash"],
+                                        "time": blockinfo["time"],
+                                    }
+
+                                    polls[chain]["overtime_ended_at"] = block_time
+                                    polls[chain]["status"] = "historical"
+                                    polls_v2[chain]["overtime_ended_at"] = block_time
+                                    polls_v2[chain]["status"] = "historical"
+                                    lib_json.write_jsonfile_data('poll_config.json', polls)
+                                    lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
+                                    return
+                lib_json.write_jsonfile_data('poll_config.json', polls)
+                lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
+
+            if polls[chain]["overtime_ended_at"]:
+                if now > polls[chain]["overtime_ended_at"] + 120:
+                    polls[chain]["first_overtime_block"] = None
+                    polls[chain]["final_ntx_block"] = None
+                    polls[chain]["overtime_ended_at"] = None
+                    polls[chain]["ends_at"] = now + 120
+                    polls[chain]["status"] = "active"
+
+                    polls_v2[chain]["first_overtime_block"] = None
+                    polls_v2[chain]["final_ntx_block"] = None
+                    polls_v2[chain]["overtime_ended_at"] = None
+                    polls_v2[chain]["ends_at"] = now + 120
+                    polls_v2[chain]["status"] = "active"
+
+                    lib_json.write_jsonfile_data('poll_config.json', polls)
+                    lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
 
     except Exception as e:
         logger.warning(f"RPC (overtime getinfo) not responding! {e}")
 
 
-def update_balances(polls, balances):
-    try:
-        for chain in polls:
-            if not polls[chain]["final_ntx_block"]:
-                rpc = lib_rpc.get_rpc(chain)
-                if rpc:
-                    for category in polls[chain]["categories"]:
-                        for option in polls[chain]["categories"][category]["options"]:
-                            address = polls[chain]["categories"][category]["options"][option]["address"]
-                            logger.info(f"Getting {chain} balance for {address}")
-                            params = {"addresses": [address]}
-                            r = rpc.getaddressbalance(params)
-                            balance = r["balance"]/100000000
-                            balances.update({address: balance})
-                            polls[chain]["categories"][category]["options"][option].update({"votes": balance})
-                    lib_json.write_jsonfile_data('poll_config.json', polls)
-                else:
-                    logger.warning(rpc)
-            else:
-                logger.info(f"Not updating {chain} votes, poll is over.")
-    except Exception as e:
-        logger.warning(f"Error in [update_balances] for {chain} {category} {option}: {e}")
-    logger.info(f"balances: {balances}")
-    return balances
+def get_sync_data(explorer):
+    return requests.get(f"{explorer}/insight-api-komodo/sync").json()
 
 
 if __name__ == '__main__':

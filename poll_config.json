@@ -1,5 +1,6 @@
 {
   "KIP0001": {
+    "explorer": "https://kip0001.explorer.kmd.io",
     "categories": {
       "aur_poll": {
         "title": "Should KMD's Active User Reward be reduced?",
@@ -8,13 +9,13 @@
             "address": "RReduceRewardsXXXXXXXXXXXXXXUxPxuC",
             "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/qrcodes/RReduceRewardsXXXXXXXXXXXXXXUxPxuC.png",
             "text": "Reduce the active user reward amount to 0.01% APR in order to decrease the KMD total supply over time.",
-            "votes": 5558614.84772924
+            "votes": 5802028.57388924
           },
           "No": {
             "address": "RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF",
             "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/qrcodes/RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF.png",
             "text": "Keep the active user reward amount at 5.1% APR.",
-            "votes": 2193640.79128666
+            "votes": 2194719.78662903
           }
         }
       }
@@ -22,9 +23,12 @@
     "snapshot_at": 1677887999,
     "airdrop_at": 1678147199,
     "starts_at": 1678147199,
-    "ends_at": 1680307199,
-    "_ends_at": 1680307199,
+    "ends_at": 1679897304,
+    "overtime_ended_at": null,
     "first_overtime_block": null,
-    "final_ntx_block": null
+    "final_ntx_block": null,
+    "current_block": 15033,
+    "updated_time": 1679897344,
+    "status": "active"
   }
 }
