@@ -105,11 +105,12 @@ def update_polls():
                 "hash": block_hash,
                 "time": block_time,
             }
+
             if not polls[chain]["final_ntx_block"]:
                 update_balances(polls, polls_v2)
                 ends_at = polls[chain]["ends_at"]
 
-                if info["tiptime"] > polls[chain]["ends_at"] and not polls[chain]["first_overtime_block"]:
+                if info["tiptime"] > polls[chain]["ends_at"] and not polls_v2[chain]["first_overtime_block"]:
                     polls[chain]["first_overtime_block"] = blocktip
                     polls_v2[chain]["first_overtime_block"] = {
                         "height": blocktip,
@@ -120,13 +121,14 @@ def update_polls():
                 if polls[chain]["first_overtime_block"]:
                     polls[chain]["status"] = "overtime"
                     polls_v2[chain]["status"] = "overtime"
-                    if blocktip >= polls[chain]["first_overtime_block"]["height"]:
+                    if blocktip >= polls_v2[chain]["first_overtime_block"]["height"]:
                         logger.info(f"longestchain: {blocktip}")
-                        for i in range(polls[chain]["first_overtime_block"]["height"], blocktip):
-
+                        for i in range(polls_v2[chain]["first_overtime_block"]["height"], blocktip+1):
+                            logger.info(f"Scanning block: {i}")
                             for txid in block_txids:
                                 tx_info = rpc.getrawtransaction(txid, 1)
                                 if is_ntx(tx_info):
+                                    logger.info(f"ntx found in: {i}")
                                     blockinfo = rpc.getblock(str(i))
                                     polls[chain]["final_ntx_block"] = i
                                     polls_v2[chain]["final_ntx_block"] = {
