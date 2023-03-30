@@ -145,23 +145,6 @@ def update_polls():
                 lib_json.write_jsonfile_data('poll_config.json', polls)
                 lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
 
-            if polls[chain]["overtime_ended_at"]:
-                if now > polls[chain]["overtime_ended_at"] + 120:
-                    polls[chain]["first_overtime_block"] = None
-                    polls[chain]["final_ntx_block"] = None
-                    polls[chain]["overtime_ended_at"] = None
-                    polls[chain]["ends_at"] = now + 120
-                    polls[chain]["status"] = "active"
-
-                    polls_v2[chain]["first_overtime_block"] = None
-                    polls_v2[chain]["final_ntx_block"] = None
-                    polls_v2[chain]["overtime_ended_at"] = None
-                    polls_v2[chain]["ends_at"] = now + 120
-                    polls_v2[chain]["status"] = "active"
-
-                    lib_json.write_jsonfile_data('poll_config.json', polls)
-                    lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
-
     except Exception as e:
         logger.warning(f"RPC (overtime getinfo) not responding! {e}")
 
