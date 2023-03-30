@@ -46,8 +46,9 @@ def is_ntx(tx_info):
         notary_addresses = get_notary_addresses()
         if set(vin_addresses).issubset(notary_addresses):
             if vouts[1]["scriptPubKey"]["asm"].find("OP_RETURN") > -1:
-                return True
-    return False
+                ntx_data = requests.get(f'https://stats.kmd.io/api/tools/decode_opreturn/?OP_RETURN={vouts[1]["scriptPubKey"]["asm"]}').json()
+                return ntx_data
+    return None
 
 
 def get_balance_data(explorer, address):
@@ -118,14 +119,6 @@ def update_polls():
                 update_balances(polls, polls_v2)
                 ends_at = polls[chain]["ends_at"]
 
-                if info["tiptime"] > polls[chain]["ends_at"] and not polls_v2[chain]["first_overtime_block"]:
-                    polls[chain]["first_overtime_block"] = blocktip
-                    polls_v2[chain]["first_overtime_block"] = {
-                        "height": blocktip,
-                        "hash": block_hash,
-                        "time": block_time,
-                    }
-
                 if polls[chain]["first_overtime_block"]:
                     polls[chain]["status"] = "overtime"
                     polls_v2[chain]["status"] = "overtime"
@@ -136,23 +129,35 @@ def update_polls():
                             for txid in block_txids:
                                 tx_info = rpc.getrawtransaction(txid, 1)
                                 if is_ntx(tx_info):
-                                    logger.info(f"ntx found in: {i}")
-                                    blockinfo = rpc.getblock(str(i))
-                                    polls[chain]["final_ntx_block"] = i
-                                    polls_v2[chain]["final_ntx_block"] = {
-                                        "height": i,
-                                        "hash": blockinfo["hash"],
-                                        "time": blockinfo["time"],
-                                    }
+                                    ntx_data = is_ntx(tx_info)["results"]
+                                    logger.info(f"ntx for block {ntx_data['notarised_block']} found in: {i}")
+                                    if ntx_data['notarised_block'] >= polls[chain]["first_overtime_block"]:
+                                        blockinfo = rpc.getblock(str(ntx_data['notarised_block']))
+                                        polls[chain]["final_ntx_block"] = ntx_data['notarised_block']
+                                        polls_v2[chain]["final_ntx_block"] = {
+                                            "height": ntx_data['notarised_block'],
+                                            "hash": blockinfo["hash"],
+                                            "time": blockinfo["time"],
+                                        }
+                                        polls_v2[chain].update({"final_ntx_block_tx": txid})
 
-                                    polls[chain]["overtime_ended_at"] = block_time
-                                    polls[chain]["status"] = "historical"
-                                    polls_v2[chain]["overtime_ended_at"] = block_time
-                                    polls_v2[chain]["status"] = "historical"
-                                    update_balances(polls, polls_v2, i)
-                                    lib_json.write_jsonfile_data('poll_config.json', polls)
-                                    lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
-                                    return
+                                        polls[chain]["overtime_ended_at"] = block_time
+                                        polls[chain]["status"] = "historical"
+                                        polls_v2[chain]["overtime_ended_at"] = block_time
+                                        polls_v2[chain]["status"] = "historical"
+                                        update_balances(polls, polls_v2, ntx_data['notarised_block'])
+                                        lib_json.write_jsonfile_data('poll_config.json', polls)
+                                        lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
+                                        return
+
+                elif info["tiptime"] > polls[chain]["ends_at"]:
+                    polls[chain]["first_overtime_block"] = blocktip
+                    polls_v2[chain]["first_overtime_block"] = {
+                        "height": blocktip,
+                        "hash": block_hash,
+                        "time": block_time,
+                    }
+
                 lib_json.write_jsonfile_data('poll_config.json', polls)
                 lib_json.write_jsonfile_data('poll_config_v2.json', polls_v2)
 
