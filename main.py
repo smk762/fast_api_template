@@ -23,6 +23,10 @@ CORS_ORIGINS = []
 if os.getenv("CORS_ORIGINS"):
     CORS_ORIGINS = os.getenv("CORS_ORIGINS").split(" ")
 
+API_PORT = 8080
+if os.getenv("API_PORT"):
+    API_PORT = os.getenv("API_PORT")
+
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
 
@@ -52,6 +56,6 @@ def get_jsonfile_data():
 
 if __name__ == '__main__':
     if SSL_KEY != "" and SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=8080, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=8080)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT)
