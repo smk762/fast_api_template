@@ -21,7 +21,7 @@ with open("poll_config_v2.json", "w+") as f:
     config = {
       ticker: {
         "explorer": explorer,
-        "categories": {}
+        "categories": {},
         "snapshot_at": snapshot_at,
         "airdrop_at": airdrop_at,
         "starts_at": starts_at,

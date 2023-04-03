@@ -4,7 +4,7 @@ import lib_rpc
 import lib_json
 from lib_logger import logger
 
-def get_poll_options(chain, category):
+def get_poll_options(polls, chain, category):
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     if category not in polls[chain]["categories"].keys():

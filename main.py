@@ -172,7 +172,7 @@ def get_poll_tally(chain: str, category: str):
     options = lib_poll.get_poll_options(polls, chain, category)
     tally = {}
     for option in options:
-        talley.update({options[option]["address"]: options[option]["votes"]})
+        tally.update({options[option]["address"]: options[option]["votes"]})
     return tally
 
 
@@ -182,7 +182,7 @@ def get_poll_tally(chain: str, category: str):
     options = lib_poll.get_poll_options(polls_v2, chain, category)
     tally = {}
     for option in options:
-        talley.update({options[option]["address"]: options[option]["votes"]})
+        tally.update({options[option]["address"]: options[option]["votes"]})
     return tally
 
 
@@ -225,7 +225,7 @@ def get_poll_options_addresses(chain: str, category: str):
 @app.get("/api/v1/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
     polls = lib_json.get_jsonfile_data('poll_config.json')
-    options = lib_poll.get_poll_options(chain, category)
+    options = lib_poll.get_poll_options(polls, chain, category)
     if "error" in options: return options
     qr_codes = {}
     for option in options:
@@ -236,7 +236,7 @@ def get_poll_options_qr_codes(chain: str, category: str):
 @app.get("/api/v2/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
     polls_v2 = lib_json.get_jsonfile_data('poll_config_v2.json')
-    options = lib_poll.get_poll_options(chain, category)
+    options = lib_poll.get_poll_options(polls_v2, chain, category)
     if "error" in options: return options
     qr_codes = {}
     for option in options:
@@ -247,7 +247,7 @@ def get_poll_options_qr_codes(chain: str, category: str):
 @app.get("/api/v1/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
     polls = lib_json.get_jsonfile_data('poll_config.json')
-    options = lib_poll.get_poll_options(chain, category)
+    options = lib_poll.get_poll_options(polls, chain, category)
     if "error" in options: return options
     option_text = {}
     for option in options:
@@ -258,7 +258,7 @@ def get_poll_options_text(chain: str, category: str):
 @app.get("/api/v2/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
     polls_v2 = lib_json.get_jsonfile_data('poll_config_v2.json')
-    options = lib_poll.get_poll_options(chain, category)
+    options = lib_poll.get_poll_options(polls_v2, chain, category)
     if "error" in options: return options
     option_text = {}
     for option in options:
