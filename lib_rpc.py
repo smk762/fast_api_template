@@ -15,7 +15,7 @@ if os.getenv("RPCIP"):
 DEAMONS = ['RICK', 'MORTY']
 if os.getenv("DEAMONS"):
     DEAMONS = os.getenv("DEAMONS").split(" ")
-
+print(DEAMONS)
 
 def def_data_dir():
     try:

@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
+import lib_rpc
 import lib_data
 import lib_json
 from lib_logger import logger
@@ -25,7 +26,7 @@ if os.getenv("CORS_ORIGINS"):
 
 API_PORT = 8080
 if os.getenv("API_PORT"):
-    API_PORT = os.getenv("API_PORT")
+    API_PORT = int(os.getenv("API_PORT"))
 
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
@@ -43,6 +44,7 @@ app.add_middleware(
 def update_data():
     data = {}
     for coin in lib_rpc.DEAMONS:
+        print(coin)
         try:
             rpc = lib_rpc.get_rpc(coin)
             info = rpc.getinfo()
@@ -50,7 +52,7 @@ def update_data():
                 coin: {
                     "longestchain": info["longestchain"],
                     "tiptime": info["tiptime"],
-                    "notarised": info["notarised"],
+                    "notarized": info["notarized"],
                     "balance": info["balance"],
                     "synced": info["synced"],
                     "difficulty": info["difficulty"]
