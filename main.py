@@ -39,19 +39,33 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=15)
+@repeat_every(seconds=60)
 def update_data():
-    try:
-        data = lib_data.get_data()
-        lib_json.write_jsonfile_data('jsondata.json', data)
-    except Exception as e:
-        logger.info(f"Error in [update_data]: {e}")
-        return {"Error: ": str(e)}
+    data = {}
+    for coin in lib_rpc.DEAMONS:
+        try:
+            rpc = lib_rpc.get_rpc(coin)
+            info = rpc.getinfo()
+            data.update({
+                coin: {
+                    "longestchain": info["longestchain"],
+                    "tiptime": info["tiptime"],
+                    "notarised": info["notarised"],
+                    "balance": info["balance"],
+                    "synced": info["synced"],
+                    "difficulty": info["difficulty"]
+                }
+            })
+        except Exception as e:
+            logger.info(f"Error in [update_data]: {e}")
+            return {"Error: ": str(e)}
+    lib_json.write_jsonfile_data('blocks_data.json', data)
 
 
-@app.get('/api/v1/data', tags=[])
-def get_jsonfile_data():
-    return lib_json.get_jsonfile_data('jsondata.json')
+@app.get('/api/v1/last_block', tags=[])
+def get_last_block_data():
+    return lib_json.get_jsonfile_data('blocks_data.json')
+
 
 
 if __name__ == '__main__':
