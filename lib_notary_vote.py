@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import requests
-
-regions = {
-    "AR": "Asia / Russia",
-    "EU": "Europe",
-    "NA": "North America",
-    "SH": "Southern Hemisphere"
-}
+import const
 
 def parse_candidates(season):
-    base_url = f"https://github.com/KomodoPlatform/NotaryNodes/tree/master/season{season}/candidates"
+    base_url = f"https://github.com/KomodoPlatform/NotaryNodes/tree/master/season{season}"
     data = requests.get(f"https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season{season}/candidates/README.md").text
     candidates = {}
     headers = []
@@ -26,24 +20,17 @@ def parse_candidates(season):
                 for i in range(len(line_data)):
                     notary = line_data[i].split("]")[0].replace("[", "")
                     if len(notary) > 1:
-                        proposal = line_data[i].split("]")[1].replace("(", "").replace(")", "")
+                        info = line_data[i].split("]")[1].replace("(", "").replace(")", "")
+                        proposal = info.split(" ")[0]
+                        address = info.split(" ")[1].replace('"', '')
                         candidates[headers[i]].update({
                             notary: {
-                                "proposal": f"{base_url}/{proposal}",
-                                "address": ""
+                                "proposal": f"{base_url}/candidates/{proposal}",
+                                "address": address,
+                                "qr_code": f'{base_url.replace("tree", "blob")}/qr_codes/{notary}_{headers[i]}.jpg'
                             }
                         })
     return candidates
-
-def input_candidate_addresses(candidates):
-    for region in candidates:
-        for candidate in candidates[region]:
-            print(candidates[region][candidate]["proposal"])
-            # address = input(f"Enter address for {candidate}_{region}: ")
-            address = "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-            candidates[region][candidate].update({"address": address})
-    return candidates
-
 
 def enforce_input(q, is_int=False):
     if is_int:
@@ -70,11 +57,12 @@ def add_notary_vote_to_poll_config(candidates, poll_config):
     if ticker in poll_config:
         x = ""
         while x.lower() not in ["y", "n"]:
-            x = input(f"{ticker} already exists in poll_config_v2.json! Continue [y/n]? ")
+            x = input(f"{ticker} already exists in poll_config_v3.json! Continue [y/n]? ")
             if x.lower() == "n":
                 sys.exit()
 
     explorer = enforce_input("Enter chain explorer: ")
+    if explorer.endswith("/"): explorer = explorer[:-1]
     snapshot_at = enforce_input("Enter snapshot timestamp: ", True)
     airdrop_at = enforce_input("Enter airdrop timestamp: ", True)
     starts_at = enforce_input("Enter voting start timestamp: ", True)
@@ -101,21 +89,20 @@ def add_notary_vote_to_poll_config(candidates, poll_config):
     for category in categories:
         config[ticker]["categories"].update({
             category: {
-                "title": f"Which candidates would you like to serve in the {regions[category]} region?",
-                "options": {}
+                "title": f"Which candidates would you like to serve in the {const.REGIONS[category]} region?",
+                "options": []
             }
         })
 
         
         for candidate in candidates[category]:
             # Todo: Automate generating QR codes
-            config[ticker]["categories"][category]["options"].update({
-                candidate: {
-                    "text": candidates[category][candidate]["proposal"],
-                    "votes": 0,
-                    "address": candidates[category][candidate]["address"],
-                    "qr_code": ""
-                }
+            config[ticker]["categories"][category]["options"].append({
+                "candidate": candidate,
+                "text": candidates[category][candidate]["proposal"],
+                "votes": 0,
+                "address": candidates[category][candidate]["address"],
+                "qr_code": candidates[category][candidate]["qr_code"]
             })
 
     

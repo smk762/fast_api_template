@@ -10,6 +10,8 @@ def get_jsonfile_data(filename):
 
 def write_jsonfile_data(filename, data, indent=4):
     try:
+        print(f"Writing {filename}...")
+        print(data)
         with open(filename, 'w+') as json_file:
             json.dump(data, json_file, indent=indent)
         logger.info(f"Updated {filename}!")

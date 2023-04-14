@@ -3,13 +3,13 @@ import sys
 import json
 
 
-with open("poll_config_v2.json", "w+") as f:
+with open("poll_config_v3.json", "w+") as f:
     data = json.load(f)
     ticker = input("Enter chain ticker: ")
     if ticker in data:
         x = ""
         while x.lower() not in ["y", "n"]:
-            x = input(f"{ticker} already exists in poll_config_v2.json! Continue [y/n]? ")
+            x = input(f"{ticker} already exists in poll_config_v3.json! Continue [y/n]? ")
             if x.lower() == "n":
                 sys.exit()
     explorer = input("Enter chain explorer: ")
@@ -44,7 +44,7 @@ with open("poll_config_v2.json", "w+") as f:
         config[ticker]["categories"].update({
             cat_name: {
                 "title": cat_desc,
-                "options": {}
+                "options": []
             }
         })
 
@@ -56,12 +56,11 @@ with open("poll_config_v2.json", "w+") as f:
             # Todo: Automate generating these
             opt_qr_url = input("Enter option qrcode url: ")
             config[ticker]["categories"][cat_name]["options"].update({
-                opt_name: {
-                    "text": opt_desc,
-                    "votes": 0,
-                    "address": opt_addr,
-                    "qr_code": opt_qr_url
-                }
+                "name": opt_name
+                "text": opt_desc,
+                "votes": 0,
+                "address": opt_addr,
+                "qr_code": opt_qr_url
             })
 
     

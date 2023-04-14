@@ -1,286 +1,50 @@
 {
+    "AR": {
+        "decker": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
+            "address": "RB4ddQGvuQBPfpw6dcefF8AFZekVJc9tem",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/decker_AR.jpg"
+        },
+        "goldenman": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/goldenman/README.md",
+            "address": "RRfaF1s266XULS8HsF1kCFcfLASCCgEdSN",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/goldenman_AR.jpg"
+        },
+        "dragonhound": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dragonhound/README.md",
+            "address": "RKpigLeT5rgXy31yubpgWcJ91i1TZbZg5h",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/dragonhound_AR.jpg"
+        }
+    },
     "EU": {
-        "smdmitry": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/smdmitry/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "bitbybit": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/bitbybit/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "vanbogan": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/van/readme.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "strob": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/strob/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "chmex": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/chmex/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "mx222": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/mx222/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "Marmara": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/MarmaraChain/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "powerwolf": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/powerwolf/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "madmax": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/madmax/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "webworker01": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/webworker01/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "cipi": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/cipi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "cipi2": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/cipi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "darkolisio": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/darkolisio/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "yurii-khi": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/yurii-khi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "computergenie": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/computergenie/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "phit": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/phm87/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "ca333": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/ca333/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "komodopioneers": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/komomopioneers/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "node-9": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/node-9/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "kolo": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/kolo/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
+        "decker": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
+            "address": "RKjE9R2FLLmEUm7DKQ714ehMqSE7qdT3rv",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/decker_EU.jpg"
         }
     },
     "NA": {
-        "dragonhound": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dragonhound/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "computergenie": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/computergenie/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "webworker01": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/webworker01/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
+        "decker": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
+            "address": "RELzVBrc9WtrJxtNihWKfEVXVhj72dBAoQ",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/decker_NA.jpg"
         },
         "strob": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/strob/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/strob/README.md",
+            "address": "RStrobNmEspEAgB8Jtt6ncK8tCWcGm77na",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/strob_NA.jpg"
         },
-        "theerbeen": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/theerbeen/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "nodeone": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/nodeone/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "madmax": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/madmax/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "dennis": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dennis/readme.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "pbca26": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/pbca26/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "fatswallop": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/fatswallop/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "ptyx": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/ptyx/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "cipi2": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/cipi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "tokel": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/tokel/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "who-biz": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/who-biz/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "phit": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/phm87/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "mylo": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/mylo/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "chmex": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/chmex/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
+        "dragonhound": {
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dragonhound/README.md",
+            "address": "RT3PBi6wBLvUySxtykehejsVTLKgCEwbzu",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/dragonhound_NA.jpg"
         }
     },
     "SH": {
-        "smdmitry": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/smdmitry/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "dappvader": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dappvader/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "NutellaLicka": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/NutellaLicka/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "drkush": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/drkush/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "chmex": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/chmex/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "sheeba": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/sheeba/readme.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "alien": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/alien/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "mcrypt": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/mcrypt/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "dragonhound": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dragonhound/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "gcharang": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/gcharang/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "pbca26": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/pbca26/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "workhax0": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/workhax0/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "kmdude": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/kmdude/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "mylo": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/mylo/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "metaphilibert": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/metaphilibert/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "arnomad": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/arnomad/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        }
-    },
-    "AR": {
-        "dudezmobi": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dudezmobi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "kolo": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/kolo/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "decker": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/decker/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "goldenman": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/goldenman/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "chmex": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/chmex/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "fediakash": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/fediakash/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "NutellaLicka": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/NutellaLicka/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "xen": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/xen/readme.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "mcrypt": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/mcrypt/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "madmax": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/madmax/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "dimxy": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/dimxy/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "cipi2": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/cipi/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "artist": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/artist/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "artem.pikulin": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/artem.pikulin/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
         "strob": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/strob/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
-        },
-        "tonyl": {
-            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season6/candidates/tonyl/README.md",
-            "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9"
+            "proposal": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/strob/README.md",
+            "address": "RStrobSH68ke1eFmxNehVuJczTEpFX3C4f",
+            "qr_code": "https://github.com/KomodoPlatform/NotaryNodes/blob/master/season7/qr_codes/strob_SH.jpg"
         }
     }
 }
