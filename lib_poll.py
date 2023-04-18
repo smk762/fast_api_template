@@ -60,6 +60,23 @@ def get_balance_data(explorer, address):
     return balance
 
 
+def get_address_utxos(explorer, address):
+    try:
+        reduced = []
+        utxos = requests.get(f"{explorer}/insight-api-komodo/addr/{address}/utxo").json()
+        for utxo in utxos:
+            reudced_utxo = {
+                "txid": utxo["txid"],
+                "amount": utxo["amount"],
+                "height": utxo["height"]
+            }
+            reduced.append(reudced_utxo)
+        return reduced
+    except Exception as e:
+        logger.warning(f"Error in [get_address_utxos]: {e}")
+        return []
+
+
 def update_balances(polls, final_block=0):
     try:
         for chain in polls:
@@ -73,16 +90,21 @@ def update_balances(polls, final_block=0):
                     if final_block != 0:
                         rpc = lib_rpc.get_rpc(chain)
                         balance_data = rpc.getaddressdeltas({"addresses": [address], "start":1, "end": final_block})
+                        print(balance_data)
                         balance = 0
                         for i in balance_data:
                             balance += i["satoshis"]
                         option.update({"votes": balance/100000000})
                     elif not polls[chain]["final_ntx_block"]:
-                        balance = get_balance_data(explorer, address)
-                        option.update({"votes": balance})
+                        option.update({
+                            "votes": get_balance_data(explorer, address),
+                            "utxos": get_address_utxos(explorer, address),
+                        })
                     elif sync_height <= polls[chain]["final_ntx_block"]["height"]:
-                        balance = get_balance_data(explorer, address)
-                        option.update({"votes": balance})
+                        option.update({
+                            "votes": get_balance_data(explorer, address),
+                            "utxos": get_address_utxos(explorer, address),
+                        })
                     else:
                         logger.info(f"Not updating {chain} votes, poll is over.")
 

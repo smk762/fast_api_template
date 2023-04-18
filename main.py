@@ -22,7 +22,8 @@ RPCIP = os.getenv("KMD_RPCIP")
 API_PORT = int(os.getenv("FASTAPI_PORT"))
 BALANCES = {}
 CURRENT_BLOCK = {}
-API_ADDRESS = "RYbwMBQx9yCaTAxVXwuvHucuHb4Sz66dTj"
+API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
+VOTE_ACTIVE = time.time() < 1682899199
 
 tags_metadata = []
 app = FastAPI(openapi_tags=tags_metadata)
@@ -35,6 +36,20 @@ app = FastAPI(openapi_tags=tags_metadata)
 #    allow_headers=["*"],
 #)
 
+
+# Update poll data
+@app.on_event("startup")
+@repeat_every(seconds=10)
+def update_poll_data():
+    try:
+        logger.info("Updating poll data...")
+        lib_poll.update_polls()
+        logger.info("Poll data updated!")
+    except Exception as e:
+        logger.warning(f"Error in [update_poll_data]: {e}")
+       
+
+# TX generator
 @app.on_event("startup")
 @repeat_every(seconds=30)
 def move_chains():
@@ -45,11 +60,55 @@ def move_chains():
         chains = polls.keys()
         for chain in chains:
             rpc = lib_rpc.get_rpc(chain)
-            addr = random.choice(["RReduceRewardsXXXXXXXXXXXXXXUxPxuC", "RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF"])
-            logger.info(f"{chain} sendtoaddress {addr} 0.00762")
-            logger.info(rpc.sendtoaddress(addr, 0.00762))
+            logger.info(f"{chain} sendtoaddress {API_ADDRESS} 0.00762")
+            logger.info(rpc.sendtoaddress(API_ADDRESS, 0.00762))
     except Exception as e:
         logger.error(e)
+ 
+
+@app.on_event("startup")
+@repeat_every(seconds=60)
+def rpc_getinfo():
+    try:
+        polls = lib_json.get_jsonfile_data('poll_config_v3.json')
+        if not polls:
+            polls = {}
+        for chain in polls:
+            rpc = lib_rpc.get_rpc(chain)
+            logger.info(rpc.getinfo())
+    except Exception as e:
+        logger.warning(f"RPC (getinfo) not responding: {e}")
+
+
+@app.on_event("startup")
+@repeat_every(seconds=915)
+def update_candidates():
+    if VOTE_ACTIVE:
+        try:
+            votes = {}
+            poll_data = lib_json.get_jsonfile_data('poll_config_v3.json')
+            for region in poll_data["VOTE2023"]["categories"]:
+                if region not in votes:
+                    votes.update({region: {}})
+                for i in poll_data["VOTE2023"]["categories"][region]["options"]:
+                    votes[region].update({i["candidate"]: i["votes"]})
+
+
+            candidates_data = requests.get("https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/candidates.json").json()                    
+            for region in candidates_data:
+                for i in candidates_data[region]:
+                    if i["candidate"] in votes[region]:
+                        i.update({"votes": votes[region][i["candidate"]]})
+                    else:
+                        i.update({"votes": 0})
+            
+            for region in poll_data["VOTE2023"]["categories"]:
+                poll_data["VOTE2023"]["categories"][region]["options"] = candidates_data[region]
+
+            lib_json.write_jsonfile_data('poll_config_v3.json', poll_data)
+        except Exception as e:
+            logger.error(e)
+
 
 
 @app.get('/api/v3/polls_list', tags=[])
@@ -186,33 +245,6 @@ def get_all_polls():
     if not polls:
         polls = {}
     return polls
-
-
-# TODO: RPC per chain
-@app.on_event("startup")
-@repeat_every(seconds=5)
-def update_poll_data():
-    try:
-        logger.info("Updating poll data...")
-        lib_poll.update_polls()
-        logger.info("Poll data updated!")
-    except Exception as e:
-        logger.warning(f"Error in [update_poll_data]: {e}")
-        
-
-@app.on_event("startup")
-@repeat_every(seconds=60)
-def rpc_getinfo():
-    try:
-        polls = lib_json.get_jsonfile_data('poll_config_v3.json')
-        if not polls:
-            polls = {}
-        for chain in polls:
-            rpc = lib_rpc.get_rpc(chain)
-            logger.info(rpc.getinfo())
-    except Exception as e:
-        logger.warning(f"RPC (getinfo) not responding: {e}")
-
 
 if __name__ == '__main__':
     if SSL_KEY != "" and SSL_CERT != "":
