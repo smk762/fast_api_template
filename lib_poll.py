@@ -60,15 +60,22 @@ def get_balance_data(explorer, address):
     return balance
 
 
+def get_txid_time(explorer, txid):
+    tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
+    return tx_info["blocktime"]
+
+
 def get_address_utxos(explorer, address):
     try:
         reduced = []
         utxos = requests.get(f"{explorer}/insight-api-komodo/addr/{address}/utxo").json()
         for utxo in utxos:
+            utxo_time = get_txid_time(explorer, utxo["txid"])
             reudced_utxo = {
                 "txid": utxo["txid"],
                 "amount": utxo["amount"],
-                "height": utxo["height"]
+                "height": utxo["height"],
+                "time": utxo_time
             }
             reduced.append(reudced_utxo)
         return reduced
@@ -96,17 +103,22 @@ def update_balances(polls, final_block=0):
                             balance += i["satoshis"]
                         option.update({"votes": balance/100000000})
                     elif not polls[chain]["final_ntx_block"]:
+                        balance = get_balance_data(explorer, address)
+                        utxos = get_address_utxos(explorer, address)
                         option.update({
-                            "votes": get_balance_data(explorer, address),
-                            "utxos": get_address_utxos(explorer, address),
+                            "votes": balance,
+                            "utxos": utxos,
                         })
                     elif sync_height <= polls[chain]["final_ntx_block"]["height"]:
+                        balance = get_balance_data(explorer, address)
+                        utxos = get_address_utxos(explorer, address)
                         option.update({
-                            "votes": get_balance_data(explorer, address),
-                            "utxos": get_address_utxos(explorer, address),
+                            "votes": balance,
+                            "utxos": utxos,
                         })
                     else:
                         logger.info(f"Not updating {chain} votes, poll is over.")
+
 
     except Exception as e:
         logger.warning(f"Error in [update_balances] for {chain}: {e}")
