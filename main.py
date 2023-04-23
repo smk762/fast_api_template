@@ -24,6 +24,7 @@ load_dotenv()
 
 config = ConfigFastAPI()
 db = SqliteDB(config)
+using_nginx = True
 
 app = FastAPI(openapi_tags=config.API_TAGS)
 app.add_middleware(
@@ -62,7 +63,7 @@ def get_nft_metadata():
 
 
 if __name__ == '__main__':
-    if config.SSL_KEY != "" and config.SSL_CERT != "":
+    if config.SSL_KEY != "" and config.SSL_CERT != "" and not using_nginx:
         uvicorn.run("main:app", host=config.API_HOST,
                                 port=config.API_PORT,
                                 ssl_keyfile=config.SSL_KEY,

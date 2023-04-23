@@ -1,0 +1,27 @@
+[Unit]
+Description=fastapi-servicename
+Wants=network-online.target
+After=network-online.target
+Conflicts=getty@tty1.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+WorkingDirectory=/home/admin/moralis-proxy/fast_api_docker
+ExecStart=/usr/bin/python3 /home/admin/moralis-proxy/fast_api_docker/main.py
+
+# Logs path
+StandardOutput=append:/home/admin/logs/fastapi-servicename.log
+StandardError=append:/home/admin/logs/fastapi-servicename.log
+
+User=admin
+Group=admin
+Type=simple
+Restart=on-failure
+TimeoutStopSec=30min
+RestartSec=10s
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target
+
