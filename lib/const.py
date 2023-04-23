@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 import os
+import sys
 from dotenv import load_dotenv
 import lib.json_utils as json_utils
 
@@ -27,6 +29,9 @@ class ConfigFastAPI():
         self.API_METADATA = self.get_api_metadata()
         self.CORS_ORIGINS = self.get_cors_origins()
         self.SSL_KEY, self.SSL_CERT = self.get_ssl_certs()
+
+        # Return the class as a dictionary
+        self.as_dict = self.__dict__
 
     def get_api_port(self):
         ''' Returns the port for the API. '''
@@ -118,7 +123,3 @@ class ConfigFastAPI():
         if os.getenv("CORS_ORIGINS"):
             CORS_ORIGINS += os.getenv("CORS_ORIGINS").split(" ")
         return CORS_ORIGINS
-
-
-if __name__ == "__main__":
-    pass
