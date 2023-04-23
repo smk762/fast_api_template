@@ -25,7 +25,7 @@ sudo ln -s /etc/nginx/sites-available/${subdomain} /etc/nginx/sites-enabled/${su
 sudo systemctl restart nginx
 
 echo "Creating service file..."
-cp config/TEMPLATE-fastapi.service config/fastapi-${1}.service
+cp config/fastapi-TEMPLATE.service config/fastapi-${1}.service
 sed "s|API_PATH|${PWD}|g" -i "config/fastapi-${1}.service"
 sed "s/USERNAME/${USER}/g" -i "config/fastapi-${1}.service"
 
