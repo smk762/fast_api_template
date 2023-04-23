@@ -1,0 +1,57 @@
+# --- 
+# https://sysadmin.pm/nginx-rate-limit/
+# https://www.nginx.com/blog/rate-limiting-nginx/
+# https://gist.github.com/ipmb/472da2a9071dd87e24d3
+geo $limit {
+ default 1;
+ 127.0.0.1 0;
+}
+
+map $limit $limit_key {
+ 0 "";
+ 1 $binary_remote_addr;
+}
+
+limit_req_zone $binary_remote_addr zone=SERVICE_api:10m rate=1r/s;
+
+server {
+    listen 80;
+    server_name SUBDOMAIN;
+    location /.well-known {
+        root WEBROOT;
+    }
+    location / {
+    return 301 https://$server_name$request_uri;
+    }
+}
+
+server {
+  #listen 80;
+  listen 443 ssl;
+  server_name SUBDOMAIN;
+  ssl_certificate   /etc/letsencrypt/live/SUBDOMAIN/fullchain.pem;
+  ssl_certificate_key   /etc/letsencrypt/live/SUBDOMAIN/privkey.pem;
+  root WEBROOT;
+  access_log HOMEDIR/logs/SUBDOMAIN-access.log;
+  error_log  HOMEDIR/logs/SUBDOMAIN-error.log;
+  location / {
+    proxy_pass http://NGINX_PROXY_HOST:FASTAPI_PORT;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    # ip allow and deny rules
+    # deny 23.152.0.13;
+  }
+
+   location /.well-known {
+        # Note that a request for /.well-known/test.html will
+        # look for WEBROOT/.well-known/test.html
+        # and not WEBROOT/test.html
+        root WEBROOT;
+    }
+}
+# ---
