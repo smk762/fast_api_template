@@ -1,5 +1,6 @@
 # Custom
 *.db
+db/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -17,7 +18,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+#lib/
 lib64/
 parts/
 sdist/
