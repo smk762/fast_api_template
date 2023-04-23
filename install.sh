@@ -20,7 +20,7 @@ echo "Setting up FastAPI..."
 subdomain=$(python3 ./vars.py subdomain)
 sudo certbot certonly -d ${subdomain}
 ./config/configure.py ssl_env
-sudo cp nginx/fastapi-${1}.serverblock /etc/nginx/sites-available/${subdomain}
+sudo cp config/fastapi-${1}.serverblock /etc/nginx/sites-available/${subdomain}
 sudo ln -s /etc/nginx/sites-available/${subdomain} /etc/nginx/sites-enabled/${subdomain}
 sudo systemctl restart nginx
 
