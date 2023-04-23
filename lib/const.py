@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 import os
+import sys
 from dotenv import load_dotenv
 import lib.json_utils as json_utils
 
@@ -21,6 +23,7 @@ class ConfigFastAPI():
 
         # FastAPI Environment Variables
         self.SUBDOMAIN = self.get_subdomain()
+        self.API_HOST = self.get_api_host()
         self.API_PORT = self.get_api_port()
         self.API_TAGS = self.get_api_tags()
         self.API_URL = self.get_api_url()
@@ -28,14 +31,20 @@ class ConfigFastAPI():
         self.CORS_ORIGINS = self.get_cors_origins()
         self.SSL_KEY, self.SSL_CERT = self.get_ssl_certs()
 
+        # Return the class as a dictionary
+        self.as_dict = self.__dict__
+
+    def get_api_host(self):
+        ''' Returns the host IP for the API. '''
+        API_HOST = os.getenv("FASTAPI_HOST")
+        if not API_HOST: return "127.0.0.1"
+        else: return API_HOST
+        
     def get_api_port(self):
         ''' Returns the port for the API. '''
         API_PORT = os.getenv("FASTAPI_PORT")
-        if not API_PORT:
-            API_PORT = 8088
-        else:
-            API_PORT = int(API_PORT)
-        return API_PORT
+        if not API_PORT: return 8088
+        else: return int(API_PORT)
 
     def get_ssl_certs(self):
         ''' Returns the SSL key and cert. '''
@@ -118,7 +127,3 @@ class ConfigFastAPI():
         if os.getenv("CORS_ORIGINS"):
             CORS_ORIGINS += os.getenv("CORS_ORIGINS").split(" ")
         return CORS_ORIGINS
-
-
-if __name__ == "__main__":
-    pass

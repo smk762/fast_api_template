@@ -52,7 +52,10 @@ def get_jsonfile_data():
 
 if __name__ == '__main__':
     if config.SSL_KEY != "" and config.SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT,
-                    ssl_keyfile=config.SSL_KEY, ssl_certfile=config.SSL_CERT)
+        uvicorn.run("main:app", host=config.API_HOST,
+                                port=config.API_PORT,
+                                ssl_keyfile=config.SSL_KEY,
+                                ssl_certfile=config.SSL_CERT)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT)
+        uvicorn.run("main:app", host=config.API_HOST,
+                                port=config.API_PORT)
