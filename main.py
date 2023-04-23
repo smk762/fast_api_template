@@ -19,17 +19,19 @@ load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
 
-CORS_ORIGINS = []
+CORS_ORIGINS = ["http://localhost:3000"]
 if os.getenv("CORS_ORIGINS"):
     CORS_ORIGINS = os.getenv("CORS_ORIGINS").split(" ")
+
+TAGS_METADATA = []
+if os.getenv("TAGS_METADATA"):
+    TAGS_METADATA = os.getenv("TAGS_METADATA").split(" ")
 
 API_PORT = 8080
 if os.getenv("API_PORT"):
     API_PORT = os.getenv("API_PORT")
 
-tags_metadata = []
-app = FastAPI(openapi_tags=tags_metadata)
-
+app = FastAPI(openapi_tags=TAGS_METADATA)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
