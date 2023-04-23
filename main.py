@@ -19,22 +19,29 @@ load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
 SSL_CERT = os.getenv("SSL_CERT")
 
-
-tags_metadata = []
-cors_origins = [
-    "http://localhost:3000",
-    "https://vote.komodoplatform.com",
-    "http://vote.komodoplatform.com"
+CORS_ORIGINS = [
+    "http://localhost:3000"
 ]
-app = FastAPI(openapi_tags=tags_metadata)
+if os.getenv("CORS_ORIGINS"):
+    CORS_ORIGINS = os.getenv("CORS_ORIGINS").split(" ")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+TAGS_METADATA = []
+if os.getenv("TAGS_METADATA"):
+    TAGS_METADATA = os.getenv("TAGS_METADATA").split(" ")
+
+API_PORT = 8080
+if os.getenv("API_PORT"):
+    API_PORT = os.getenv("API_PORT")
+
+app = FastAPI(openapi_tags=TAGS_METADATA)
 
 @app.on_event("startup")
 @repeat_every(seconds=15)
@@ -54,6 +61,6 @@ def get_jsonfile_data():
 
 if __name__ == '__main__':
     if SSL_KEY != "" and SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=8080, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=8080)
+        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT)
