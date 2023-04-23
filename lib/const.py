@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 import os
 import sys
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import lib.json_utils as json_utils
 
 
 class ConfigFastAPI():
     ''' Class for API configuration. '''
     def __init__(self) -> None:
-        load_dotenv()
-        
-        self.FAUCET_COINS = self.get_faucet_coins()
-
-        # AtomicDEX Environment Variables
-        self.ATOMICDEX_IP = self.get_atomicdex_api()
-        self.ATOMICDEX_PORT = self.get_atomicdex_port()
-        self.ATOMICDEX_USERPASS = self.get_atomicdex_userpass()
+        load_dotenv(find_dotenv())
         
         # SQLite Environment Variables
         self.SQLITEDB_PATH = self.get_sqlitedb_path()
@@ -30,6 +23,9 @@ class ConfigFastAPI():
         self.API_METADATA = self.get_api_metadata()
         self.CORS_ORIGINS = self.get_cors_origins()
         self.SSL_KEY, self.SSL_CERT = self.get_ssl_certs()
+
+        # Other App variables
+        self.MORALIS_API_KEY = os.getenv('MORALIS_API_KEY')
 
         # Return the class as a dictionary
         self.as_dict = self.__dict__

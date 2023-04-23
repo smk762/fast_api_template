@@ -17,6 +17,7 @@ from lib.sqlite import SqliteDB
 from lib.logger import logger
 import lib.api_proxy as api_proxy
 import lib.json_utils as json_utils
+import lib.moralis_api as moralis_api
 
 
 load_dotenv()
@@ -45,9 +46,19 @@ def update_data():
         return {"Error: ": str(e)}
 
 
-@app.get('/api/v1/data', tags=["data"])
-def get_jsonfile_data():
-    return json_utils.get_jsonfile_data('jsondata.json')
+@app.get('/api/v1/get_wallet_nfts', tags=[""])
+def get_wallet_nfts():
+    return moralis_api.get_wallet_nfts("eth", "0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
+
+
+@app.get('/api/v1/get_wallet_nft_transfers', tags=[""])
+def get_wallet_nft_transfers():
+    return moralis_api.get_wallet_nft_transfers("eth", "0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
+
+
+@app.get('/api/v1/get_nft_metadata', tags=[""])
+def get_nft_metadata():
+    return moralis_api.get_nft_metadata("eth", "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB", token_id="1")
 
 
 if __name__ == '__main__':
