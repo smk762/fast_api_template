@@ -65,8 +65,8 @@ def get_wallet_nft_transfers(chain, address, format="decimal", limit=10, disable
 
 
 # https://moralisweb3.github.io/Moralis-Python-SDK/evm_api/nft.html#get_nft_metadata
-def get_nft_metadata(chain, address, format="decimal", token_id="",
-                              normalizeMetadata=True, media_items=True):
+def get_nft_metadata(chain, address,  token_id="", format="decimal",
+                     normalizeMetadata=True, media_items=True):
 
     params = {
         "address": address, 

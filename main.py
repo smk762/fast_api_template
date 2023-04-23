@@ -48,18 +48,18 @@ def update_data():
 
 
 @app.get('/api/v1/get_wallet_nfts', tags=[""])
-def get_wallet_nfts():
-    return moralis_api.get_wallet_nfts("eth", "0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
+def get_wallet_nfts(chain="eth", address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045"):
+    return moralis_api.get_wallet_nfts(chain, address)
 
 
 @app.get('/api/v1/get_wallet_nft_transfers', tags=[""])
-def get_wallet_nft_transfers():
-    return moralis_api.get_wallet_nft_transfers("eth", "0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
+def get_wallet_nft_transfers(chain="eth", address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045"):
+    return moralis_api.get_wallet_nft_transfers(chain, address)
 
 
 @app.get('/api/v1/get_nft_metadata', tags=[""])
-def get_nft_metadata():
-    return moralis_api.get_nft_metadata("eth", "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB", token_id="1")
+def get_nft_metadata(chain="eth", address="0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB", token_id="1"):
+    return moralis_api.get_nft_metadata(chain, address, token_id)
 
 
 if __name__ == '__main__':
