@@ -1,0 +1,48 @@
+{
+    "table_name": [
+        {
+            "column_name": "value",
+            "type": "string",
+            "description": "Extra information about this column.",
+            "primary_key": true,
+            "foreign_key_table": "",
+            "foreign_key_column": "",
+            "foreign_key_on_delete": "",
+            "foreign_key_on_update": "",
+            "not_null": true,
+            "default": "",
+            "unique": true,
+            "auto_increment": true            
+        }
+    ],
+    "table_template": [
+        {
+            "column_name": "id",
+            "type": "INTEGER",
+            "description": "Autoincrementing index column (primary key).",
+            "primary_key": true,
+            "foreign_key_table": "",
+            "foreign_key_column": "",
+            "foreign_key_on_delete": "",
+            "foreign_key_on_update": "",
+            "not_null": true,
+            "default": "",
+            "unique": true,
+            "auto_increment": true            
+        },
+        {
+            "column_name": "updated_at",
+            "description": "The timestamp when the record was last updated.",
+            "type": "INTEGER",
+            "primary_key": false,
+            "foreign_key_table": "",
+            "foreign_key_column": "",
+            "foreign_key_on_delete": "",
+            "foreign_key_on_update": "",
+            "not_null": true,
+            "default": "",
+            "unique": false,
+            "auto_increment": false
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 import json
-from lib_logger import logger
+from lib.logger import logger
 
 def get_jsonfile_data(filename):
     try:

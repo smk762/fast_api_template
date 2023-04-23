@@ -11,53 +11,48 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
-import lib_data
-import lib_json
-from lib_logger import logger
+from lib.const import ConfigFastAPI
+from lib.sqlite import SqliteDB
+
+from lib.logger import logger
+import lib.api_proxy as api_proxy
+import lib.json_utils as json_utils
+
 
 load_dotenv()
-SSL_KEY = os.getenv("SSL_KEY")
-SSL_CERT = os.getenv("SSL_CERT")
 
-CORS_ORIGINS = ["http://localhost:3000"]
-if os.getenv("CORS_ORIGINS"):
-    CORS_ORIGINS = os.getenv("CORS_ORIGINS").split(" ")
+config = ConfigFastAPI()
+db = SqliteDB(config)
 
-TAGS_METADATA = []
-if os.getenv("TAGS_METADATA"):
-    TAGS_METADATA = os.getenv("TAGS_METADATA").split(" ")
-
-API_PORT = 8080
-if os.getenv("API_PORT"):
-    API_PORT = os.getenv("API_PORT")
-
-app = FastAPI(openapi_tags=TAGS_METADATA)
+app = FastAPI(openapi_tags=config.API_TAGS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=config.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
+
 
 @app.on_event("startup")
 @repeat_every(seconds=15)
 def update_data():
     try:
-        data = lib_data.get_data()
-        lib_json.write_jsonfile_data('jsondata.json', data)
+        data = api_proxy.get_data()
+        json_utils.write_jsonfile_data('jsondata.json', data)
     except Exception as e:
         logger.info(f"Error in [update_data]: {e}")
         return {"Error: ": str(e)}
 
 
-@app.get('/api/v1/data', tags=[])
+@app.get('/api/v1/data', tags=["data"])
 def get_jsonfile_data():
-    return lib_json.get_jsonfile_data('jsondata.json')
+    return json_utils.get_jsonfile_data('jsondata.json')
 
 
 if __name__ == '__main__':
-    if SSL_KEY != "" and SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT)
+    if config.SSL_KEY != "" and config.SSL_CERT != "":
+        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT,
+                    ssl_keyfile=config.SSL_KEY, ssl_certfile=config.SSL_CERT)
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=API_PORT)
+        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT)
