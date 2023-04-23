@@ -8,7 +8,7 @@ import socket
 import string
 import mnemonic
 from dotenv import load_dotenv
-from lib.logger import logger
+from logger import logger
 
 load_dotenv()
 
@@ -127,11 +127,11 @@ def check_dotenv():
                 f.write(f'{var}="{val}"\n')
 
 
-def create_serverblock():
+def create_serverblock(service):
     home = os.path.expanduser("~")
     script_path = os.path.realpath(os.path.dirname(__file__))
-    blockname = f"{script_path}/nginx/fastapi-faucet.serverblock"
-    with open(f"{script_path}/nginx/TEMPLATE.serverblock", "r") as r:
+    blockname = f"{script_path}/fastapi-{service}.serverblock"
+    with open(f"{script_path}/fastapi-TEMPLATE.serverblock", "r") as r:
         with open(blockname, "w") as w:
             for line in r.readlines():
                 line = line.replace("HOMEDIR", home)
@@ -175,7 +175,10 @@ if __name__ == "__main__":
         elif sys.argv[1] == "atomicdex":
             configure_atomicdex('atomicdex')
         elif sys.argv[1] == "nginx":
-            create_serverblock()
+            if len(sys.argv) > 2:
+                create_serverblock(sys.argv[2])
+            else:
+                logger.error("Please specify a service name. E.g. 'python3 configure.py nginx faucet")
         elif sys.argv[1] == "ssl_env":
             update_ssl_env()
         else:

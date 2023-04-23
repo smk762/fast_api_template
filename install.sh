@@ -16,7 +16,7 @@ echo "Configuring environment..."
 ./config/configure.py env_vars
 
 echo "Setting up FastAPI..."
-./config/configure.py nginx
+./config/configure.py nginx ${1}
 subdomain=$(python3 ./vars.py subdomain)
 sudo certbot certonly -d ${subdomain}
 ./config/configure.py ssl_env
