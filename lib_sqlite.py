@@ -8,6 +8,7 @@ DB_PATH = const.get_db_path()
 # Create table if not existing
 def create_tbl(table='voting'):
     try:
+        print(f'Creating table {table} in {DB_PATH}')
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}';")

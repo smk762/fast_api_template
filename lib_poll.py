@@ -69,7 +69,10 @@ def sort_by_time(data):
 
 def get_txid_time(explorer, txid):
     tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
-    return tx_info["blocktime"]
+    if "blocktime" in tx_info:
+        return tx_info["blocktime"]
+    else:
+        return false
 
 
 def get_address_utxos(explorer, address):
@@ -78,13 +81,14 @@ def get_address_utxos(explorer, address):
         utxos = requests.get(f"{explorer}/insight-api-komodo/addr/{address}/utxo").json()
         for utxo in utxos:
             utxo_time = get_txid_time(explorer, utxo["txid"])
-            reudced_utxo = {
-                "txid": utxo["txid"],
-                "amount": utxo["amount"],
-                "height": utxo["height"],
-                "time": utxo_time
-            }
-            reduced.append(reudced_utxo)
+            if utxo_time:
+                reduced_utxo = {
+                    "txid": utxo["txid"],
+                    "amount": utxo["amount"],
+                    "height": utxo["height"],
+                    "time": utxo_time
+                }
+                reduced.append(reduced_utxo)
         return reduced
     except Exception as e:
         logger.warning(f"Error in [get_address_utxos]: {e}")
@@ -101,11 +105,43 @@ def get_address_balance(balances, address, final_block=None):
         return round(balance, 4)
     else:
         return 0
-                            
+
+
+def reduce_notary_name(notary):
+    notary = notary.split("_")[0]
+    if notary in ["kolox", "ptyx2"]:
+        notary = notary[:-1]
+    if notary == "blackice":
+        notary = "decker"
+    if notary == "strobnidan":
+        notary = "strob"
+    return notary
+
+
+def get_veterans():
+    veterancy = {}
+    tenure = {}
+    for i in range(1, 7):
+        url = f"https://stats.kmd.io/api/info/notary_nodes/?season=Season_{i}"
+        data = requests.get(url).json()["results"]
+        data = [reduce_notary_name(notary) for notary in data]
+        data = list(set(data))
+        for notary in data:
+            if notary not in tenure:
+                tenure[notary] = 0
+            tenure[notary] += 1
+
+    for notary in sorted(tenure, key=tenure.get, reverse=True):
+        if tenure[notary] > 1:
+            veterancy.update({notary: tenure[notary]})
+    return veterancy
+        
+
 
 def update_balances(polls, final_block=0, testnet=False):
-    try:
-        for coin in polls:
+    veterans = lib_json.get_jsonfile_data('veterans.json')
+    for coin in polls:
+        try:
             existing_txids = db.VoteTXIDs(coin)
             poll_txids = existing_txids.get_txids()
             poll_txid_list = [i["txid"] for i in poll_txids]
@@ -125,6 +161,12 @@ def update_balances(polls, final_block=0, testnet=False):
                         if candidate == v:
                             testnet_ids.append(k)
                     option.update({"testnet": testnet_ids})
+
+                    if candidate in veterans:
+                        option.update({"veteran": True})
+                    else:
+                        option.update({"veteran": False})
+
                     row = db.VoteRow()
                     row.coin = coin
                     row.address = address
@@ -173,15 +215,17 @@ def update_balances(polls, final_block=0, testnet=False):
                         all_utxos += utxos
                         option.update({
                             "votes": get_address_balance(balances, address),
-                            "utxos": utxos,
+                            "utxos": utxos
                         })
                     else:
                         logger.info(f"Not updating {coin} votes, poll is over.")
             if all_utxos:
+                print(all_utxos[0])
+                sum_utxos = sum([i["amount"] for i in all_utxos])
+                all_filtered_utxos = [i for i in all_utxos if i["amount"] >= 1]
                 sorted_utxos = sort_by_time(all_utxos)
                 sorted_utxos.reverse()
                 last_100 = sorted_utxos[:100]
-                sum_utxos = sum([i["amount"] for i in sorted_utxos])
                 polls[coin].update({
                     "recent_votes": sorted_utxos[:100],
                     "sum_votes": sum_utxos,
@@ -189,8 +233,8 @@ def update_balances(polls, final_block=0, testnet=False):
                 })
 
 
-    except Exception as e:
-        logger.warning(f"Error in [update_balances] for {coin}: {e}")
+        except Exception as e:
+            logger.warning(f"Error in [update_balances] for {coin}: {e}")
 
 
 def update_polls():
@@ -212,8 +256,11 @@ def update_polls():
             polls[coin]["current_block"] = {
                 "height": blocktip,
                 "hash": block_hash,
-                "time": block_time,
+                "time": block_time
             }
+
+            if "total_votes" in polls[coin].keys():
+                del polls[coin]["total_votes"]
 
             if not polls[coin]["final_ntx_block"]:
                 update_balances(polls, testnet=testnet)
