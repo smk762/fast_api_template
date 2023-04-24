@@ -12,7 +12,7 @@ config = ConfigFastAPI()
 print(config.as_dict)
 
 # https://moralisweb3.github.io/Moralis-Python-SDK/evm_api/nft.html#get_wallet_nfts
-def get_wallet_nfts(chain, address, format="decimal", limit=10, disable_total=True,
+def get_wallet_nfts(chain, address, format="decimal", limit=100, disable_total=True,
                     token_addresses=None, cursor="", normalizeMetadata=True, media_items=True):
     if not token_addresses:
         token_addresses = []
@@ -38,7 +38,7 @@ def get_wallet_nfts(chain, address, format="decimal", limit=10, disable_total=Tr
 
 
 # https://moralisweb3.github.io/Moralis-Python-SDK/evm_api/nft.html#get_wallet_nft_transfers
-def get_wallet_nft_transfers(chain, address, format="decimal", limit=10, disable_total=True, cursor="",
+def get_wallet_nft_transfers(chain, address, format="decimal", limit=100, disable_total=True, cursor="",
                     to_block="", from_block="", direction="both"):
 
     params = {
