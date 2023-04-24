@@ -13,20 +13,31 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Re
 import lib_poll
 import lib_json
 import lib_rpc
+import const
+import lib_sqlite as db
 from lib_logger import logger
 
 load_dotenv()
-SSL_KEY = os.getenv("SSL_KEY")
-SSL_CERT = os.getenv("SSL_CERT")
-RPCIP = os.getenv("KMD_RPCIP")
-API_PORT = int(os.getenv("FASTAPI_PORT"))
+
+
 BALANCES = {}
 CURRENT_BLOCK = {}
-API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
+RPCIP = os.getenv("KMD_RPCIP")
+API_PORT = const.get_api_port()
 VOTE_ACTIVE = time.time() < 1682899199
+SSL_KEY, SSL_CERT = const.get_ssl_certs()
+API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
+
 
 tags_metadata = []
-app = FastAPI(openapi_tags=tags_metadata)
+
+def create_app():
+    db.create_tbl()
+    app = FastAPI(openapi_tags=tags_metadata)
+    return app
+
+app = create_app()
+
 
 #app.add_middleware(
 #    CORSMiddleware,
@@ -39,7 +50,7 @@ app = FastAPI(openapi_tags=tags_metadata)
 
 # Update poll data
 @app.on_event("startup")
-@repeat_every(seconds=10)
+@repeat_every(seconds=20)
 def update_poll_data():
     try:
         logger.info("Updating poll data...")
@@ -75,7 +86,7 @@ def rpc_getinfo():
             polls = {}
         for chain in polls:
             rpc = lib_rpc.get_rpc(chain)
-            logger.info(rpc.getinfo())
+            #logger.info(rpc.getinfo())
     except Exception as e:
         logger.warning(f"RPC (getinfo) not responding: {e}")
 
