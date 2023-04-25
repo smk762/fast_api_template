@@ -166,11 +166,22 @@ def get_address_transactions(explorer, address):
         transactions = requests.get(f"{explorer}/insight-api-komodo/addrs/{address}/txs?from={from_}&to={to_}").json()
         tx_count = transactions["totalItems"]
         break
+    #print(transactions)
 
-    print(transactions)
-
+def get_address_info(explorer, address):
+    info = requests.get(f"{explorer}/insight-api-komodo/addr/{address}").json()
+    balance = info["balance"]
+    transactions = info["transactions"]
+    return balance, transactions
     
-
+def get_balances_dict(polls, explorer):
+    balances = {}
+    for category in polls[coin]["categories"]:
+        for option in polls[coin]["categories"][category]["options"]:
+            address = option["address"]
+            balance, transactions = get_address_info(explorer, address)
+            balances.update({address: balance})
+    return balances
 
 def update_balances(polls, final_block=0, testnet=False):
     veterans = lib_json.get_jsonfile_data('veterans.json')
@@ -182,13 +193,14 @@ def update_balances(polls, final_block=0, testnet=False):
             explorer = polls[coin]["explorer"]
             balances = existing_txids.get_sum_by_address()
             balances = [dict(i) for i in balances]
+            #balances = get_balances_dict(polls, explorer)
+            print(balances)
             addresses = [i["address"] for i in balances]
             sync_height = get_sync_data(polls[coin]['explorer'])["height"]
             all_utxos = []
             for category in polls[coin]["categories"]:
                 for option in polls[coin]["categories"][category]["options"]:
                     address = option["address"]
-                    transactions = get_address_transactions(explorer, address)
                     candidate = option["candidate"]
 
                     testnet_ids = []
