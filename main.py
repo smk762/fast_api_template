@@ -32,7 +32,7 @@ API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
 tags_metadata = []
 
 def create_app():
-    print("Creating app...")
+    logger.info("Creating app...")
     db.create_tbl()
     app = FastAPI(openapi_tags=tags_metadata)
     return app

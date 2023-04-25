@@ -8,7 +8,7 @@ DB_PATH = const.get_db_path()
 # Create table if not existing
 def create_tbl(table='voting'):
     try:
-        print(f'Creating table {table} in {DB_PATH}')
+        logger.info(f'Creating table {table} in {DB_PATH}')
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}';")
@@ -28,7 +28,7 @@ def create_tbl(table='voting'):
                 ")
             conn.commit()
     except Exception as e:
-        print(e)
+        logger.info(e)
 
 
 def connect_sqlite(DB):
@@ -68,8 +68,8 @@ def get_table_row(cursor, table):
 
 def view_table_info(cursor, table):
     info = get_table_info(cursor, table)
-    print(f"\n\n## {table}\n")
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info(f"\n\n## {table}\n")
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "-"*10,
         "-"*21,
         "-"*18,
@@ -78,7 +78,7 @@ def view_table_info(cursor, table):
         "-"*13,
         )    
     )
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "ID",
         "Name",
         "Type",
@@ -87,7 +87,7 @@ def view_table_info(cursor, table):
         "PrimaryKey"
         )
     )
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "-"*10,
         "-"*21,
         "-"*18,
@@ -98,7 +98,7 @@ def view_table_info(cursor, table):
     )
 
     for i in info:
-        print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
             f'{i[0]}',
             f'{i[1]}',
             f'{i[2]}',
@@ -115,6 +115,42 @@ class VoteTXIDs():
         self.address = address
         self.category = category
         self.option = option
+
+    def get_recent_votes(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            if self.address:
+                sql = f"SELECT * FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;"
+            else:
+                sql = f"SELECT * FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;"
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            recent = [dict(i) for i in data]
+            return recent
+
+
+    def get_num_votes(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            if self.address:
+                cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+            else:
+                cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
+            return cursor.fetchone()[0]
+
+
+    def get_sum_votes(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            if self.address:
+                cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+            else:
+                cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
+            return round(cursor.fetchone()[0],6)
+
 
     def get_txids(self):
         with sqlite3.connect(DB_PATH) as conn:
@@ -212,9 +248,31 @@ class VoteTXIDs():
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             sql = f"SELECT * from voting WHERE coin='{self.coin}' AND category='{region}' AND option='{candidate}';"
-            print(sql)
+            logger.info(sql)
             cursor.execute(sql)
             return cursor.fetchall()
+
+    def get_addresses_list(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            sql = f"SELECT DISTINCT address from voting WHERE coin='{self.coin}';"
+            logger.info(sql)
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            addresses = [i[0] for i in data]
+            return addresses
+
+    def get_txids_list(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            sql = f"SELECT DISTINCT txid from voting WHERE coin='{self.coin}';"
+            logger.info(sql)
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            txids = [i[0] for i in data]
+            return txids
     
 
 
@@ -234,7 +292,7 @@ class VoteRow():
         try:
             with sqlite3.connect(DB_PATH) as conn:
                 cursor = conn.cursor()
-                print(f"Adding txid {self.txid} to voting table")
+                logger.info(f"Adding txid {self.txid} to voting table")
                 cursor.execute(f"INSERT INTO voting (coin,address,category,option,txid,blockheight,amount,blocktime) \
                                 VALUES ('{self.coin}', '{self.address}', '{self.category}', '{self.option}', '{self.txid}', \
                                         {self.blockheight}, {self.amount}, {self.blocktime});")
@@ -253,7 +311,7 @@ class VoteRow():
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             if self.txid:
-                print(f"Removing txid {self.txid} from voting table")
                 cursor.execute(f"DELETE FROM voting WHERE txid='{self.txid}';")
-            conn.commit()
+                conn.commit()
+                logger.info(f"Removed txid {self.txid} from voting table")
         
