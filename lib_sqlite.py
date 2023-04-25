@@ -207,6 +207,15 @@ class VoteTXIDs():
             cursor.execute(f"SELECT address, SUM(amount) as votes FROM voting WHERE coin='{self.coin}' GROUP BY address;")
             return cursor.fetchall()
     
+    def get_candidate_rows(self, candidate, region):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            sql = f"SELECT * from voting WHERE coin='{self.coin}' AND category='{region}' AND option='{candidate}';"
+            print(sql)
+            cursor.execute(sql)
+            return cursor.fetchall()
+    
 
 
 class VoteRow():
@@ -225,6 +234,7 @@ class VoteRow():
         try:
             with sqlite3.connect(DB_PATH) as conn:
                 cursor = conn.cursor()
+                print(f"Adding txid {self.txid} to voting table")
                 cursor.execute(f"INSERT INTO voting (coin,address,category,option,txid,blockheight,amount,blocktime) \
                                 VALUES ('{self.coin}', '{self.address}', '{self.category}', '{self.option}', '{self.txid}', \
                                         {self.blockheight}, {self.amount}, {self.blocktime});")
@@ -237,5 +247,13 @@ class VoteRow():
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             cursor.execute(f"UPDATE voting SET blockheight={self.blockheight}, amount={self.amount}, blocktime={self.blocktime} WHERE coin='{self.coin}' AND txid='{self.txid}';")
+            conn.commit()
+        
+    def delete_txid(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            if self.txid:
+                print(f"Removing txid {self.txid} from voting table")
+                cursor.execute(f"DELETE FROM voting WHERE txid='{self.txid}';")
             conn.commit()
         

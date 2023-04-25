@@ -6,6 +6,9 @@ import lib_json
 from lib_logger import logger
 import lib_sqlite as db
 
+
+SELF_SEND_TXIDS = []
+
 def get_poll_options(polls, coin, category):
     if coin not in polls.keys():
         return {"error": f"{coin} does not exist!"}
@@ -72,7 +75,7 @@ def get_txid_time(explorer, txid):
     if "blocktime" in tx_info:
         return tx_info["blocktime"]
     else:
-        return false
+        return False
 
 
 def get_address_utxos(explorer, address):
@@ -81,7 +84,7 @@ def get_address_utxos(explorer, address):
         utxos = requests.get(f"{explorer}/insight-api-komodo/addr/{address}/utxo").json()
         for utxo in utxos:
             utxo_time = get_txid_time(explorer, utxo["txid"])
-            if utxo_time:
+            if utxo_time and utxo["txid"] not in SELF_SEND_TXIDS:
                 reduced_utxo = {
                     "txid": utxo["txid"],
                     "amount": utxo["amount"],
@@ -135,7 +138,38 @@ def get_veterans():
         if tenure[notary] > 1:
             veterancy.update({notary: tenure[notary]})
     return veterancy
-        
+
+
+def is_self_send(txid, explorer, vote_addresses):
+    try:
+        if txid in SELF_SEND_TXIDS:
+            return True
+        tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
+        if "vin" in tx_info:
+            for i in tx_info['vin']:
+                if "addr" in i:
+                    if i['addr'] in vote_addresses:
+                        SELF_SEND_TXIDS.append(txid)
+                        bad_row = db.VoteRow(txid=txid)
+                        bad_row.delete_txid()
+                        print(f"Source [{i['addr']}] in [{txid}] is a vote address, skipping")
+                        return True
+    except Exception as e:
+        print(f"Error in [is_self_send]: {e}")    
+    return False
+
+def get_address_transactions(explorer, address):
+    # 50 max. Need to loop over pages.
+    while True:
+        from_ = 1
+        to_ = 50
+        transactions = requests.get(f"{explorer}/insight-api-komodo/addrs/{address}/txs?from={from_}&to={to_}").json()
+        tx_count = transactions["totalItems"]
+        break
+
+    print(transactions)
+
+    
 
 
 def update_balances(polls, final_block=0, testnet=False):
@@ -145,15 +179,16 @@ def update_balances(polls, final_block=0, testnet=False):
             existing_txids = db.VoteTXIDs(coin)
             poll_txids = existing_txids.get_txids()
             poll_txid_list = [i["txid"] for i in poll_txids]
+            explorer = polls[coin]["explorer"]
             balances = existing_txids.get_sum_by_address()
             balances = [dict(i) for i in balances]
-            # logger.info(balances)
+            addresses = [i["address"] for i in balances]
             sync_height = get_sync_data(polls[coin]['explorer'])["height"]
-            explorer = polls[coin]["explorer"]
             all_utxos = []
             for category in polls[coin]["categories"]:
                 for option in polls[coin]["categories"][category]["options"]:
                     address = option["address"]
+                    transactions = get_address_transactions(explorer, address)
                     candidate = option["candidate"]
 
                     testnet_ids = []
@@ -178,53 +213,64 @@ def update_balances(polls, final_block=0, testnet=False):
 
                     elif not polls[coin]["final_ntx_block"]:
                         utxos = get_address_utxos(explorer, address)
+                        good_utxos = []
                         for utxo in utxos:
-                            if utxo["txid"] not in poll_txid_list:
-                                if "height" in utxo.keys():
-                                    row.txid = utxo["txid"]
-                                    row.amount = utxo["amount"]
-                                    row.blockheight = utxo["height"]
-                                    row.blocktime = utxo["time"]
-                                    row.insert()
-
                             utxo.update({
                                 "candidate": candidate,
                                 "region": category
                             })
+                            if not is_self_send(utxo["txid"], explorer, addresses):
+                                if utxo["txid"] not in poll_txid_list and utxo["txid"] not in SELF_SEND_TXIDS:
+                                    if "height" in utxo.keys():
+                                        row.txid = utxo["txid"]
+                                        row.amount = utxo["amount"]
+                                        row.blockheight = utxo["height"]
+                                        row.blocktime = utxo["time"]
+                                        row.insert()
+                                good_utxos.append(utxo)
+                        print(f"{len(utxos)} before filtering self sent")
+                        utxos = good_utxos
+                        print(f"{len(utxos)} after filtering self sent")
                         all_utxos += utxos
                         option.update({
                             "votes": get_address_balance(balances, address),
-                            "utxos": utxos,
+                            "utxos": [i for i in utxos if i["amount"] >= 1]
                         })
 
                     elif sync_height <= polls[coin]["final_ntx_block"]["height"]:
                         utxos = get_address_utxos(explorer, address)
                         logger.info(f"{len(utxos)} {coin} utxos for {address}")
+                        good_utxos = []
                         for utxo in utxos:
-                            if utxo["txid"] not in poll_txid_list:
-                                if "height" in utxo.keys():
-                                    row.txid = utxo["txid"]
-                                    row.amount = utxo["amount"]
-                                    row.blockheight = utxo["height"]
-                                    row.blocktime = utxo["time"]
-                                    row.insert()
                             utxo.update({
                                 "candidate": candidate,
                                 "region": category
                             })
+                            if not is_self_send(utxo["txid"], explorer, addresses):
+                                if utxo["txid"] not in poll_txid_list and utxo["txid"] not in SELF_SEND_TXIDS:
+                                    if "height" in utxo.keys():
+                                        row.txid = utxo["txid"]
+                                        row.amount = utxo["amount"]
+                                        row.blockheight = utxo["height"]
+                                        row.blocktime = utxo["time"]
+                                        row.insert()
+                                good_utxos.append(utxo)
+
+                        print(f"{len(utxos)} before filtering self sent")
+                        utxos = good_utxos
+                        print(f"{len(utxos)} after filtering self sent")
                         all_utxos += utxos
                         option.update({
                             "votes": get_address_balance(balances, address),
-                            "utxos": utxos
+                            "utxos":  [i for i in utxos if i["amount"] >= 1]
                         })
                     else:
                         logger.info(f"Not updating {coin} votes, poll is over.")
             if all_utxos:
-                print(all_utxos[0])
                 sum_utxos = sum([i["amount"] for i in all_utxos])
-                all_filtered_utxos = [i for i in all_utxos if i["amount"] >= 1]
                 sorted_utxos = sort_by_time(all_utxos)
                 sorted_utxos.reverse()
+                sorted_utxos = [i for i in sorted_utxos if i["amount"] >= 1]
                 last_100 = sorted_utxos[:100]
                 polls[coin].update({
                     "recent_votes": sorted_utxos[:100],

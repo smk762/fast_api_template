@@ -258,7 +258,15 @@ def get_all_polls():
         polls = {}
     return polls
 
+
+@app.get('/api/v3/db/{coin}/{candidate}/{region}', tags=[])
+def get_candidate_rows(coin: str, candidate: str, region: str):
+    vote_db = db.VoteTXIDs(coin)
+    data = vote_db.get_candidate_rows(candidate, region)
+    return data
+
 if __name__ == '__main__':
+    # Generally its better to let NGINX handle SSL
     if SSL_KEY != "" and SSL_CERT != "":
         uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT, reload=True)
     else:
