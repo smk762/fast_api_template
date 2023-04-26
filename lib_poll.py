@@ -148,11 +148,11 @@ def update_option(option, coin, explorer, address, category, candidate, poll_txi
 
         balance, transactions = get_address_info(explorer, address)
         tx_to_scan = list(set(transactions) - set(poll_txid_list) - set(SELF_SENT_TXIDS))
+
         for txid in tx_to_scan:
             utxo = {}
             if txid not in poll_txid_list and txid not in SELF_SENT_TXIDS:
                 tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
-                #logger.info(f"TX Info: {tx_info}")
                 if not is_self_send(txid, explorer, addresses):
                     logger.info(f"Processing TXID {txid} [{candidate}]")
                     if "blockheight" in tx_info.keys():

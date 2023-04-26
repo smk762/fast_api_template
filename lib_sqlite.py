@@ -20,10 +20,11 @@ def create_tbl(table='voting'):
                             address text, \
                             category int, \
                             option text, \
-                            txid text UNIQUE, \
+                            txid text, \
                             amount real, \
                             blockheight int, \
-                            blocktime int \
+                            blocktime int, \
+                            UNIQUE(txid, address) \
                         ) \
                 ")
             conn.commit()
@@ -126,8 +127,11 @@ class VoteTXIDs():
                 sql = f"SELECT * FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;"
             cursor.execute(sql)
             data = cursor.fetchall()
-            recent = [dict(i) for i in data]
-            return recent
+            try:
+                recent = [dict(i) for i in data]
+                return recent
+            except:
+                return []
 
 
     def get_num_votes(self):
@@ -138,7 +142,10 @@ class VoteTXIDs():
                 cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
             else:
                 cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
-            return cursor.fetchone()[0]
+            try:
+                return cursor.fetchone()[0]
+            except:
+                return 0
 
 
     def get_sum_votes(self):
@@ -149,7 +156,10 @@ class VoteTXIDs():
                 cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
             else:
                 cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
-            return round(cursor.fetchone()[0],6)
+            try:
+                return round(cursor.fetchone()[0],6)
+            except:
+                return 0
 
 
     def get_txids(self):
@@ -178,7 +188,10 @@ class VoteTXIDs():
                 cursor.execute(f"SELECT COUNT(txid) FROM voting WHERE coin='{self.coin}' AND category='{self.category}';")
             else:
                 cursor.execute(f"SELECT COUNT(txid) FROM voting WHERE coin='{self.coin}';")
-            return cursor.fetchone()[0]
+            try:
+                return cursor.fetchone()[0]
+            except:
+                return 0
     
     def get_txids_sum(self):
         with sqlite3.connect(DB_PATH) as conn:
@@ -248,7 +261,6 @@ class VoteTXIDs():
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             sql = f"SELECT * from voting WHERE coin='{self.coin}' AND category='{region}' AND option='{candidate}';"
-            logger.info(sql)
             cursor.execute(sql)
             return cursor.fetchall()
 
@@ -257,11 +269,13 @@ class VoteTXIDs():
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             sql = f"SELECT DISTINCT address from voting WHERE coin='{self.coin}';"
-            logger.info(sql)
             cursor.execute(sql)
             data = cursor.fetchall()
-            addresses = [i[0] for i in data]
-            return addresses
+            try:
+                addresses = [i[0] for i in data]
+                return addresses
+            except:
+                return []
 
     def get_txids_list(self):
         with sqlite3.connect(DB_PATH) as conn:
@@ -269,10 +283,12 @@ class VoteTXIDs():
             cursor = conn.cursor()
             sql = f"SELECT DISTINCT txid from voting WHERE coin='{self.coin}';"
             logger.info(sql)
-            cursor.execute(sql)
             data = cursor.fetchall()
-            txids = [i[0] for i in data]
-            return txids
+            try:
+                txids = [i[0] for i in data]
+                return txids
+            except:
+                return []
     
 
 
