@@ -47,12 +47,14 @@ def get_notary_addresses():
 def is_ntx(tx_info):
     vouts = tx_info["vout"]
     vins = tx_info["vin"]
+    logger.info(f"len(vins): {len(vins)}")
     if len(vouts) == 2 and len(vins) == 13:
         vin_addresses = [i["address"] for i in vins]
         notary_addresses = get_notary_addresses()
         if set(vin_addresses).issubset(notary_addresses):
             if vouts[1]["scriptPubKey"]["asm"].find("OP_RETURN") > -1:
                 ntx_data = requests.get(f'https://stats.kmd.io/api/tools/decode_opreturn/?OP_RETURN={vouts[1]["scriptPubKey"]["asm"]}').json()
+                logger.info(f"ntx_data: {ntx_data}")
                 return ntx_data
     return None
 
@@ -137,6 +139,7 @@ def get_txid_amount(txinfo, address):
                 amount += Decimal(i["value"])
     return float(amount)
 
+
 def update_option(option, coin, explorer, address, category, candidate, poll_txid_list, addresses):
     try:
         candidate_votes = db.VoteTXIDs(coin=coin, address=address)
@@ -154,21 +157,15 @@ def update_option(option, coin, explorer, address, category, candidate, poll_txi
             if txid not in poll_txid_list and txid not in SELF_SENT_TXIDS:
                 tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
                 if not is_self_send(txid, explorer, addresses):
-                    logger.info(f"Processing TXID {txid} [{candidate}]")
                     if "blockheight" in tx_info.keys():
                         row.txid = txid
                         row.amount = get_txid_amount(tx_info, address)
                         row.blockheight = tx_info["blockheight"]
                         row.blocktime = tx_info["blocktime"]
                         row.insert()
-                    else:
-                        logger.info(f"Skipping TXID {txid} [{candidate}] (unconfirmed)")
-                else:
-                    logger.info(f"Skipping TXID {txid} [{candidate}] (self send)")
     except Exception as e:
         logger.info(f"Error in [update_option]: {e}")
     return option
-
 
 
 def get_testnet_ids(testnet, candidate):
@@ -177,9 +174,11 @@ def get_testnet_ids(testnet, candidate):
         if candidate == v: testnet_ids.append(k)
     return testnet_ids
 
+
 def is_veteran(candidate, veterans):
     if candidate in veterans: return True
     else: return False
+
 
 def update_balances(polls, final_block=0, testnet=False):
     veterans = lib_json.get_jsonfile_data('veterans.json')
@@ -225,6 +224,7 @@ def update_balances(polls, final_block=0, testnet=False):
         else:
             logger.info(f"Not updating {coin} votes, poll is over.")
 
+
 def recast_recent_votes(recent_txids):
     recent_votes = []
     for i in recent_txids:
@@ -238,6 +238,7 @@ def recast_recent_votes(recent_txids):
         }
         recent_votes.append(vote)
     return recent_votes
+
 
 def update_polls():
     try:
@@ -273,15 +274,15 @@ def update_polls():
 
                         for i in range(polls[coin]["first_overtime_block"]["height"], blocktip+1):
                             logger.info(f"Scanning block: {i}")
-
-                            for txid in block_txids:
+                            block_tx = rpc.getblock(str(i))
+                            for txid in block_tx["tx"]:
+                                logger.info(txid)
                                 tx_info = rpc.getrawtransaction(txid, 1)
+                                logger.info(f"Scanning txid: {txid}")
 
                                 if is_ntx(tx_info):
                                     ntx_data = is_ntx(tx_info)["results"]
-                                    logger.info(f"ntx for block {ntx_data['notarised_block']} found in: {i}")
-
-                                    if ntx_data['notarised_block'] >= polls[coin]["first_overtime_block"]:
+                                    if ntx_data['notarised_block'] >= polls[coin]["first_overtime_block"]["height"]:
                                         blockinfo = rpc.getblock(str(ntx_data['notarised_block']))
                                         polls[coin]["final_ntx_block"] = {
                                             "height": ntx_data['notarised_block'],
@@ -289,7 +290,6 @@ def update_polls():
                                             "time": blockinfo["time"],
                                         }
                                         polls[coin].update({"final_ntx_block_tx": txid})
-
                                         polls[coin]["overtime_ended_at"] = block_time
                                         polls[coin]["status"] = "historical"
                                         update_balances(polls, ntx_data['notarised_block'], testnet=testnet)
@@ -318,7 +318,7 @@ def get_sync_data(explorer):
 
 if __name__ == '__main__':
     rpc = lib_rpc.get_rpc("KIP0001")
-    tx_info = rpc.getrawtransaction("0a95b1ecf0163640d5e631767877fa745f40bf9480631b1f9c5f64a953c3b1c7", 1)
+    tx_info = rpc.getrawtransaction("9bb939a7de730487a4023075d1db6fdd0849fd33ced57d16b6453e5f5453edaa", 1)
     logger.info(is_ntx(tx_info))
     assert is_ntx(tx_info)
     tx_info = rpc.getrawtransaction("dfc390cf85a40dac5c4b3ec6540f32ba229610a14039cb1f30afec9cdddf8c34", 1)

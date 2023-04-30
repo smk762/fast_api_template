@@ -282,7 +282,6 @@ class VoteTXIDs():
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             sql = f"SELECT DISTINCT txid from voting WHERE coin='{self.coin}';"
-            logger.info(sql)
             data = cursor.fetchall()
             try:
                 txids = [i[0] for i in data]
@@ -308,13 +307,13 @@ class VoteRow():
         try:
             with sqlite3.connect(DB_PATH) as conn:
                 cursor = conn.cursor()
-                logger.info(f"Adding txid {self.txid} to voting table")
                 cursor.execute(f"INSERT INTO voting (coin,address,category,option,txid,blockheight,amount,blocktime) \
                                 VALUES ('{self.coin}', '{self.address}', '{self.category}', '{self.option}', '{self.txid}', \
                                         {self.blockheight}, {self.amount}, {self.blocktime});")
                 conn.commit()
         except Exception as e:
-            logger.warning(e)
+            pass
+            # logger.warning(e)
                     
 
     def update(self):
@@ -329,5 +328,4 @@ class VoteRow():
             if self.txid:
                 cursor.execute(f"DELETE FROM voting WHERE txid='{self.txid}';")
                 conn.commit()
-                logger.info(f"Removed txid {self.txid} from voting table")
         
