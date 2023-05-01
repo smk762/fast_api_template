@@ -111,20 +111,23 @@ def view_table_info(cursor, table):
 
 
 class VoteTXIDs():
-    def __init__(self, coin, address=None, category=None, option=None):
+    def __init__(self, coin, address=None, category=None, option=None, final_block=None):
         self.coin = coin
         self.address = address
         self.category = category
         self.option = option
+        self.final_block = final_block
 
     def get_recent_votes(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
+            constraints = [f"coin='{self.coin}'"]
+            if self.final_block:
+                constraints.append(f"blockheight <= {self.final_block}")
             if self.address:
-                sql = f"SELECT * FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;"
-            else:
-                sql = f"SELECT * FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;"
+                constraints.append(f"address='{self.address}'")
+            sql = f"SELECT * FROM voting WHERE {' AND '.join(constraints)} ORDER BY blocktime desc LIMIT 100;"
             cursor.execute(sql)
             data = cursor.fetchall()
             try:
@@ -138,43 +141,74 @@ class VoteTXIDs():
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            if self.address:
-                cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+            if not self.final_block:
+                if self.address:
+                    cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+                else:
+                    cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
+                try:
+                    return cursor.fetchone()[0]
+                except:
+                    return 0
             else:
-                cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
-            try:
-                return cursor.fetchone()[0]
-            except:
-                return 0
+                if self.address:
+                    cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND blockheight <= {self.final_block} AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+                else:
+                    cursor.execute(f"SELECT COUNT(*) FROM voting WHERE coin='{self.coin}' AND blockheight <= {self.final_block} ORDER BY blocktime desc LIMIT 100;")
+                try:
+                    return cursor.fetchone()[0]
+                except:
+                    return 0
 
 
     def get_sum_votes(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            if self.address:
-                cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+            if not self.final_block:
+                if self.address:
+                    cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' ORDER BY blocktime desc LIMIT 100;")
+                else:
+                    cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
+                try:
+                    return round(cursor.fetchone()[0],6)
+                except:
+                    return 0
             else:
-                cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' ORDER BY blocktime desc LIMIT 100;")
-            try:
-                return round(cursor.fetchone()[0],6)
-            except:
-                return 0
+                if self.address:
+                    cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND address='{self.address}' AND blockheight <= {self.final_block} ORDER BY blocktime desc LIMIT 100;")
+                else:
+                    cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND blockheight <= {self.final_block} ORDER BY blocktime desc LIMIT 100;")
+                try:
+                    return round(cursor.fetchone()[0],6)
+                except:
+                    return 0
 
 
     def get_txids(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
-            if self.address and self.category and self.option:
-                cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND option='{self.option} AND address='{self.address}' ';")
-            elif self.category and self.option:
-                cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND address='{self.option}' ';")
-            elif self.category:
-                cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}';")
+            if not self.final_block:
+                if self.address and self.category and self.option:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND option='{self.option} AND address='{self.address}' ';")
+                elif self.category and self.option:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND address='{self.option}' ';")
+                elif self.category:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}';")
+                else:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}';")
+                return cursor.fetchall()
             else:
-                cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}';")
-            return cursor.fetchall()
+                if self.address and self.category and self.option:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND option='{self.option} AND address='{self.address}'  AND blockheight <= {self.final_block};")
+                elif self.category and self.option:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND address='{self.option}'  AND blockheight <= {self.final_block};")
+                elif self.category:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND category='{self.category}' AND blockheight <= {self.final_block};")
+                else:
+                    cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND blockheight <= {self.final_block};")
+                return cursor.fetchall()
     
     def get_txids_count(self):
         with sqlite3.connect(DB_PATH) as conn:
@@ -311,6 +345,7 @@ class VoteRow():
                                 VALUES ('{self.coin}', '{self.address}', '{self.category}', '{self.option}', '{self.txid}', \
                                         {self.blockheight}, {self.amount}, {self.blocktime});")
                 conn.commit()
+                logger.info(f"Inserted {self.txid} for {self.option}_{self.category} ({self.address}) into voting table")
         except Exception as e:
             pass
             # logger.warning(e)
@@ -327,5 +362,19 @@ class VoteRow():
             cursor = conn.cursor()
             if self.txid:
                 cursor.execute(f"DELETE FROM voting WHERE txid='{self.txid}';")
+                conn.commit()
+
+    def delete_invalid_blocks(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            if self.blockheight and self.coin:
+                cursor.execute(f"DELETE FROM voting WHERE coin='{self.coin}' AND blockheight > {self.blockheight};")
+                conn.commit()
+        
+    def delete_coin(self):
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            if self.txid:
+                cursor.execute(f"DELETE FROM voting WHERE coin='{self.coin}';")
                 conn.commit()
         

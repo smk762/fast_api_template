@@ -1,3 +1,4 @@
+import csv
 import time
 import json
 import requests
@@ -16,6 +17,70 @@ def get_poll_options(polls, coin, category):
     if category not in polls[coin]["categories"].keys():
         return {"error": f"{coin} has no {category} category!"}
     return polls[coin]["categories"][category]["options"]
+
+
+def validate_poll_results(polls, coin, final_block):
+    logger.info(f'Validating poll results for {coin}')
+    deltas_json = []
+    rpc = lib_rpc.get_rpc(coin)
+    data = requests.get(f'https://kip0001.smk.dog/api/v3/polls/{coin}/info').json()
+    explorer = polls[coin]["explorer"]
+    for cat in data['categories']:
+        for option in data['categories'][cat]["options"]:
+            addr = option['address']
+            candidate = option['candidate']
+            logger.info(f'{candidate}: {addr} ({cat})')
+            params = {
+                "addresses": [addr],
+                "start":1,
+                "end":final_block
+            }
+            deltas = rpc.getaddressdeltas(params)
+            sats = Decimal(0)
+            for i in deltas:
+                sats += Decimal(i["satoshis"])
+            x = {
+                "candidate": candidate,
+                "region": cat,
+                "address": addr,
+                "votes": str(round(sats/100000000,8)),
+                "deltas": deltas
+            }
+            deltas_json.append(x)
+
+    # Export to JSON and CSV
+    lib_json.write_jsonfile_data(f'{coin}_summary.json', deltas_json)
+    with open(f'{coin}_summary.csv', 'w') as csvfile:
+        field_names = ["candidate", "region", "address", "votes", "deltas"]
+        writer = csv.DictWriter(csvfile, fieldnames=field_names)
+        writer.writeheader()
+        writer.writerows(deltas_json)
+    
+    # Clear the DB, then repopulate it
+    coin_votes = db.VoteTXIDs(coin)
+    addresses = coin_votes.get_addresses_list()
+    row = db.VoteRow(coin=coin, blockheight=final_block)
+    row.delete_coin()
+    row.delete_invalid_blocks()
+    for i in deltas_json:
+        row.address = i["address"]
+        row.category = i["region"]
+        row.option = i["candidate"]
+        logger.info(f'Rescanning for {row.option}: {row.address} ({row.category})')
+        for delta in i["deltas"]:
+            txid = delta["txid"]
+            tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
+            if not is_self_send(txid, explorer, row.address, addresses):
+                if "blockheight" in tx_info.keys():
+                    if tx_info["blockheight"] <= final_block:
+                        row.txid = txid
+                        row.amount = get_txid_amount(tx_info, row.address)
+                        row.blockheight = tx_info["blockheight"]
+                        row.blocktime = tx_info["blocktime"]
+                        row.insert()
+    update_balances(polls, final_block)
+    lib_json.write_jsonfile_data('poll_config_v3.json', polls)
+
 
 
 def get_polls_statuses(polls):
@@ -101,7 +166,7 @@ def get_veterans():
     return veterancy
 
 
-def is_self_send(txid, explorer, vote_addresses):
+def is_self_send(txid, explorer, address, vote_addresses):
     try:
         if txid in SELF_SENT_TXIDS:
             return True
@@ -115,6 +180,11 @@ def is_self_send(txid, explorer, vote_addresses):
                     return True
                 if "addr" in i:
                     if i['addr'] in vote_addresses:
+                        SELF_SENT_TXIDS.append(txid)
+                        bad_row = db.VoteRow(txid=txid)
+                        bad_row.delete_txid()
+                        return True
+                    if i['addr'] == address:
                         SELF_SENT_TXIDS.append(txid)
                         bad_row = db.VoteRow(txid=txid)
                         bad_row.delete_txid()
@@ -153,10 +223,9 @@ def update_option(option, coin, explorer, address, category, candidate, poll_txi
         tx_to_scan = list(set(transactions) - set(poll_txid_list) - set(SELF_SENT_TXIDS))
 
         for txid in tx_to_scan:
-            utxo = {}
             if txid not in poll_txid_list and txid not in SELF_SENT_TXIDS:
                 tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
-                if not is_self_send(txid, explorer, addresses):
+                if not is_self_send(txid, explorer, address, addresses):
                     if "blockheight" in tx_info.keys():
                         row.txid = txid
                         row.amount = get_txid_amount(tx_info, address)
@@ -180,49 +249,55 @@ def is_veteran(candidate, veterans):
     else: return False
 
 
-def update_balances(polls, final_block=0, testnet=False):
+def update_balances(polls, final_block=0):
     veterans = lib_json.get_jsonfile_data('veterans.json')
     for coin in polls:
-        if polls[coin]["status"] != "historical":
-            try:
-                explorer = polls[coin]["explorer"]
-                sync_height = get_sync_data(explorer)["height"]
+        try:
+            testnet = lib_json.get_jsonfile_data(f'testnet_{coin}.json')
+            explorer = polls[coin]["explorer"]
+            sync_height = get_sync_data(explorer)["height"]
+            if final_block != 0:
+                coin_votes = db.VoteTXIDs(coin, final_block=final_block)
+            else:    
                 coin_votes = db.VoteTXIDs(coin)
-                addresses = coin_votes.get_addresses_list()
-                poll_txid_list = coin_votes.get_txids_list()
-                for category in polls[coin]["categories"]:
-                    options = polls[coin]["categories"][category]["options"]
-                    for option in options:
-                        address = option["address"]
-                        candidate = option["candidate"]
+            addresses = coin_votes.get_addresses_list()
+            poll_txid_list = coin_votes.get_txids_list()
+            for category in polls[coin]["categories"]:
+                options = polls[coin]["categories"][category]["options"]
+                for option in options:
+                    address = option["address"]
+                    candidate = option["candidate"]
 
-                        option = update_option(option, coin, explorer, address, category, candidate, poll_txid_list, addresses)
-                        logger.info(f"Getting {coin} votes for {candidate}")
+                    option = update_option(option, coin, explorer, address, category, candidate, poll_txid_list, addresses)
+                    logger.info(f"Getting {coin} votes for {candidate}")
+                    if final_block != 0:
+                        candidate_votes = db.VoteTXIDs(coin=coin, address=address, final_block=final_block)
+                    else:
                         candidate_votes = db.VoteTXIDs(coin=coin, address=address)
-                        candidate_recent_txids = candidate_votes.get_recent_votes()
-                        candidate_recent_votes = recast_recent_votes(candidate_recent_txids)
+                    candidate_recent_txids = candidate_votes.get_recent_votes()
+                    candidate_recent_votes = recast_recent_votes(candidate_recent_txids)
 
+                    option.update({
+                        "votes": candidate_votes.get_sum_votes(),
+                        "veteran": is_veteran(candidate, veterans),
+                        "utxos": []
+                    })
+                    if testnet:
                         option.update({
-                            "votes": candidate_votes.get_sum_votes(),
-                            "testnet": get_testnet_ids(testnet, candidate),
-                            "veteran": is_veteran(candidate, veterans),
-                            "utxos": []
+                            "testnet": get_testnet_ids(testnet, candidate)
                         })
 
-                lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
+            recent_txids = coin_votes.get_recent_votes()
+            recent_votes = recast_recent_votes(recent_txids)
+            polls[coin].update({
+                "recent_votes": recent_votes,
+                "sum_votes": coin_votes.get_sum_votes(),
+                "count_votes": coin_votes.get_num_votes()
+            })
+            lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
 
-                recent_txids = coin_votes.get_recent_votes()
-                recent_votes = recast_recent_votes(recent_txids)
-                polls[coin].update({
-                    "recent_votes": recent_votes,
-                    "sum_votes": coin_votes.get_sum_votes(),
-                    "count_votes": coin_votes.get_num_votes()
-                })
-
-            except Exception as e:
-                logger.warning(f"Error in [update_balances] for {coin}: {e}")
-        else:
-            logger.info(f"Not updating {coin} votes, poll is over.")
+        except Exception as e:
+            logger.warning(f"Error in [update_balances] for {coin}: {e}")
 
 
 def recast_recent_votes(recent_txids):
@@ -247,26 +322,58 @@ def update_polls():
             polls = {}
         now = int(time.time())
         for coin in polls:
+            logger.info(f"Updating {coin} poll")
             rpc = lib_rpc.get_rpc(coin)
             info = rpc.getinfo()
             polls[coin]["updated_time"] = now
             blocktip = info["longestchain"]
-            blockinfo = rpc.getblock(str(blocktip))
-            block_time = blockinfo["time"]
-            block_txids = blockinfo["tx"]
-            block_hash = blockinfo["hash"]
+            block_info = rpc.getblock(str(blocktip))
+            block_time = block_info["time"]
+            block_txids = block_info["tx"]
+            block_hash = block_info["hash"]
+            final_block = None
             polls[coin]["current_block"] = {
                 "height": blocktip,
                 "hash": block_hash,
                 "time": block_time
             }
 
-            if not polls[coin]["final_ntx_block"]:
-                testnet = lib_json.get_jsonfile_data(f'testnet_{coin}.json')
-                update_balances(polls, testnet=testnet)
+            if polls[coin]["final_ntx_block"]:
+                now = int(time.time())
+                overtime_ended = polls[coin]["overtime_ended_at"]
+                since_ended = now - overtime_ended
+                final_block = polls[coin]["final_ntx_block"]["height"]
+                logger.info(f"Final {coin} block detected: {final_block} at {overtime_ended} ({since_ended} seconds ago)")
+                if now - overtime_ended < 86400:
+                    # Compare DB to addressdeltas to resolve reorgs
+                    logger.info(f"Rescanning {coin} votes, poll ended < day ago on block {final_block}.")
+                    validate_poll_results(polls, coin, polls[coin]["final_ntx_block"]["height"])                
+            else:
                 ends_at = polls[coin]["ends_at"]
 
-                if polls[coin]["first_overtime_block"]:
+                if info["tiptime"] > ends_at and not polls[coin]["first_overtime_block"]:
+                    logger.info(f"Looking for first overtime block for {coin}")
+                    last_blockinfo = rpc.getblock(str(blocktip-2000))
+                    for i in range(blocktip-2000, blocktip+1):
+                        block_info = rpc.getblock(str(i))
+                        if last_blockinfo['time'] < ends_at:
+                            logger.info(f"Last Block {i-1} is before ends_at: {ends_at}")
+                            if block_info['time'] > ends_at:
+                                logger.info(f"Block {i} is after ends_at: {ends_at}")
+                                block_info = rpc.getblock(str(i))
+                                polls[coin].update({
+                                    "first_overtime_block": {
+                                        "height": block_info['height'],
+                                        "hash": block_info['hash'],
+                                        "time": block_info['time']
+                                    }
+                                })
+                                logger.info(polls[coin]["first_overtime_block"])
+                                break
+                        last_blockinfo = block_info
+                
+                if polls[coin]["first_overtime_block"] and not polls[coin]["final_ntx_block"]:
+                    logger.info(f"Looking for final ntx block for {coin}")
                     polls[coin]["status"] = "overtime"
 
                     if blocktip >= polls[coin]["first_overtime_block"]["height"]:
@@ -274,35 +381,32 @@ def update_polls():
 
                         for i in range(polls[coin]["first_overtime_block"]["height"], blocktip+1):
                             logger.info(f"Scanning block: {i}")
-                            block_tx = rpc.getblock(str(i))
-                            for txid in block_tx["tx"]:
-                                logger.info(txid)
+                            block_info = rpc.getblock(str(i))
+                            for txid in block_info["tx"]:
                                 tx_info = rpc.getrawtransaction(txid, 1)
                                 logger.info(f"Scanning txid: {txid}")
 
                                 if is_ntx(tx_info):
                                     ntx_data = is_ntx(tx_info)["results"]
                                     if ntx_data['notarised_block'] >= polls[coin]["first_overtime_block"]["height"]:
-                                        blockinfo = rpc.getblock(str(ntx_data['notarised_block']))
+                                        block_info = rpc.getblock(str(ntx_data['notarised_block']))
                                         polls[coin]["final_ntx_block"] = {
                                             "height": ntx_data['notarised_block'],
-                                            "hash": blockinfo["hash"],
-                                            "time": blockinfo["time"],
+                                            "hash": block_info["hash"],
+                                            "time": block_info["time"],
                                         }
-                                        polls[coin].update({"final_ntx_block_tx": txid})
-                                        polls[coin]["overtime_ended_at"] = block_time
-                                        polls[coin]["status"] = "historical"
-                                        update_balances(polls, ntx_data['notarised_block'], testnet=testnet)
-                                        lib_json.write_jsonfile_data('poll_config_v3.json', polls)
-                                        return
+                                        polls[coin].update({
+                                            "final_ntx_block_tx": txid,
+                                            "overtime_ended_at": block_time,
+                                            "status": "historical"
+                                        })
+                                        final_block = ntx_data['notarised_block']
+                                        logger.info(f"Final {coin} block detected: {final_block}")
+                                        break
+                            if polls[coin]["final_ntx_block"]:
+                                break
 
-                elif info["tiptime"] > polls[coin]["ends_at"]:
-                    polls[coin]["first_overtime_block"] = {
-                        "height": blocktip,
-                        "hash": block_hash,
-                        "time": block_time,
-                    }
-
+                update_balances(polls, final_block)
                 lib_json.write_jsonfile_data('poll_config_v3.json', polls)
                 lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
 

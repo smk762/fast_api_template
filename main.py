@@ -27,6 +27,7 @@ API_PORT = const.get_api_port()
 VOTE_ACTIVE = time.time() < 1682899199
 SSL_KEY, SSL_CERT = const.get_ssl_certs()
 API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
+GEN_BLOCKS = False
 
 
 tags_metadata = []
@@ -65,17 +66,18 @@ def update_poll_data():
 @app.on_event("startup")
 @repeat_every(seconds=30)
 def move_chains():
-    try:
-        polls = lib_json.get_jsonfile_data('poll_config_v3.json')
-        if not polls:
-            polls = {}
-        chains = polls.keys()
-        for chain in chains:
-            rpc = lib_rpc.get_rpc(chain)
-            logger.info(f"{chain} sendtoaddress {API_ADDRESS} 0.00762")
-            logger.info(rpc.sendtoaddress(API_ADDRESS, 0.00762))
-    except Exception as e:
-        logger.error(e)
+    if GEN_BLOCKS:
+        try:
+            polls = lib_json.get_jsonfile_data('poll_config_v3.json')
+            if not polls:
+                polls = {}
+            chains = polls.keys()
+            for chain in chains:
+                rpc = lib_rpc.get_rpc(chain)
+                logger.info(f"{chain} sendtoaddress {API_ADDRESS} 0.00762")
+                logger.info(rpc.sendtoaddress(API_ADDRESS, 0.00762))
+        except Exception as e:
+            logger.error(e)
  
 
 @app.on_event("startup")
