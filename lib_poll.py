@@ -322,93 +322,96 @@ def update_polls():
             polls = {}
         now = int(time.time())
         for coin in polls:
-            logger.info(f"Updating {coin} poll")
-            rpc = lib_rpc.get_rpc(coin)
-            info = rpc.getinfo()
-            polls[coin]["updated_time"] = now
-            blocktip = info["longestchain"]
-            block_info = rpc.getblock(str(blocktip))
-            block_time = block_info["time"]
-            block_txids = block_info["tx"]
-            block_hash = block_info["hash"]
-            final_block = None
-            polls[coin]["current_block"] = {
-                "height": blocktip,
-                "hash": block_hash,
-                "time": block_time
-            }
-
-            if polls[coin]["final_ntx_block"]:
-                now = int(time.time())
-                overtime_ended = polls[coin]["overtime_ended_at"]
-                since_ended = now - overtime_ended
-                final_block = polls[coin]["final_ntx_block"]["height"]
-                logger.info(f"Final {coin} block detected: {final_block} at {overtime_ended} ({since_ended} seconds ago)")
-                if now - overtime_ended < 86400:
-                    # Compare DB to addressdeltas to resolve reorgs
-                    logger.info(f"Rescanning {coin} votes, poll ended < day ago on block {final_block}.")
-                    validate_poll_results(polls, coin, polls[coin]["final_ntx_block"]["height"])                
+            if polls[coin]["results_official"]:
+                logger.info(f"Skipping {coin} poll, official results are in")
             else:
-                ends_at = polls[coin]["ends_at"]
+                logger.info(f"Updating {coin} poll")
+                rpc = lib_rpc.get_rpc(coin)
+                info = rpc.getinfo()
+                polls[coin]["updated_time"] = now
+                blocktip = info["longestchain"]
+                block_info = rpc.getblock(str(blocktip))
+                block_time = block_info["time"]
+                block_txids = block_info["tx"]
+                block_hash = block_info["hash"]
+                final_block = None
+                polls[coin]["current_block"] = {
+                    "height": blocktip,
+                    "hash": block_hash,
+                    "time": block_time
+                }
 
-                if info["tiptime"] > ends_at and not polls[coin]["first_overtime_block"]:
-                    logger.info(f"Looking for first overtime block for {coin}")
-                    last_blockinfo = rpc.getblock(str(blocktip-2000))
-                    for i in range(blocktip-2000, blocktip+1):
-                        block_info = rpc.getblock(str(i))
-                        if last_blockinfo['time'] < ends_at:
-                            logger.info(f"Last Block {i-1} is before ends_at: {ends_at}")
-                            if block_info['time'] > ends_at:
-                                logger.info(f"Block {i} is after ends_at: {ends_at}")
-                                block_info = rpc.getblock(str(i))
-                                polls[coin].update({
-                                    "first_overtime_block": {
-                                        "height": block_info['height'],
-                                        "hash": block_info['hash'],
-                                        "time": block_info['time']
-                                    }
-                                })
-                                logger.info(polls[coin]["first_overtime_block"])
-                                break
-                        last_blockinfo = block_info
-                
-                if polls[coin]["first_overtime_block"] and not polls[coin]["final_ntx_block"]:
-                    logger.info(f"Looking for final ntx block for {coin}")
-                    polls[coin]["status"] = "overtime"
+                if polls[coin]["final_ntx_block"]:
+                    now = int(time.time())
+                    overtime_ended = polls[coin]["overtime_ended_at"]
+                    since_ended = now - overtime_ended
+                    final_block = polls[coin]["final_ntx_block"]["height"]
+                    logger.info(f"Final {coin} block detected: {final_block} at {overtime_ended} ({since_ended} seconds ago)")
+                    if now - overtime_ended < 86400:
+                        # Compare DB to addressdeltas to resolve reorgs
+                        logger.info(f"Rescanning {coin} votes, poll ended < day ago on block {final_block}.")
+                        validate_poll_results(polls, coin, polls[coin]["final_ntx_block"]["height"])                
+                else:
+                    ends_at = polls[coin]["ends_at"]
 
-                    if blocktip >= polls[coin]["first_overtime_block"]["height"]:
-                        logger.info(f"longestchain: {blocktip}")
-
-                        for i in range(polls[coin]["first_overtime_block"]["height"], blocktip+1):
-                            logger.info(f"Scanning block: {i}")
+                    if info["tiptime"] > ends_at and not polls[coin]["first_overtime_block"]:
+                        logger.info(f"Looking for first overtime block for {coin}")
+                        last_blockinfo = rpc.getblock(str(blocktip-2000))
+                        for i in range(blocktip-2000, blocktip+1):
                             block_info = rpc.getblock(str(i))
-                            for txid in block_info["tx"]:
-                                tx_info = rpc.getrawtransaction(txid, 1)
-                                logger.info(f"Scanning txid: {txid}")
-
-                                if is_ntx(tx_info):
-                                    ntx_data = is_ntx(tx_info)["results"]
-                                    if ntx_data['notarised_block'] >= polls[coin]["first_overtime_block"]["height"]:
-                                        block_info = rpc.getblock(str(ntx_data['notarised_block']))
-                                        polls[coin]["final_ntx_block"] = {
-                                            "height": ntx_data['notarised_block'],
-                                            "hash": block_info["hash"],
-                                            "time": block_info["time"],
+                            if last_blockinfo['time'] < ends_at:
+                                logger.info(f"Last Block {i-1} is before ends_at: {ends_at}")
+                                if block_info['time'] > ends_at:
+                                    logger.info(f"Block {i} is after ends_at: {ends_at}")
+                                    block_info = rpc.getblock(str(i))
+                                    polls[coin].update({
+                                        "first_overtime_block": {
+                                            "height": block_info['height'],
+                                            "hash": block_info['hash'],
+                                            "time": block_info['time']
                                         }
-                                        polls[coin].update({
-                                            "final_ntx_block_tx": txid,
-                                            "overtime_ended_at": block_time,
-                                            "status": "historical"
-                                        })
-                                        final_block = ntx_data['notarised_block']
-                                        logger.info(f"Final {coin} block detected: {final_block}")
-                                        break
-                            if polls[coin]["final_ntx_block"]:
-                                break
+                                    })
+                                    logger.info(polls[coin]["first_overtime_block"])
+                                    break
+                            last_blockinfo = block_info
+                    
+                    if polls[coin]["first_overtime_block"] and not polls[coin]["final_ntx_block"]:
+                        logger.info(f"Looking for final ntx block for {coin}")
+                        polls[coin]["status"] = "overtime"
 
-                update_balances(polls, final_block)
-                lib_json.write_jsonfile_data('poll_config_v3.json', polls)
-                lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
+                        if blocktip >= polls[coin]["first_overtime_block"]["height"]:
+                            logger.info(f"longestchain: {blocktip}")
+
+                            for i in range(polls[coin]["first_overtime_block"]["height"], blocktip+1):
+                                logger.info(f"Scanning block: {i}")
+                                block_info = rpc.getblock(str(i))
+                                for txid in block_info["tx"]:
+                                    tx_info = rpc.getrawtransaction(txid, 1)
+                                    logger.info(f"Scanning txid: {txid}")
+
+                                    if is_ntx(tx_info):
+                                        ntx_data = is_ntx(tx_info)["results"]
+                                        if ntx_data['notarised_block'] >= polls[coin]["first_overtime_block"]["height"]:
+                                            block_info = rpc.getblock(str(ntx_data['notarised_block']))
+                                            polls[coin]["final_ntx_block"] = {
+                                                "height": ntx_data['notarised_block'],
+                                                "hash": block_info["hash"],
+                                                "time": block_info["time"],
+                                            }
+                                            polls[coin].update({
+                                                "final_ntx_block_tx": txid,
+                                                "overtime_ended_at": block_time,
+                                                "status": "historical"
+                                            })
+                                            final_block = ntx_data['notarised_block']
+                                            logger.info(f"Final {coin} block detected: {final_block}")
+                                            break
+                                if polls[coin]["final_ntx_block"]:
+                                    break
+
+                    update_balances(polls, final_block)
+                    lib_json.write_jsonfile_data('poll_config_v3.json', polls)
+                    lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
 
     except Exception as e:
         logger.warning(f"RPC (overtime getinfo) not responding! {e}")
