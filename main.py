@@ -13,6 +13,7 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Re
 
 from lib.const import ConfigFastAPI
 from lib.sqlite import SqliteDB
+from lib.banxa import BanxaAPI
 
 from lib.logger import logger
 import lib.api_proxy as api_proxy
@@ -23,6 +24,7 @@ load_dotenv()
 
 config = ConfigFastAPI()
 db = SqliteDB(config)
+banxa = BanxaAPI()
 
 app = FastAPI(openapi_tags=config.API_TAGS)
 app.add_middleware(
@@ -45,9 +47,13 @@ def update_data():
         return {"Error: ": str(e)}
 
 
-@app.get('/api/v1/data', tags=["data"])
-def get_jsonfile_data():
-    return json_utils.get_jsonfile_data('jsondata.json')
+@app.get('/api/v1/get/{endpoint}', tags=["banxa"])
+def get_banxa(endpoint):
+    return banxa.sendGetRequest(endpoint)
+
+@app.get('/api/v1/post/{endpoint}/{payload}', tags=["banxa"])
+def post_banxa(endpoint, payload):
+    return banxa.sendGetRequest(endpoint, payload)
 
 
 if __name__ == '__main__':

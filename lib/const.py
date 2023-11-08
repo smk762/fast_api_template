@@ -28,6 +28,25 @@ class ConfigFastAPI():
         self.CORS_ORIGINS = self.get_cors_origins()
         self.SSL_KEY, self.SSL_CERT = self.get_ssl_certs()
 
+        # Banxa Environment Variables
+        self.BANXA_KEY = self.get_banxa_key()
+        self.BANXA_SECRET = self.get_banxa_secret()
+        self.BANXA_URL = self.get_banxa_url()
+        if not self.BANXA_URL.endswith("/"):
+            self.BANXA_URL += "/"
+        
+    def get_banxa_key(self):
+        ''' Returns the API subdomain'''
+        return os.getenv('BANXA_KEY')
+    
+    def get_banxa_secret(self):
+        ''' Returns the API subdomain'''
+        return os.getenv('BANXA_SECRET')
+    
+    def get_banxa_url(self):
+        ''' Returns the API subdomain'''
+        return os.getenv('BANXA_URL')
+    
     def get_api_port(self):
         ''' Returns the port for the API. '''
         API_PORT = os.getenv("FASTAPI_PORT")
