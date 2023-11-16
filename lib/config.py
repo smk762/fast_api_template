@@ -51,7 +51,7 @@ class ConfigFastAPI:
         self.KOMODEFI = {
             "IP": os.getenv("KOMODEFI_IP") or "127.0.0.1",
             "PORT": self.int_or_none(os.getenv("KOMODEFI_PORT")) or 7783,
-            "USERPASS": os.getenv("KOMODEFI_USERPASS") or "RpcUserP@assw0rd"
+            "USERPASS": os.getenv("KOMODEFI_USERPASS") or "RpcUserP@assw0rd",
         }
 
     def int_or_none(self, value):
