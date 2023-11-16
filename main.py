@@ -9,15 +9,26 @@ from dotenv import load_dotenv
 from fastapi_utils.tasks import repeat_every
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
+from fastapi import (
+    Depends,
+    Request,
+    FastAPI,
+    HTTPException,
+    status,
+    APIRouter,
+    Body,
+    Request,
+    Response,
+    status,
+)
 
-from lib.const import ConfigFastAPI
+from lib.config import ConfigFastAPI
 from lib.sqlite import SqliteDB
 from lib.banxa import BanxaAPI
-
+from lib.models import ApiProxyGet
 from lib.logger import logger
-import lib.api_proxy as api_proxy
 import lib.json_utils as json_utils
+
 
 
 load_dotenv()
@@ -26,39 +37,48 @@ config = ConfigFastAPI()
 db = SqliteDB(config)
 banxa = BanxaAPI()
 
-app = FastAPI(openapi_tags=config.API_TAGS)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=config.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
+app = FastAPI(openFASTAPI_TAGS=config.FASTAPI["TAGS"])
+if config.FASTAPI["USE_MIDDLEWARE"]:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=config.FASTAPI["CORS_ORIGINS"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 
-@app.on_event("startup")
-@repeat_every(seconds=15)
-def update_data():
-    try:
-        data = api_proxy.get_data()
-        json_utils.write_jsonfile_data('jsondata.json', data)
-    except Exception as e:
-        logger.info(f"Error in [update_data]: {e}")
-        return {"Error: ": str(e)}
+@app.get("/api/v1/{org}", tags=["api"])
+def get_response(org, request: Request):
+    if org == "banxa":
+        return banxa.sendGetRequest(request)
+    return {
+        "error": f"Invalid endpoint {request.query_params['endpoint']} for {org}",
+        "query": request.query_params,
+    }
 
 
-@app.get('/api/v1/get/{endpoint}', tags=["banxa"])
-def get_banxa(endpoint):
-    return banxa.sendGetRequest(endpoint)
+@app.post("/api/v1/{org}", tags=["api"])
+async def get_response(org, request: Request):
+    body = await request.json()
+    payload = json.dumps(body).replace(" ", "")
+    if org == "banxa":
+        return banxa.sendPostRequest(request, payload)
+    return {
+        "error": f"Invalid endpoint {request.query_params['endpoint']} for {org}",
+        "query": request.query_params,
+        "body": body
+    }
 
-@app.get('/api/v1/post/{endpoint}/{payload}', tags=["banxa"])
-def post_banxa(endpoint, payload):
-    return banxa.sendGetRequest(endpoint, payload)
 
-
-if __name__ == '__main__':
-    if config.SSL_KEY != "" and config.SSL_CERT != "":
-        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT,
-                    ssl_keyfile=config.SSL_KEY, ssl_certfile=config.SSL_CERT)
+if __name__ == "__main__":
+    if config.FASTAPI["SSL_KEY"] != "" and config.FASTAPI["SSL_CERT"] != "":
+        uvicorn.run(
+            "main:app",
+            host=config.FASTAPI["HOST"],
+            port=config.FASTAPI["PORT"],
+            ssl_keyfile=config.FASTAPI["SSL_KEY"],
+            ssl_certfile=config.FASTAPI["SSL_CERT"],
+        )
     else:
-        uvicorn.run("main:app", host="0.0.0.0", port=config.API_PORT)
+        uvicorn.run("main:app", host="0.0.0.0", port=config.FASTAPI["FASTAPI_PORT"])

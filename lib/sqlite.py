@@ -2,18 +2,20 @@
 import os
 import time
 import sqlite3
-from lib.const import ConfigFastAPI
+from lib.config import ConfigFastAPI
 from lib.json_utils import write_jsonfile_data, get_jsonfile_data
 
 class SqliteDB():
     def __init__(self, config):
         self.db_path = config.SQLITEDB_PATH
         self.tables_config =  config.SQLITEDB_TABLES
-
-        # Initialize configured tables
-        for table_name in self.tables_config:
-            if table_name not in ["table_name", "table_template"]:
-                self.create_tables(table_name)
+        if os.path.exists(self.db_path):
+            # Initialize configured tables
+            for table_name in self.tables_config:
+                if table_name not in ["table_name", "table_template"]:
+                    self.create_tables(table_name)
+        else:
+            print(f"Database file does not exist: {self.db_path}")
 
     # Connect to SQLite DB    
     def connect_sqlite(self):
