@@ -23,10 +23,13 @@ class BanxaAPI:
         if request.method == "POST":
             data = "POST\n" + endpoint + "\n" + str(nonce) + "\n" + payload
         else:
-            endpoint += "?" + "&".join(
-                [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
-            )
-            data = f"GET{newline}{endpoint}{newline}{nonce}"
+            if endpoint == "/api/orders" and "order_id" in request.query_params:
+                endpoint += "/" + request.query_params["order_id"]
+            else:
+                endpoint += "?" + "&".join(
+                    [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
+                )
+            data = 'GET\n' + endpoint + '\n' + str(nonce)
         return {
             "Authorization": f"Bearer {self.generateHmac(data, nonce)}",
             "Content-Type": "application/json",
@@ -37,11 +40,14 @@ class BanxaAPI:
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
         headers = self.get_headers(endpoint, request)
-        url = self.url + endpoint
-        print(url)
-        url += "?" + "&".join(
-            [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
-        )
+        if endpoint == "/api/orders" and "order_id" in request.query_params:
+            endpoint += "/" + request.query_params["order_id"]
+            url = self.url + endpoint
+        else:
+            url = self.url + endpoint
+            url += "?" + "&".join(
+                [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
+            )
         response = requests.get(url=url, headers=headers)
         try:
             return response.json()
