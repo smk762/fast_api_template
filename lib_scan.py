@@ -8,7 +8,10 @@ import socket
 import requests
 import threading
 from lib_electrum import ElectrumConnection
-from lib_sqlite import update_electrum_row, update_electrum_row_failed
+import lib_sqlite
+
+script_dir = os.path.abspath( os.path.dirname( __file__ ) )
+
 
 
 class scan_thread(threading.Thread):
@@ -46,27 +49,28 @@ class scan_thread(threading.Thread):
 
 
 def thread_electrum(coin, url, port, ssl, method, params):
-    rpc = ElectrumConnection(url, port, ssl)
+    electrum = ElectrumConnection(url, port, ssl)
+    time.sleep(3)
     now = int(time.time())
-    resp = rpc.version()
+    resp = electrum.get_tip()
     try:
         if isinstance(resp, str) or isinstance(resp, OSError) or isinstance(resp, ConnectionResetError) \
              or isinstance(resp, ConnectionRefusedError) or isinstance(resp, socket.gaierror) \
              or isinstance(resp, json.decoder.JSONDecodeError):
             resp = str(resp).replace("'", "")
             row = (coin, f"{url}:{port}", ssl, "Failing", resp)
-            update_electrum_row_failed(row)
-            #print(f"<<<< Failed: {row}")
+            lib_sqlite.update_electrum_row_failed(row)
+            print(f"<<<< Failed: {row}")
         elif isinstance(resp, dict):
             resp = json.dumps(resp)
             row = (coin, f"{url}:{port}", ssl, "OK", resp, now)
-            update_electrum_row(row)
-            #print(f">>>> OK: {row}")
+            lib_sqlite.update_electrum_row(row)
+            print(f">>>> OK: {row}")
 
     except Exception as e:
         resp = str(resp)
         row = (coin, f"{url}:{port}", ssl, "Failing", resp)
-        update_electrum_row_failed(row)
+        lib_sqlite.update_electrum_row_failed(row)
         #print(f"<<<< Failed: {row} {e}")
         
 
@@ -76,10 +80,10 @@ def update_electrums_status():
 
 
 def get_repo_electrums():
-    electrum_coins = [f for f in os.listdir(f"coins/electrums") if os.path.isfile(f"coins/electrums/{f}")]
+    electrum_coins = [f for f in os.listdir(f"{script_dir}/coins/electrums") if os.path.isfile(f"{script_dir}/coins/electrums/{f}")]
     repo_electrums = {}
     for coin in electrum_coins:
-        with open(f"coins/electrums/{coin}", "r") as f:
+        with open(f"{script_dir}/coins/electrums/{coin}", "r") as f:
             electrums = json.load(f)
             repo_electrums.update({coin: electrums})
     return repo_electrums
@@ -97,17 +101,17 @@ def scan_electrums(electrum_dict):
             if "protocol" in electrum:
                 if electrum["protocol"] == "SSL":
                     ssl_list.append(coin)
-                    thread_list.append(scan_thread(coin, url, port, True, "server.version"))
+                    thread_list.append(scan_thread(coin, url, port, True, "blockchain.headers.subscribe"))
                     continue
             non_ssl_list.append(coin)
-            thread_list.append(scan_thread(coin, url, port, False, "server.version"))
+            thread_list.append(scan_thread(coin, url, port, False, "blockchain.headers.subscribe"))
 
     # for coin in electrum_dict:
     #     for electrum in electrum_dict[coin]:
     #         if "ws_url" in electrum:
     #             url, port = electrum["ws_url"].split(":")
     #             ws_list.append(coin)
-    #             thread_list.append(scan_thread(coin, url, port, "blockchain.block.headers", [1,2], "ws"))
+    #             thread_list.append(scan_thread(coin, url, port, "blockchain.headers.subscribe", [1,2], "ws"))
 
     for thread in thread_list:
         thread.start()
@@ -119,3 +123,13 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == "scan":
             update_electrums_status()
+
+        if sys.argv[1] == "clean":
+            electrum_coins = list(get_repo_electrums().keys())
+            db_coins = lib_sqlite.get_db_coins()
+            print(electrum_coins)
+            print(db_coins)
+            for coin in db_coins:
+                if coin not in electrum_coins:
+                    print(f"Deleting {coin}")
+                    lib_sqlite.delete_electrum_coin(coin)

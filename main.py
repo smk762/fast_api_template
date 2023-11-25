@@ -29,8 +29,13 @@ app = FastAPI(openapi_tags=tags_metadata)
 
 cors_origins = [
     "http://localhost:3000",
+    "http://116.203.120.91:8762/",
+    "http://stats.kmd.io",
+    "https://116.203.120.91:8762/",
+    "https://stats.kmd.io",
     "https://vote.komodoplatform.com",
-    "http://vote.komodoplatform.com"
+    "http://vote.komodoplatform.com",
+    "*"
 ]
 
 app.add_middleware(
@@ -42,7 +47,7 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=600)
+@repeat_every(seconds=60)
 def update_data():
     try:
         logger.info("Updating electrum status")

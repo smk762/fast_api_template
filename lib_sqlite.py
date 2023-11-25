@@ -8,6 +8,8 @@ from lib_logger import logger
 import sqlite3
 
 
+script_dir = os.path.abspath( os.path.dirname( __file__ ) )
+
 def get_sqlite(db_file):
     """ create a database connection to a SQLite database """
     conn = None
@@ -90,6 +92,33 @@ def view_table_info(cursor, table):
     )
 
 
+def delete_electrum_coin(coin):
+    try:
+        sql = f"DELETE FROM electrum_status WHERE coin = '{coin}';"
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        conn.commit()
+        print(f"{coin} removed from database")
+    except Exception as e:
+        print(e)
+        print(sql)
+
+def get_db_coins():
+    try:
+        sql = f"SELECT DISTINCT coin FROM electrum_status;"
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        resp = []
+        for i in cursor.fetchall():
+            resp.append(i[0])
+        return resp
+    except Exception as e:
+        print(e)
+        print(sql)
+
+
 def update_electrum_row(row):
     try:
         sql = f"INSERT INTO electrum_status \
@@ -97,7 +126,7 @@ def update_electrum_row(row):
                 VALUES (?, ?, ?, ?, ?, ?) \
                 ON CONFLICT (electrum) DO UPDATE \
                 SET status='{row[3]}', response='{row[4]}', last_connection='{row[5]}';"
-        conn = get_sqlite("electrum_status.db")
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
         conn.commit()
@@ -113,7 +142,7 @@ def update_electrum_row_failed(row):
                 VALUES (?, ?, ?, ?, ?) \
                 ON CONFLICT (electrum) DO UPDATE \
                 SET status='{row[3]}', response='{row[4]}';"
-        conn = get_sqlite("electrum_status.db")
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
         conn.commit()
@@ -123,7 +152,7 @@ def update_electrum_row_failed(row):
 
 
 def get_electrum_status_data():
-    conn = get_sqlite("electrum_status.db")
+    conn = get_sqlite(f"{script_dir}/electrum_status.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     rows = cursor.execute("SELECT * FROM electrum_status").fetchall()
@@ -138,7 +167,7 @@ def create_tables():
         status TEXT,                            \
         response TEXT,                           \
         last_connection INTEGER);"
-    conn = get_sqlite("electrum_status.db")
+    conn = get_sqlite(f"{script_dir}/electrum_status.db")
     cursor = conn.cursor()
     cursor.execute(sql)
 

@@ -14,6 +14,7 @@
 #  0. You just DO WHAT THE F*** YOU WANT TO.
 
 import ssl
+import time
 import json
 import socket
 import hashlib
@@ -39,7 +40,8 @@ class ElectrumConnection():
                 with socket.create_connection((self.url, self.port)) as sock:
                     with context.wrap_socket(sock, server_hostname=self.url) as ssock:
                         ssock.send(json.dumps({"id": 0, "method": method, "params": params}).encode() + b'\n')
-                        data = ssock.recv(99999)[:-1].decode()
+                        time.sleep(3)
+                        data = ssock.recv(99999)[:-1].decode().split("\n")[0]
                         try:
                             return json.loads(data)
                         except Exception as e:
@@ -47,7 +49,8 @@ class ElectrumConnection():
             else:
                 with socket.create_connection((self.url, self.port)) as sock:
                     sock.send(json.dumps({"id": 0, "method": method, "params": params}).encode() + b'\n')
-                    data = sock.recv(99999)[:-1].decode()
+                    time.sleep(3)
+                    data = sock.recv(99999)[:-1].decode().split("\n")[0]
                     try:
                         return json.loads(data)
                     except Exception as e:
@@ -57,6 +60,10 @@ class ElectrumConnection():
 
     def version(self):
         return self.rpc("server.version")
+
+    def get_tip(self):
+        self.version()
+        return self.rpc("blockchain.headers.subscribe")
 
     def broadcast(raw_tx):
         return self.rpc('blockchain.transaction.broadcast', raw_tx)
