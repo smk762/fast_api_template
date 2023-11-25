@@ -57,11 +57,6 @@ def update_data():
         logger.error(f"Electrum status update Failed! {e}")
 
 
-@app.get('/api/v1/data', tags=[])
-def get_jsonfile_data():
-    return lib_json.get_jsonfile_data('jsondata.json')
-
-
 @app.get('/api/v1/electrums_status', tags=[])
 def get_electrums_status():
     data = lib_sqlite.get_electrum_status_data()
