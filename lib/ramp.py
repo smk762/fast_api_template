@@ -32,10 +32,15 @@ class RampAPI:
         print(url)
         response = requests.get(url=url, headers=self.get_headers(endpoint, request))
         try:
-            return response.json()
+            resp = response.json()
+            if "message" in resp:
+                if self.key in resp["message"]:
+                    resp["message"].replace(self.key, "<***API***KEY***>")
+            return resp
         except Exception as e:
             print(e)
-        return response.content
+            print(response.content)
+        return {"error": "Invalid response from Ramp API. Check logs for details."}
 
     def sendPostRequest(self, request, payload):
         endpoint = request.query_params["endpoint"]
@@ -49,7 +54,12 @@ class RampAPI:
             headers=self.get_headers(endpoint, request, payload),
         )
         try:
-            return response.json()
+            resp = response.json()
+            if "message" in resp:
+                if self.key in resp["message"]:
+                    resp["message"].replace(self.key, "<***API***KEY***>")
+            return resp
         except Exception as e:
             print(e)
-        return response.content
+            print(response.content)
+        return {"error": "Invalid response from Ramp API. Check logs for details."}
