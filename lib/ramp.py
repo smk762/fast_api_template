@@ -23,7 +23,7 @@ class RampAPI:
         print(url)
         url += (
             "?hostApiKey="
-            + self.key
+            + self.key + "&"
             + "&".join(
                 [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
             )
