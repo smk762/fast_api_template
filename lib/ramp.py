@@ -25,7 +25,7 @@ class RampAPI:
             "?hostApiKey="
             + self.key + "&"
             + "&".join(
-                [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
+                [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
             )
         )
 
@@ -35,7 +35,7 @@ class RampAPI:
             resp = response.json()
             if "message" in resp:
                 if self.key in resp["message"]:
-                    resp["message"].replace(self.key, "<***API***KEY***>")
+                    resp["message"] = resp["message"].replace(self.key, "<***API***KEY***>")
             return resp
         except Exception as e:
             print(e)
@@ -57,7 +57,7 @@ class RampAPI:
             resp = response.json()
             if "message" in resp:
                 if self.key in resp["message"]:
-                    resp["message"].replace(self.key, "<***API***KEY***>")
+                    resp["message"] = resp["message"].replace(self.key, "<***API***KEY***>")
             return resp
         except Exception as e:
             print(e)
