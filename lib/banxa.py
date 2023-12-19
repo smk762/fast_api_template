@@ -3,6 +3,7 @@ import requests
 import time
 import hmac
 import json
+from lib.logger import logger
 from lib.config import ConfigFastAPI
 
 
@@ -18,11 +19,11 @@ class BanxaAPI:
         self.test_secret = bytes(self.config.API_SECRETS["BANXA"], "utf8")
         
 
-    def generateHmac(self, payload, nonce):
-        hmacCode = hmac.digest(self.secret, payload.encode("utf8"), "SHA256")
-        return self.key + ":" + hmacCode.hex() + ":" + str(nonce)
+    def generateHmac(self, payload, nonce, secret, key):
+        hmacCode = hmac.digest(secret, payload.encode("utf8"), "SHA256")
+        return key + ":" + hmacCode.hex() + ":" + str(nonce)
 
-    def get_headers(self, endpoint, request, payload=None):
+    def get_headers(self, endpoint, request, secret, key, payload=None):
         newline = "\n"
         nonce = int(time.time())
         if request.method == "POST":
@@ -36,20 +37,30 @@ class BanxaAPI:
                 )
             data = 'GET\n' + endpoint + '\n' + str(nonce)
         return {
-            "Authorization": f"Bearer {self.generateHmac(data, nonce)}",
+            "Authorization": f"Bearer {self.generateHmac(data, nonce, secret, key)}",
             "Content-Type": "application/json",
         }
 
     def sendGetRequest(self, request):
+        url = self.url
+        key = self.key
+        secret = self.secret
+        if "is_test_mode" in request.query_params:
+            if request.query_params["is_test_mode"].lower() == "false":
+                logger.info("Using test mode")
+                url = self.test_url
+                key = self.test_key
+                secret = self.test_secret            
+            
         endpoint = request.query_params["endpoint"]
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
-        headers = self.get_headers(endpoint, request)
+        headers = self.get_headers(endpoint, request, secret, key)
         if endpoint == "/api/orders" and "order_id" in request.query_params:
             endpoint += "/" + request.query_params["order_id"]
-            url = self.url + endpoint
+            url += endpoint
         else:
-            url = self.url + endpoint
+            url += endpoint
             url += "?" + "&".join(
                 [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
             )
@@ -61,12 +72,20 @@ class BanxaAPI:
         return response.content
 
     def sendPostRequest(self, request, payload):
+        url = self.url
+        key = self.key
+        secret = self.secret
+        if "is_test_mode" in request.query_params:
+            if request.query_params["is_test_mode"].lower() == "false":
+                url = self.test_url
+                key = self.test_key
+                secret = self.test_secret 
         endpoint = request.query_params["endpoint"]
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
-        headers = self.get_headers(endpoint, request, payload)
+        headers = self.get_headers(endpoint, request, secret, key, payload)
 
-        response = requests.post(self.url + endpoint, data=payload, headers=headers)
+        response = requests.post(url + endpoint, data=payload, headers=headers)
         try:
             return response.json()
         except Exception as e:

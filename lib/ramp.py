@@ -3,6 +3,7 @@ import requests
 import time
 import hmac
 from lib.config import ConfigFastAPI
+from lib.logger import logger
 
 
 class RampAPI:
@@ -12,20 +13,27 @@ class RampAPI:
         self.key = self.config.API_KEYS["RAMP_PROD"]
         self.test_url = self.config.API_URLS["RAMP"]
         self.test_key = self.config.API_KEYS["RAMP"]
-
+        
     def get_headers(self, endpoint, request, payload=None):
         return {"Content-Type": "application/json"}
 
     def sendGetRequest(self, request):
+        url = self.url
+        key = self.key
+        if "is_test_mode" in request.query_params:
+            if request.query_params["is_test_mode"].lower() == "false":
+                logger.info("Using test mode")
+                url = self.test_url
+                key = self.test_key
         endpoint = request.query_params["endpoint"]
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
         headers = self.get_headers(endpoint, request)
-        url = self.url + endpoint
+        url = url + endpoint
         print(url)
         url += (
             "?hostApiKey="
-            + self.key + "&"
+            + key + "&"
             + "&".join(
                 [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
             )
@@ -36,8 +44,8 @@ class RampAPI:
         try:
             resp = response.json()
             if "message" in resp:
-                if self.key in resp["message"]:
-                    resp["message"] = resp["message"].replace(self.key, "<***API***KEY***>")
+                if key in resp["message"]:
+                    resp["message"] = resp["message"].replace(key, "<***API***KEY***>")
             return resp
         except Exception as e:
             print(e)
@@ -45,10 +53,17 @@ class RampAPI:
         return {"error": "Invalid response from Ramp API. Check logs for details."}
 
     def sendPostRequest(self, request, payload):
+        url = self.url
+        key = self.key
+        if "is_test_mode" in request.query_params:
+            if request.query_params["is_test_mode"].lower() == "false":
+                logger.info("Using test mode")
+                url = self.test_url
+                key = self.test_key
         endpoint = request.query_params["endpoint"]
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
-        url = self.url + endpoint + "?hostApiKey=" + self.key
+        url = url + endpoint + "?hostApiKey=" + key
         print(url)
         response = requests.post(
             url=url,
@@ -58,8 +73,8 @@ class RampAPI:
         try:
             resp = response.json()
             if "message" in resp:
-                if self.key in resp["message"]:
-                    resp["message"] = resp["message"].replace(self.key, "<***API***KEY***>")
+                if key in resp["message"]:
+                    resp["message"] = resp["message"].replace(key, "<***API***KEY***>")
             return resp
         except Exception as e:
             print(e)
