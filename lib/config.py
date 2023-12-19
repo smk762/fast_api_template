@@ -39,11 +39,9 @@ class ConfigFastAPI:
         self.API_SECRETS = {}
         self.API_URLS = {}
         for k, v in os.environ.items():
-            if k.endswith("_APIKEY"):
-                self.API_KEYS.update({k.replace("_APIKEY", ""): v})
-            elif k.endswith("_SECRET"):
-                self.API_SECRETS.update({k.replace("_SECRET", ""): v})
-            elif k.endswith("_BASEURL"):
+            self.API_KEYS.update({k.replace("_APIKEY", ""): v})
+            self.API_SECRETS.update({k.replace("_SECRET", ""): v})
+            if k.contains("_BASEURL"):
                 if v.endswith("/"):
                     v = v[:-1]
                 self.API_URLS.update({k.replace("_BASEURL", ""): v})

@@ -9,9 +9,14 @@ from lib.config import ConfigFastAPI
 class BanxaAPI:
     def __init__(self) -> None:
         self.config = ConfigFastAPI()
-        self.url = self.config.API_URLS["BANXA"]
-        self.key = self.config.API_KEYS["BANXA"]
-        self.secret = bytes(self.config.API_SECRETS["BANXA"], "utf8")
+        self.url = self.config.API_URLS["BANXA_PROD"]
+        self.key = self.config.API_KEYS["BANXA_PROD"]
+        self.secret = bytes(self.config.API_SECRETS["BANXA_PROD"], "utf8")
+        
+        self.test_url = self.config.API_URLS["BANXA"]
+        self.test_key = self.config.API_KEYS["BANXA"]
+        self.test_secret = bytes(self.config.API_SECRETS["BANXA"], "utf8")
+        
 
     def generateHmac(self, payload, nonce):
         hmacCode = hmac.digest(self.secret, payload.encode("utf8"), "SHA256")

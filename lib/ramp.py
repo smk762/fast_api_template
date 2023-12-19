@@ -8,8 +8,10 @@ from lib.config import ConfigFastAPI
 class RampAPI:
     def __init__(self) -> None:
         self.config = ConfigFastAPI()
-        self.url = self.config.API_URLS["RAMP"]
-        self.key = self.config.API_KEYS["RAMP"]
+        self.url = self.config.API_URLS["RAMP_PROD"]
+        self.key = self.config.API_KEYS["RAMP_PROD"]
+        self.test_url = self.config.API_URLS["RAMP"]
+        self.test_key = self.config.API_KEYS["RAMP"]
 
     def get_headers(self, endpoint, request, payload=None):
         return {"Content-Type": "application/json"}
@@ -53,3 +55,4 @@ class RampAPI:
         except Exception as e:
             print(e)
         return response.content
+
