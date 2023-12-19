@@ -21,7 +21,7 @@ class RampAPI:
         url = self.url
         key = self.key
         if "is_test_mode" in request.query_params:
-            if request.query_params["is_test_mode"].lower() == "false":
+            if request.query_params["is_test_mode"].lower() == "true":
                 logger.info("Using test mode")
                 url = self.test_url
                 key = self.test_key
@@ -56,7 +56,7 @@ class RampAPI:
         url = self.url
         key = self.key
         if "is_test_mode" in request.query_params:
-            if request.query_params["is_test_mode"].lower() == "false":
+            if request.query_params["is_test_mode"].lower() == "true":
                 logger.info("Using test mode")
                 url = self.test_url
                 key = self.test_key

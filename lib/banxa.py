@@ -46,7 +46,7 @@ class BanxaAPI:
         key = self.key
         secret = self.secret
         if "is_test_mode" in request.query_params:
-            if request.query_params["is_test_mode"].lower() == "false":
+            if request.query_params["is_test_mode"].lower() == "true":
                 logger.info("Using test mode")
                 url = self.test_url
                 key = self.test_key
@@ -76,7 +76,7 @@ class BanxaAPI:
         key = self.key
         secret = self.secret
         if "is_test_mode" in request.query_params:
-            if request.query_params["is_test_mode"].lower() == "false":
+            if request.query_params["is_test_mode"].lower() == "true":
                 url = self.test_url
                 key = self.test_key
                 secret = self.test_secret 
