@@ -32,7 +32,7 @@ class BanxaAPI:
                 endpoint += "/" + request.query_params["order_id"]
             else:
                 endpoint += "?" + "&".join(
-                    [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
+                    [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
                 )
             data = 'GET\n' + endpoint + '\n' + str(nonce)
         return {
@@ -51,7 +51,7 @@ class BanxaAPI:
         else:
             url = self.url + endpoint
             url += "?" + "&".join(
-                [f"{k}={v}" for k, v in request.query_params.items() if k != "endpoint"]
+                [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
             )
         response = requests.get(url=url, headers=headers)
         try:

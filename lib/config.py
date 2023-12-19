@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import lib.json_utils as json_utils
 
+script_path = os.path.realpath(os.path.dirname(__file__))
 
 class ConfigFastAPI:
     """Class for API configuration."""
@@ -70,9 +71,9 @@ class ConfigFastAPI:
         """Returns the path to the SQLite DB."""
         path = os.getenv("SQLITEDB_PATH")
         if not path:
-            if not os.path.exists("db"):
-                os.mkdir("db")
-            path = "db/fastapi.db"
+            path = f"{script_path}/db"
+            if not os.path.exists(path):
+                os.mkdir(path)
         return path
 
     def get_FASTAPI_METADATA(self):

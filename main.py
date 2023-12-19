@@ -48,6 +48,9 @@ if config.FASTAPI["USE_MIDDLEWARE"]:
         allow_headers=["*"],
     )
 
+@app.get("/api/v1/healthcheck", tags=["api"])
+def get_response(request: Request):
+    return {"status": "online"}
 
 @app.get("/api/v1/{org}", tags=["api"])
 def get_response(org, request: Request):
