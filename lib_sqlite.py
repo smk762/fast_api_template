@@ -121,15 +121,17 @@ def get_db_coins():
 
 def update_electrum_row(row):
     try:
+        print(f"adding {row} added yo from database")
         sql = f"INSERT INTO electrum_status \
-                    (coin, electrum, ssl, status, response, last_connection) \
-                VALUES (?, ?, ?, ?, ?, ?) \
-                ON CONFLICT (electrum) DO UPDATE \
-                SET status='{row[3]}', response='{row[4]}', last_connection='{row[5]}';"
+                    (coin, server, protocol, result, last_connection) \
+                VALUES (?, ?, ?, ?, ?) \
+                ON CONFLICT (server) DO UPDATE \
+                SET result='{row[3]}', last_connection='{row[4]}';"
         conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
         conn.commit()
+        print(f"{row} added yo from database")
     except Exception as e:
         print(e)
         print(sql)
@@ -137,11 +139,15 @@ def update_electrum_row(row):
 
 def update_electrum_row_failed(row):
     try:
-        sql = f"INSERT INTO electrum_status \
-                    (coin, electrum, ssl, status, response) \
-                VALUES (?, ?, ?, ?, ?) \
-                ON CONFLICT (electrum) DO UPDATE \
-                SET status='{row[3]}', response='{row[4]}';"
+        sql = f"INSERT INTO electrum_status    \
+                    (coin,                     \
+                    server,                    \
+                    protocol,                  \
+                    result,                    \
+                    last_connection)           \
+                VALUES (?, ?, ?, ?, ?)         \
+                ON CONFLICT (server) DO UPDATE \
+                SET result='{row[3]}';"
         conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
@@ -160,12 +166,11 @@ def get_electrum_status_data():
 
 def create_tables():
     sql = "CREATE TABLE electrum_status (   \
-        id INTEGER PRIMARY KEY,              \
-        coin TEXT NOT NULL,                   \
-        electrum TEXT NOT NULL UNIQUE,         \
-        ssl BOOLEAN NOT NULL,         \
-        status TEXT,                            \
-        response TEXT,                           \
+        id INTEGER PRIMARY KEY,             \
+        coin TEXT NOT NULL,                 \
+        server TEXT NOT NULL UNIQUE,        \
+        protocol TEXT NOT NULL,             \
+        result TEXT,                        \
         last_connection INTEGER);"
     conn = get_sqlite(f"{script_dir}/electrum_status.db")
     cursor = conn.cursor()
