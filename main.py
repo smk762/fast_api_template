@@ -51,7 +51,7 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=3600)
+@repeat_every(seconds=600)
 def update_data():
     try:
         logger.info("Updating electrum status")
@@ -70,7 +70,7 @@ def update_data():
         for coin in data:
             for protocol in ["tcp", "ssl", "wss"]:
                 for server in data[coin][protocol]:
-                    result = data[coin][protocol][server]['result']
+                    result = data[coin][protocol][server]['result'].replace("'", "")
                     last = data[coin][protocol][server]['last_connection']
                     if result == "Passed":
                         row = (coin, server, protocol, result, last)
