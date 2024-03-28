@@ -14,8 +14,10 @@ from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Re
 import lib_sqlite
 import lib_data
 import lib_json
-import lib_scan
 from lib_logger import logger
+from coins.utils import scan_electrums as scan
+
+script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 
 load_dotenv()
 SSL_KEY = os.getenv("SSL_KEY")
@@ -25,7 +27,9 @@ if not API_PORT:
     API_PORT = 8999
 
 tags_metadata = []
-app = FastAPI(openapi_tags=tags_metadata)
+#app = FastAPI(openapi_tags=tags_metadata)
+app = FastAPI()
+
 
 cors_origins = [
     "http://localhost:3000",
@@ -47,14 +51,35 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=60)
+@repeat_every(seconds=600)
 def update_data():
     try:
         logger.info("Updating electrum status")
-        lib_scan.update_electrums_status()
-        logger.info("Electrum status updated!")
+        scan.get_electrums_report()
+        with open(f'{script_dir}/coins/utils/electrum_scan_report.json') as f:
+            data = json.load(f)
+        electrum_coins = list(data.keys())
+        db_coins = lib_sqlite.get_db_coins()
+        print(electrum_coins)
+        print(db_coins)
+        for coin in db_coins:
+            if coin not in electrum_coins:
+                print(f"Deleting {coin}")
+                lib_sqlite.delete_electrum_coin(coin)
+        logger.info("Electrum status table updated!")
+        for coin in data:
+            for protocol in ["tcp", "ssl", "wss"]:
+                for server in data[coin][protocol]:
+                    result = data[coin][protocol][server]['result'].replace("'", "")
+                    last = data[coin][protocol][server]['last_connection']
+                    if result == "Passed":
+                        row = (coin, server, protocol, result, last)
+                        lib_sqlite.update_electrum_row(row)
+                    else:
+                        row = (coin, server, protocol, result, last)
+                        lib_sqlite.update_electrum_row_failed(row)
     except Exception as e:
-        logger.error(f"Electrum status update Failed! {e}")
+        logger.error(f"Electrum status scan update Failed! {e}")
 
 
 @app.get('/api/v1/electrums_status', tags=[])
