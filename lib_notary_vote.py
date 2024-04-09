@@ -57,7 +57,7 @@ def add_notary_vote_to_poll_config(candidates, poll_config):
     if ticker in poll_config:
         x = ""
         while x.lower() not in ["y", "n"]:
-            x = input(f"{ticker} already exists in poll_config_v3.json! Continue [y/n]? ")
+            x = input(f"{ticker} already exists in poll_config.json! Continue [y/n]? ")
             if x.lower() == "n":
                 sys.exit()
 

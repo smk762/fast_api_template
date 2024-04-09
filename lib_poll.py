@@ -79,7 +79,7 @@ def validate_poll_results(polls, coin, final_block):
                         row.blocktime = tx_info["blocktime"]
                         row.insert()
     update_balances(polls, final_block)
-    lib_json.write_jsonfile_data('poll_config_v3.json', polls)
+    lib_json.write_jsonfile_data('poll_config.json', polls)
 
 
 
@@ -317,7 +317,7 @@ def recast_recent_votes(recent_txids):
 
 def update_polls():
     try:
-        polls = lib_json.get_jsonfile_data('poll_config_v3.json')
+        polls = lib_json.get_jsonfile_data('poll_config.json')
         if not polls:
             polls = {}
         now = int(time.time())
@@ -410,7 +410,7 @@ def update_polls():
                                     break
 
                     update_balances(polls, final_block)
-                    lib_json.write_jsonfile_data('poll_config_v3.json', polls)
+                    lib_json.write_jsonfile_data('poll_config.json', polls)
                     lib_json.write_jsonfile_data('self_sent_txids.json', SELF_SENT_TXIDS)
 
     except Exception as e:

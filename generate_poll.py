@@ -3,13 +3,13 @@ import sys
 import json
 
 
-with open("poll_config_v3.json", "w+") as f:
+with open("poll_config.json", "w+") as f:
     data = json.load(f)
     ticker = input("Enter chain ticker: ")
     if ticker in data:
         x = ""
         while x.lower() not in ["y", "n"]:
-            x = input(f"{ticker} already exists in poll_config_v3.json! Continue [y/n]? ")
+            x = input(f"{ticker} already exists in poll_config.json! Continue [y/n]? ")
             if x.lower() == "n":
                 sys.exit()
     explorer = input("Enter chain explorer: ")

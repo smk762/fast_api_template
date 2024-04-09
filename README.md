@@ -1,5 +1,5 @@
 ## For simple polls
-- Run `./generate_poll.py` to create a new entry in `poll_config_v2.json`
+- Run `./generate_poll.py` to create a new entry in `poll_config.json`
 
 ## For Notary Node elections
 - Update the season variable in `./parse_candidates.py`, then run it to get a dict of candidates per region.
