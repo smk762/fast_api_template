@@ -56,7 +56,7 @@ with open("poll_config.json", "w+") as f:
             # Todo: Automate generating these
             opt_qr_url = input("Enter option qrcode url: ")
             config[ticker]["categories"][cat_name]["options"].update({
-                "name": opt_name
+                "name": opt_name,
                 "text": opt_desc,
                 "votes": 0,
                 "address": opt_addr,
