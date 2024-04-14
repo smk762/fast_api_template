@@ -2,6 +2,7 @@
 import sys
 import requests
 import const
+from validate import enforce_input
 
 def parse_candidates(season):
     base_url = f"https://github.com/KomodoPlatform/NotaryNodes/tree/master/season{season}"
@@ -31,25 +32,6 @@ def parse_candidates(season):
                             }
                         })
     return candidates
-
-def enforce_input(q, is_int=False):
-    if is_int:
-        while True:
-            try:
-                a = int(input(q))
-                if not isinstance(a, int):
-                    print("Try again, must be integer!")
-                else:
-                    return int(a)
-            except:
-                print("Try again, must be integer!")
-    else:
-        while True:
-            a = input(q)
-            if a == "":
-                print("Try again, no input!")
-            else:
-                return a
 
 
 def add_notary_vote_to_poll_config(candidates, poll_config):
