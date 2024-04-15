@@ -28,6 +28,7 @@ VOTE_ACTIVE = time.time() < 1682899199
 SSL_KEY, SSL_CERT = const.get_ssl_certs()
 API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
 GEN_BLOCKS = False
+script_path = os.path.realpath(os.path.dirname(__file__))
 
 
 tags_metadata = []
@@ -68,13 +69,18 @@ def update_poll_data():
 def move_chains():
     if GEN_BLOCKS:
         try:
-            polls = lib_json.get_jsonfile_data('poll_config.json')
+            polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
             if not polls:
                 polls = {}
-            chains = polls.keys()
-            for chain in chains:
-                rpc = lib_rpc.get_rpc(chain)
-                logger.info(f"{chain} sendtoaddress {API_ADDRESS} 0.00762")
+            tickers = polls.keys()
+            for ticker in tickers:
+                rpc = lib_rpc.get_rpc(
+                    os.getenv("rpcuser"),
+                    os.getenv("rpcpass"),
+                    ticker.lower(),
+                    const.coin_info[ticker]["rpcport"]
+                )
+                logger.info(f"{ticker} sendtoaddress {API_ADDRESS} 0.00762")
                 logger.info(rpc.sendtoaddress(API_ADDRESS, 0.00762))
         except Exception as e:
             logger.error(e)
@@ -84,11 +90,16 @@ def move_chains():
 @repeat_every(seconds=60)
 def rpc_getinfo():
     try:
-        polls = lib_json.get_jsonfile_data('poll_config.json')
+        polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
         if not polls:
             polls = {}
-        for chain in polls:
-            rpc = lib_rpc.get_rpc(chain)
+        for ticker in polls:
+            rpc = lib_rpc.get_rpc(
+                os.getenv("rpcuser"),
+                os.getenv("rpcpass"),
+                ticker.lower(),
+                const.coin_info[ticker]["rpcport"]
+            )
             #logger.info(rpc.getinfo())
     except Exception as e:
         logger.warning(f"RPC (getinfo) not responding: {e}")
@@ -100,13 +111,12 @@ def update_candidates():
     if VOTE_ACTIVE:
         try:
             votes = {}
-            poll_data = lib_json.get_jsonfile_data('poll_config.json')
+            poll_data = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
             for region in poll_data["VOTE2023"]["categories"]:
                 if region not in votes:
                     votes.update({region: {}})
                 for i in poll_data["VOTE2023"]["categories"][region]["options"]:
                     votes[region].update({i["candidate"]: i["votes"]})
-
 
             candidates_data = requests.get("https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/candidates.json").json()                    
             for region in candidates_data:
@@ -119,7 +129,7 @@ def update_candidates():
             for region in poll_data["VOTE2023"]["categories"]:
                 poll_data["VOTE2023"]["categories"][region]["options"] = candidates_data[region]
 
-            lib_json.write_jsonfile_data('poll_config.json', poll_data)
+            lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', poll_data)
         except Exception as e:
             logger.error(e)
 
@@ -127,7 +137,7 @@ def update_candidates():
 
 @app.get('/api/v3/polls_list', tags=[])
 def get_polls_v3_list():
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     statuses = lib_poll.get_polls_statuses(polls)
@@ -136,7 +146,7 @@ def get_polls_v3_list():
 
 @app.get("/api/v3/polls/{chain}/info", tags=[])
 def get_poll_info(chain: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     if chain not in polls.keys():
@@ -147,7 +157,7 @@ def get_poll_info(chain: str):
 
 @app.get("/api/v3/polls/{chain}/categories", tags=[])
 def get_poll_categories(chain: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     if chain not in polls.keys():
@@ -158,7 +168,7 @@ def get_poll_categories(chain: str):
 
 @app.get("/api/v3/polls/{chain}/status", tags=[])
 def get_poll_status(chain: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     if chain not in polls.keys():
@@ -183,7 +193,7 @@ def get_poll_status(chain: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/info", tags=[])
 def get_poll_category_info(chain: str, category: str):
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     if chain not in polls.keys():
@@ -195,7 +205,7 @@ def get_poll_category_info(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/tally", tags=[])
 def get_poll_tally(chain: str, category: str):
-    polls_v3 = lib_json.get_jsonfile_data('poll_config.json')
+    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     options = lib_poll.get_poll_options(polls_v3, chain, category)
@@ -207,7 +217,7 @@ def get_poll_tally(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/options", tags=[])
 def get_poll_options(chain: str, category: str):
-    polls_v3 = lib_json.get_jsonfile_data('poll_config.json')
+    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     options = lib_poll.get_poll_options(polls_v3, chain, category)
@@ -216,7 +226,7 @@ def get_poll_options(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/addresses", tags=[])
 def get_poll_options_addresses(chain: str, category: str):
-    polls_v3 = lib_json.get_jsonfile_data('poll_config.json')
+    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     options = lib_poll.get_poll_options(polls_v3, chain, category)
@@ -229,7 +239,7 @@ def get_poll_options_addresses(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
-    polls_v3 = lib_json.get_jsonfile_data('poll_config.json')
+    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     options = lib_poll.get_poll_options(polls_v3, chain, category)
@@ -242,7 +252,7 @@ def get_poll_options_qr_codes(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
-    polls_v3 = lib_json.get_jsonfile_data('poll_config.json')
+    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     options = lib_poll.get_poll_options(polls_v3, chain, category)
@@ -255,7 +265,7 @@ def get_poll_options_text(chain: str, category: str):
 
 @app.get('/api/v3/all_polls', tags=[])
 def get_all_polls():
-    polls = lib_json.get_jsonfile_data('poll_config.json')
+    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
     return polls

@@ -65,9 +65,9 @@ coin_info = {
         }
     },
     "KIP0002": {
-        "explorer": "https://kip0002.kmdexplorer.io/",
-        "p2pport": 63161,
-        "rpcport": 63160,
+        "explorer": "https://kip0002.kmdexplorer.io",
+        "p2pport": 63160,
+        "rpcport": 63161,
         "launch": {
             "ac_name": "KIP0002",
             "ac_supply": "149687271",
@@ -77,7 +77,7 @@ coin_info = {
         }
     },
     "KIP0003": {
-        "explorer": "https://kip0003.kmdexplorer.io/",
+        "explorer": "https://kip0003.kmdexplorer.io",
         "p2pport": 48530,
         "rpcport": 48531,
         "launch": {
@@ -89,7 +89,7 @@ coin_info = {
         }
     },
     "KIP0004": {
-        "explorer": "https://kip0004.kmdexplorer.io/",
+        "explorer": "https://kip0004.kmdexplorer.io",
         "p2pport": 58225,
         "rpcport": 58226,
         "launch": {

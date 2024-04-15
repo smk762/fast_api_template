@@ -1,0 +1,2 @@
+#!/bin/bash
+docker exec -it kip0004 komodo-cli -ac_name=KIP0004 "$@"

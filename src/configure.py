@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 import string
 import shutil
@@ -11,11 +12,13 @@ from const import coin_info
 
 home = os.path.expanduser('~')
 script_path = os.path.realpath(os.path.dirname(__file__))
-project_root = Path(script_path)
+project_root = Path(script_path).parent
+print(script_path)
+print(project_root)
 
 
 def get_debug_file(ticker, container=True) -> str:
-    path = f"{home}/.komodo/{ticker}/{ticker}.conf"
+    path = f"{home}/.komodo/{ticker}"
     if container:
         path = path.replace(home, "/home/komodian")
     return f"{path}/debug.log"
@@ -26,32 +29,28 @@ def get_service_yaml(ticker):
     info = coin_info[ticker]
     p2p_port = info["p2pport"]
     rpc_port = info["rpcport"]
-    service.append(f'  {ticker.lower()}:')
-    service.append(f'    env_file:')
-    service.append(f'      - .env')
-    service.append(f'    build:')
-    service.append(f'      context: ./docker_files')
-    service.append(f'      dockerfile: Dockerfile.KMD')
-    service.append(f'      args:')
-    service.append(f'        - USER_ID=$USER_ID')
-    service.append(f'        - GROUP_ID=$GROUP_ID')
-    service.append(f'        - SERVICE_CLI="komodo-cli -ac_name={ticker}"')
-    service.append(f'    ports:')
-    service.append(f'      - "127.0.0.1:{rpc_port}:{rpc_port}"')
-    service.append(f'      - "127.0.0.1:{p2p_port}:{p2p_port}"')
-    service.append(f'    volumes:')
-    service.append(f'      - <<: *zcash-params')
-    service.append(f'      - {home}/.komodo/{ticker}:/home/komodian/.komodo/{ticker}')
-    service.append(f'    container_name: {ticker.lower()}')
-    service.append(f'    restart: always')
-    service.append(f'    stop_grace_period: 15s')
-    service.append(f'    logging:')
-    service.append(f'      driver: "json-file"')
-    service.append(f'      options:')
-    service.append(f'        max-size: "20m"')
-    service.append(f'        max-file: "10"')
-    service.append(f'    command: ["/run_{ticker}.sh"]')
-    service.append(f'')
+    service.append(f'  {ticker.lower()}:\n')
+    service.append(f'    env_file:\n')
+    service.append(f'      - src/.env\n')
+    service.append(f'    build:\n')
+    service.append(f'      context: ./src\n')
+    service.append(f'      dockerfile: Dockerfile.KMD\n')
+    service.append(f'    ports:\n')
+    service.append(f'      - "127.0.0.1:{rpc_port}:{rpc_port}"\n')
+    service.append(f'      - "127.0.0.1:{p2p_port}:{p2p_port}"\n')
+    service.append(f'    volumes:\n')
+    service.append(f'      - <<: *zcash-params\n')
+    service.append(f'      - {home}/.komodo/{ticker}:/home/komodian/.komodo/{ticker}\n')
+    service.append(f'    container_name: {ticker.lower()}\n')
+    service.append(f'    restart: always\n')
+    service.append(f'    stop_grace_period: 15s\n')
+    service.append(f'    logging:\n')
+    service.append(f'      driver: "json-file"\n')
+    service.append(f'      options:\n')
+    service.append(f'        max-size: "20m"\n')
+    service.append(f'        max-file: "10"\n')
+    service.append(f'    command: ["/run_{ticker}.sh"]\n')
+    service.append(f'\n')
     return service
 
 
@@ -85,14 +84,14 @@ def create_launch_file(ticker):
         else:
             params.append(format_param(param, value))
     launch = "komodod " + ' '.join(params)
-    launch_file = f"{script_path}/launch_files/run_{coin}.sh"
-    debug = get_debug_file(coin)
-    cli = f"komodo-cli -ac_name={coin}"
+    launch_file = f"{script_path}/launch_files/run_{ticker}.sh"
+    debug = get_debug_file(ticker)
+    cli = f"komodo-cli -ac_name={ticker}"
     with open(launch_file, 'w') as f:
         with open(f"{script_path}/templates/launch.template", 'r') as t:
             for line in t.readlines():
                 line = line.replace('CLI', cli)
-                line = line.replace('COIN', coin)
+                line = line.replace('COIN', ticker)
                 line = line.replace('DEBUG', debug)
                 line = line.replace('LAUNCH', launch)
                 f.write(line)
@@ -100,37 +99,26 @@ def create_launch_file(ticker):
 
 
 def create_conf(ticker):
-    info = coin_info[ticker]
-    rpcip = "0.0.0.0"
-    rpcuser = generate_rpc_pass()
-    rpcpass = generate_rpc_pass()
     conf_file = f"{home}/.komodo/{ticker}/{ticker}.conf"
     data_path = os.path.split(conf_file)[0]
     if not os.path.exists(data_path):
         os.makedirs(data_path)
-    # Use existing rpcuser and rpcpass if they exist
-    if os.path.exists(conf_file):
-        with open(conf_file, 'r') as f:
-            lines = f.readlines()
-            for line in lines:
-                if line.startswith('rpcuser'):
-                    rpcuser = line.split('=')[1].strip()
-                if line.startswith('rpcpassword'):
-                    rpcpass = line.split('=')[1].strip()
         
     with open(conf_file, 'w') as conf:
+        info = coin_info[ticker]
+        rpcip = "0.0.0.0"
+        rpcuser = os.getenv("rpcuser")
+        rpcpass = os.getenv("rpcpass")
         conf.write(f'rpcuser={rpcuser}\n')
         conf.write(f'rpcpassword={rpcpass}\n')
         conf.write('txindex=1\n')
-        conf.write('addressindex=1\n')
-        conf.write('spentindex=1\n')
         conf.write('server=1\n')
         conf.write('daemon=1\n')
         conf.write('rpcworkqueue=256\n')
-        conf.write(f'rpcbind={rpcip}:{info[ticker]["rpcport"]}\n')
+        conf.write(f'rpcbind={rpcip}:{info["rpcport"]}\n')
         conf.write(f'rpcallowip={rpcip}/0\n')
-        conf.write(f'port={info[ticker]["p2pport"]}\n')
-        conf.write(f'rpcport={info[ticker]["rpcport"]}\n')
+        conf.write(f'port={info["p2pport"]}\n')
+        conf.write(f'rpcport={info["rpcport"]}\n')
     # create debug.log files if not existing
     debug_file = get_debug_file(ticker, False)
     if not os.path.exists(debug_file):
@@ -149,8 +137,7 @@ if __name__ == '__main__':
             create_cli_wrapper(ticker)
             create_conf(ticker)
             yaml = get_service_yaml(ticker)
-            for l in yaml:
-                conf.write(l)
+            conf.writelines(yaml)
             
             
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import json
-import segno
 
 
 with open("poll_config.json", "r") as f:
@@ -27,6 +26,7 @@ config = {
     "airdrop_at": airdrop_at,
     "starts_at": starts_at,
     "ends_at": ends_at,
+    "results_official": None,
     "overtime_ended_at": None,
     "first_overtime_block": None,
     "final_ntx_block": None,
@@ -70,22 +70,13 @@ for i in range(category_count):
         opt_name = input(f"Enter {cat_name} option {y} name: ")
         opt_desc = input(f"Enter {cat_name} option {y} description: ")
         opt_addr = input(f"Enter {cat_name} option {y} address: ")
-        qrcode = segno.make(opt_addr, micro=False)
-        qrcode.save(
-            f'{opt_addr}.png',
-            scale=4, dark='#041019',
-            data_dark='#041019',
-            data_light='#5294a1',
-            quiet_zone='#5294a1'
-        )
-        # Todo: Automate generating these
-        opt_qr_url = input(f"Enter {cat_name} option {y} qrcode url: ")
+
         config[ticker]["categories"][cat_name]["options"].append({
             "name": str(opt_name),
             "text": str(opt_desc),
             "votes": 0,
             "address": str(opt_addr),
-            "qr_code": str(opt_qr_url)
+            "qr_code": ""
         })
 
 

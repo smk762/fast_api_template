@@ -1,6 +1,6 @@
 {
     "KIP0002": {
-        "explorer": "https://kip0002.kmdexplorer.io/",
+        "explorer": "https://kip0002.kmdexplorer.io",
         "title": "Should KMD's Block Reward be reduced?",
         "options": [
             {

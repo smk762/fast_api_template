@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
+import os
 import sys
 import time
 import requests
 import lib_rpc
 import lib_json
 import lib_poll
+import const
 from lib_logger import logger
 
-def validate(poll_data, coin):
-    rpc = lib_rpc.get_rpc(coin)
-    poll_data = lib_json.get_jsonfile_data("poll_config_v2.json")
-    final_ntx_block_height = poll_data[coin]["final_ntx_block"]["height"]
-    final_ntx_block_hash = poll_data[coin]["final_ntx_block"]["hash"]
-    notarisation_tx = poll_data[coin]["final_ntx_block_tx"]
-    first_overtime_block = poll_data[coin]["first_overtime_block"]["height"]    
+script_path = os.path.realpath(os.path.dirname(__file__))
+
+def validate(poll_data, ticker):
+    rpc = lib_rpc.get_rpc(
+        os.getenv("rpcuser"),
+        os.getenv("rpcpass"),
+        ticker.lower(),
+        const.coin_info[ticker]["rpcport"]
+    )
+    poll_data = lib_json.get_jsonfile_data(f"{script_path}/poll_config.json")
+    final_ntx_block_height = poll_data[ticker]["final_ntx_block"]["height"]
+    final_ntx_block_hash = poll_data[ticker]["final_ntx_block"]["hash"]
+    notarisation_tx = poll_data[ticker]["final_ntx_block_tx"]
+    first_overtime_block = poll_data[ticker]["first_overtime_block"]["height"]    
     tx_info = rpc.getrawtransaction(notarisation_tx, 1)
     ntx_data = lib_poll.is_ntx(tx_info)
 
@@ -32,18 +41,18 @@ def validate(poll_data, coin):
             logger.error(f"final_ntx_block {final_ntx_block_height} is less than first_overtime_block {first_overtime_block}!")
             sys.exit()
     
-    explorer_url = poll_data[coin]["explorer"]
+    explorer_url = poll_data[ticker]["explorer"]
     print(f"\nnotarisation_tx: {explorer_url}/tx/{notarisation_tx}")
     print(f"final_ntx_block: {explorer_url}/block-index/{final_ntx_block_height}")
     print(f"final_ntx_blockhash: {explorer_url}/block/{final_ntx_block_hash}")
 
 
-    for category in poll_data[coin]["categories"]:
-        for option in poll_data[coin]["categories"][category]["options"]:
-            address = poll_data[coin]["categories"][category]["options"][option]["address"]
+    for category in poll_data[ticker]["categories"]:
+        for option in poll_data[ticker]["categories"][category]["options"]:
+            address = poll_data[ticker]["categories"][category]["options"][option]["address"]
             balance_data = rpc.getaddressdeltas({"addresses": [address], "start":1, "end": final_ntx_block_height})
 
-            poll_data[coin]["categories"][category]["options"][option].update({"address_deltas":balance_data})
+            poll_data[ticker]["categories"][category]["options"][option].update({"address_deltas":balance_data})
             voter_addresses = []
             balance = 0
             for i in balance_data:
@@ -59,18 +68,22 @@ def validate(poll_data, coin):
             print(f"Average vote per address: {balance/len(voter_addresses)}")
 
 
-    lib_json.write_jsonfile_data(f"{coin}_poll_results.json", poll_data[coin])
+    if ticker.startswith("KIP"):
+        path = f'{script_path}/kip/{ticker.replace("KIP", "")}'
+    else:
+        path = f'{script_path}/vote/{ticker.replace("VOTE", "")}'
+    lib_json.write_jsonfile_data(f"{path}/{ticker}_poll_results.json", poll_data[ticker])
 
 
 if __name__ == '__main__':
     # Load config
-    poll_data = lib_json.get_jsonfile_data("poll_config_v2.json")
-    coin = input("Enter ticker of chain to validate: ")
-    if coin not in poll_data:
-        logger.error(f"{coin} not found in poll_config_v2.json!")
+    poll_data = lib_json.get_jsonfile_data(f"{script_path}/poll_config.json")
+    ticker = input("Enter ticker of chain to validate: ")
+    if ticker not in poll_data:
+        logger.error(f"{ticker} not found in poll_config.json!")
         sys.exit()
     else:
-        logger.info(f"Validating {coin}...")
-        validate(poll_data, coin)
+        logger.info(f"Validating {ticker}...")
+        validate(poll_data, ticker)
 
 

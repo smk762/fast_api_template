@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+import os
 import sqlite3
 import const
 from lib_logger import logger
 
-DB_PATH = const.get_db_path()
+script_path = os.path.realpath(os.path.dirname(__file__))
+DB_PATH = f"{script_path}/kmd_voting.db"
 
 # Create table if not existing
 def create_tbl(table='voting'):
