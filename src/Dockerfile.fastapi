@@ -2,7 +2,7 @@ FROM python:3.10
 
 ENV GROUP_ID=${GROUP_ID:-1000}
 ENV USER_ID=${USER_ID:-1000}
-ENV FASTAPI_PORT=${FASTAPI_PORT:-8087}
+ENV FASTAPI_PORT=${FASTAPI_PORT:-8088}
 RUN addgroup --gid ${GROUP_ID} notarygroup
 RUN adduser --disabled-password --gecos '' --uid ${USER_ID} --gid ${GROUP_ID} komodian
 WORKDIR /home/komodian

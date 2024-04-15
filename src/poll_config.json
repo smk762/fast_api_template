@@ -2502,11 +2502,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14347,
-            "hash": "0adb4bb40427ab5e78b096db011fe734b51fc0122dd58d300a8262e9a4f44ce6",
-            "time": 1713177388
+            "height": 14494,
+            "hash": "090b413081342a95dce123a88e44ac07ae6e9a3486d477dfde4732a3a1c07ddd",
+            "time": 1713186132
         },
-        "updated_time": 1713177355,
+        "updated_time": 1713186236,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,
@@ -2578,11 +2578,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14334,
-            "hash": "08693765829ba6e6355b5d19dcc6cf3b55ef53860575d43dc3ca88af2869ad2a",
-            "time": 1713177401
+            "height": 14485,
+            "hash": "0a271ebdd3f7b4f28f7829d3c7e6f1de11ff1036ff6ba0c4df66fa4f51eb5aa4",
+            "time": 1713186221
         },
-        "updated_time": 1713177355,
+        "updated_time": 1713186213,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,
@@ -2646,11 +2646,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14365,
-            "hash": "0dc282d2edb13b5616bca83f77fd0ad8cc24986c7aee9253b38de9498e7f94f4",
-            "time": 1713177379
+            "height": 14511,
+            "hash": "0cbcbde3f0f4c207f289d132f7ae5cc38970e4d2d635bd98ac36928c243fec98",
+            "time": 1713186237
         },
-        "updated_time": 1713177357,
+        "updated_time": 1713186215,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,

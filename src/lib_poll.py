@@ -44,7 +44,7 @@ def validate_poll_results(polls, ticker, final_block):
         ticker.lower(),
         coin_info[ticker]["rpcport"]
     )
-    data = requests.get(f'http://127.0.0.1:8087/api/v3/polls/{ticker}/info').json()
+    data = requests.get(f'http://127.0.0.1:8088/api/v3/polls/{ticker}/info').json()
     explorer = coin_info[ticker]["explorer"]
     for cat in data['categories']:
         for option in data['categories'][cat]["options"]:

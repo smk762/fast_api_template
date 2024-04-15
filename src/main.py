@@ -146,9 +146,11 @@ def get_polls_v3_list():
 
 @app.get("/api/v3/polls/{chain}/info", tags=[])
 def get_poll_info(chain: str):
+    chain = chain.upper()
     polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
+    logger.calc(chain)
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     options = polls[chain]
@@ -157,6 +159,7 @@ def get_poll_info(chain: str):
 
 @app.get("/api/v3/polls/{chain}/categories", tags=[])
 def get_poll_categories(chain: str):
+    chain = chain.upper()
     polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -168,6 +171,7 @@ def get_poll_categories(chain: str):
 
 @app.get("/api/v3/polls/{chain}/status", tags=[])
 def get_poll_status(chain: str):
+    chain = chain.upper()
     polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -193,6 +197,7 @@ def get_poll_status(chain: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/info", tags=[])
 def get_poll_category_info(chain: str, category: str):
+    chain = chain.upper()
     polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -205,6 +210,7 @@ def get_poll_category_info(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/tally", tags=[])
 def get_poll_tally(chain: str, category: str):
+    chain = chain.upper()
     polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -217,6 +223,7 @@ def get_poll_tally(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/options", tags=[])
 def get_poll_options(chain: str, category: str):
+    chain = chain.upper()    
     polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -226,6 +233,7 @@ def get_poll_options(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/addresses", tags=[])
 def get_poll_options_addresses(chain: str, category: str):
+    chain = chain.upper()
     polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -239,6 +247,7 @@ def get_poll_options_addresses(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
+    chain = chain.upper()
     polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -252,6 +261,7 @@ def get_poll_options_qr_codes(chain: str, category: str):
 
 @app.get("/api/v3/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
+    chain = chain.upper()
     polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
     if not polls:
         polls = {}
@@ -271,14 +281,18 @@ def get_all_polls():
     return polls
 
 
-@app.get('/api/v3/db/{coin}/{candidate}/{region}', tags=[])
-def get_candidate_rows(coin: str, candidate: str, region: str):
-    vote_db = db.VoteTXIDs(coin)
+@app.get('/api/v3/db/{chain}/{candidate}/{region}', tags=[])
+def get_candidate_rows(chain: str, candidate: str, region: str):
+    chain = chain.upper()
+    vote_db = db.VoteTXIDs(chain)
     data = vote_db.get_candidate_rows(candidate, region)
     return data
 
 if __name__ == '__main__':
     # Generally its better to let NGINX handle SSL
+    logger.calc(f"API_PORT: {API_PORT}")
+    logger.calc(f"SSL_KEY: {SSL_KEY}")
+    logger.calc(f"SSL_CERT: {SSL_CERT}")
     if SSL_KEY != "" and SSL_CERT != "":
         uvicorn.run("main:app", host="0.0.0.0", port=API_PORT, ssl_keyfile=SSL_KEY, ssl_certfile=SSL_CERT, reload=True)
     else:
