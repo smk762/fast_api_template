@@ -328,16 +328,10 @@ def update_balances(polls, ticker, final_block=0):
             coin_votes = db.VoteTXIDs(ticker)
         addresses = coin_votes.get_addresses_list()
         poll_txid_list = coin_votes.get_txids_list()
-        if ticker.startswith("VOTE"):
-            for category in polls[ticker]["categories"]:
-                options = polls[ticker]["categories"][category]["options"]
-                for option in options:
-                    logger.info(option)
-                    option = update_option(option, ticker, explorer, category, poll_txid_list, addresses, final_block, self_sent_txids)
-        elif ticker.startswith("KIP"):
-            options = polls[ticker]["options"]
+        for category in polls[ticker]["categories"]:
+            options = polls[ticker]["categories"][category]["options"]
             for option in options:
-                option = update_option(option, ticker, explorer, "", poll_txid_list, addresses, final_block, self_sent_txids)
+                option = update_option(option, ticker, explorer, category, poll_txid_list, addresses, final_block, self_sent_txids)
 
         recent_txids = coin_votes.get_recent_votes()
         recent_votes = recast_recent_votes(recent_txids)
@@ -486,7 +480,6 @@ def update_poll(polls, ticker):
 
 def get_sync_data(explorer):
     url = f"{explorer}/insight-api-komodo/sync"
-    logger.calc(url)
     sync = requests.get(url).json()
     return sync
 
@@ -495,10 +488,9 @@ def get_address_qrcode(addr):
     qrcode = segno.make(addr, micro=False)
     qrcode.save(
         f'{script_path}/qrcodes/{addr}.png',
-        scale=4, dark='#041019',
-        data_dark='#041019',
-        data_light='#5294a1',
-        quiet_zone='#5294a1'
+        scale=10,
+        dark='#002530',
+        light='#ffeeff'
     )
 
 if __name__ == '__main__':

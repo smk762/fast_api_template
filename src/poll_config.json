@@ -2471,24 +2471,28 @@
     "KIP0002": {
         "explorer": "https://kip0002.kmdexplorer.io",
         "title": "Should KMD's Block Reward be reduced?",
-        "options": [
-            {
-                "name": "Yes",
-                "text": "Reduce block reward from 3 KMD to 1 KMD",
-                "votes": 0,
-                "address": "RReduceB1ockRewardXXXXXXXXXXEsozaY",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RReduceB1ockRewardXXXXXXXXXXEsozaY.png",
-                "utxos": []
-            },
-            {
-                "name": "No",
-                "text": "Keep block reward as 3 KMD",
-                "votes": 0,
-                "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
-                "utxos": []
+        "categories": {
+            "KIP0002": {
+                "options": [
+                    {
+                        "name": "Yes",
+                        "text": "Reduce block reward from 3 KMD to 1 KMD",
+                        "votes": 0,
+                        "address": "RReduceB1ockRewardXXXXXXXXXXEsozaY",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RReduceB1ockRewardXXXXXXXXXXEsozaY.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "No",
+                        "text": "Keep block reward as 3 KMD",
+                        "votes": 0,
+                        "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
+                        "utxos": []
+                    }
+                ]
             }
-        ],
+        },
         "snapshot_at": 1713441600,
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
@@ -2498,11 +2502,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14282,
-            "hash": "07e6b2aad9846ea5c0cd019a98d4697135737fb4577db53860a680167349ce01",
-            "time": 1713173564
+            "height": 14347,
+            "hash": "0adb4bb40427ab5e78b096db011fe734b51fc0122dd58d300a8262e9a4f44ce6",
+            "time": 1713177388
         },
-        "updated_time": 1713173539,
+        "updated_time": 1713177355,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,
@@ -2511,56 +2515,60 @@
     "KIP0003": {
         "explorer": "https://kip0003.kmdexplorer.io",
         "title": "Should KMD's Transaction Fees be increased and/or burned?",
-        "options": [
-            {
-                "name": "No Change",
-                "text": "No change to transaction fees",
-                "votes": 0,
-                "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
-                "utxos": []
-            },
-            {
-                "name": "Burn, but no transaction fee increase",
-                "text": "Do not increase transaction fees and burn 100% of existing fees.",
-                "votes": 0,
-                "address": "RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL.png",
-                "utxos": []
-            },
-            {
-                "name": "Increase 10x with Burn",
-                "text": "Increase transaction fees by 10x and burn 100% of transaction fees.",
-                "votes": 0,
-                "address": "RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe.png",
-                "utxos": []
-            },
-            {
-                "name": "Increase 100x with Burn",
-                "text": "Increase transaction fees by 100x and burn 100% of transaction fees.",
-                "votes": 0,
-                "address": "RBurnHundredXFeeXXXXXXXXXXXXj2Furm",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnHundredXFeeXXXXXXXXXXXXj2Furm.png",
-                "utxos": []
-            },
-            {
-                "name": "Increase 10x without Burn",
-                "text": "Increase transaction fees by 10x and do not burn the transaction fees.",
-                "votes": 0,
-                "address": "RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA.png",
-                "utxos": []
-            },
-            {
-                "name": "Increase 100x without Burn",
-                "text": "Increase transaction fees by 100x and do not burn the transaction fees.",
-                "votes": 0,
-                "address": "RNoBurnHundredXFeeXXXXXXXXXXiG5upG",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnHundredXFeeXXXXXXXXXXiG5upG.png",
-                "utxos": []
+        "categories": {
+            "KIP0003": {
+                "options": [
+                    {
+                        "name": "No Change",
+                        "text": "No change to transaction fees",
+                        "votes": 0,
+                        "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Burn, but no transaction fee increase",
+                        "text": "Do not increase transaction fees and burn 100% of existing fees.",
+                        "votes": 0,
+                        "address": "RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Increase 10x with Burn",
+                        "text": "Increase transaction fees by 10x and burn 100% of transaction fees.",
+                        "votes": 0,
+                        "address": "RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Increase 100x with Burn",
+                        "text": "Increase transaction fees by 100x and burn 100% of transaction fees.",
+                        "votes": 0,
+                        "address": "RBurnHundredXFeeXXXXXXXXXXXXj2Furm",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnHundredXFeeXXXXXXXXXXXXj2Furm.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Increase 10x without Burn",
+                        "text": "Increase transaction fees by 10x and do not burn the transaction fees.",
+                        "votes": 0,
+                        "address": "RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Increase 100x without Burn",
+                        "text": "Increase transaction fees by 100x and do not burn the transaction fees.",
+                        "votes": 0,
+                        "address": "RNoBurnHundredXFeeXXXXXXXXXXiG5upG",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnHundredXFeeXXXXXXXXXXiG5upG.png",
+                        "utxos": []
+                    }
+                ]
             }
-        ],
+        },
         "snapshot_at": 1713441600,
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
@@ -2570,11 +2578,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14272,
-            "hash": "0814826ab1bb851f4a22ad4a517620ecb6869e53e5d1ea3ee9c92cadbf11900c",
-            "time": 1713173559
+            "height": 14334,
+            "hash": "08693765829ba6e6355b5d19dcc6cf3b55ef53860575d43dc3ca88af2869ad2a",
+            "time": 1713177401
         },
-        "updated_time": 1713173540,
+        "updated_time": 1713177355,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,
@@ -2583,48 +2591,52 @@
     "KIP0004": {
         "explorer": "https://kip0004.kmdexplorer.io",
         "title": "2025 Consensus Upgrade",
-        "options": [
-            {
-                "name": "No change",
-                "text": "No change to consensus mechanism - keep Proof of Work (PoW)",
-                "votes": 0,
-                "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
-                "utxos": []
-            },
-            {
-                "name": "PoS",
-                "text": "Change PoW to Proof of Stake",
-                "votes": 0,
-                "address": "RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u.png",
-                "utxos": []
-            },
-            {
-                "name": "PoS + Masternodes",
-                "text": " Change PoW to PoS and add nodal reward component equal to 50% of block reward",
-                "votes": 0,
-                "address": "RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF.png",
-                "utxos": []
-            },
-            {
-                "name": "Gridcoin v1 style PoS",
-                "text": " Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block.",
-                "votes": 0,
-                "address": "RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY.png",
-                "utxos": []
-            },
-            {
-                "name": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
-                "text": "Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block and add nodal reward component equal to 50% of block reward.",
-                "votes": 0,
-                "address": "RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z.png",
-                "utxos": []
+        "categories": {
+            "KIP0003": {
+                "options": [
+                    {
+                        "name": "No change",
+                        "text": "No change to consensus mechanism - keep Proof of Work (PoW)",
+                        "votes": 0,
+                        "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "PoS",
+                        "text": "Change PoW to Proof of Stake",
+                        "votes": 0,
+                        "address": "RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "PoS + Masternodes",
+                        "text": " Change PoW to PoS and add nodal reward component equal to 50% of block reward",
+                        "votes": 0,
+                        "address": "RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "Gridcoin v1 style PoS",
+                        "text": " Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block.",
+                        "votes": 0,
+                        "address": "RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY.png",
+                        "utxos": []
+                    },
+                    {
+                        "name": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
+                        "text": "Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block and add nodal reward component equal to 50% of block reward.",
+                        "votes": 0,
+                        "address": "RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z.png",
+                        "utxos": []
+                    }
+                ]
             }
-        ],
+        },
         "snapshot_at": 1713441600,
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
@@ -2634,11 +2646,11 @@
         "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14299,
-            "hash": "086ad8459869a3f28cc13821faee44240b241de92fed8716e18b62aa36e2c87e",
-            "time": 1713173512
+            "height": 14365,
+            "hash": "0dc282d2edb13b5616bca83f77fd0ad8cc24986c7aee9253b38de9498e7f94f4",
+            "time": 1713177379
         },
-        "updated_time": 1713173541,
+        "updated_time": 1713177357,
         "status": "new",
         "recent_votes": [],
         "sum_votes": 0,
