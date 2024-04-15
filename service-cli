@@ -1,0 +1,9 @@
+# Declare the associative array
+declare -A service_cli
+
+# Assign values to the array
+service_cli["vote2023"]="vote2023-cli"
+service_cli["kip0001"]="kip0001-cli"
+service_cli["kip0002"]="kip0002-cli"
+service_cli["kip0003"]="kip0003-cli"
+service_cli["kip0004"]="kip0004-cli"

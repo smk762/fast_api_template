@@ -1,0 +1,23 @@
+FROM python:3.10
+
+ENV GROUP_ID=${GROUP_ID:-1000}
+ENV USER_ID=${USER_ID:-1000}
+ENV FASTAPI_PORT=${FASTAPI_PORT:-8087}
+RUN addgroup --gid ${GROUP_ID} notarygroup
+RUN adduser --disabled-password --gecos '' --uid ${USER_ID} --gid ${GROUP_ID} komodian
+WORKDIR /home/komodian
+
+ENV FASTAPI_PORT=${FASTAPI_PORT}
+RUN PATH=/usr/local/bin/:$PATH
+RUN apt update && apt install -y nano htop libgomp1
+
+WORKDIR /home/komodian/api
+
+COPY ./ /home/komodian/api
+
+RUN chown -R komodian:notarygroup /home/komodian
+USER komodian
+
+RUN pip install --upgrade pip && pip3 install --upgrade -r /home/komodian/api/requirements.txt
+
+CMD python3 /home/komodian/api/main.py

@@ -1,0 +1,20 @@
+version: '3.7'
+
+x-zcash-params-volume:
+  &zcash-params
+  type: bind
+  source: /home/smk762/.zcash-params
+  target: /home/komodian/.zcash-params
+
+services:
+  vote_service:
+    build:
+      context: ./src
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "127.0.0.1:8087:8087"
+    env_file:
+      - src/.env
+    volumes:
+      - ./src:/home/komodian/api
+

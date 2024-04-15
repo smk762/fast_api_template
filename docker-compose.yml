@@ -1,0 +1,130 @@
+version: '3.7'
+
+x-zcash-params-volume:
+  &zcash-params
+  type: bind
+  source: /home/smk762/.zcash-params
+  target: /home/komodian/.zcash-params
+
+services:
+  vote_service:
+    build:
+      context: ./src
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "127.0.0.1:8087:8087"
+    env_file:
+      - src/.env
+    volumes:
+      - ./src:/home/komodian/api
+
+  vote2023:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:29807:29807"
+      - "127.0.0.1:29806:29806"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/VOTE2023:/home/komodian/.komodo/VOTE2023
+    container_name: vote2023
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_VOTE2023.sh"]
+
+  kip0001:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:46856:46856"
+      - "127.0.0.1:46855:46855"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/KIP0001:/home/komodian/.komodo/KIP0001
+    container_name: kip0001
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_KIP0001.sh"]
+
+  kip0002:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:63161:63161"
+      - "127.0.0.1:63160:63160"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/KIP0002:/home/komodian/.komodo/KIP0002
+    container_name: kip0002
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_KIP0002.sh"]
+
+  kip0003:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:48531:48531"
+      - "127.0.0.1:48530:48530"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/KIP0003:/home/komodian/.komodo/KIP0003
+    container_name: kip0003
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_KIP0003.sh"]
+
+  kip0004:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:58226:58226"
+      - "127.0.0.1:58225:58225"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/KIP0004:/home/komodian/.komodo/KIP0004
+    container_name: kip0004
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_KIP0004.sh"]
+

@@ -1,9 +1,10 @@
 # Custom
 *7776
-*.json
-*.db
+# *.json
+# *.db
 *.env
-*.csv
+# *.csv
+*.bk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

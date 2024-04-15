@@ -1,0 +1,32 @@
+{
+    "KIP0002": {
+        "explorer": "https://kip0002.kmdexplorer.io",
+        "title": "Should KMD's Block Reward be reduced?",
+        "options": [
+            {
+                "name": "Yes",
+                "text": "Reduce block reward from 3 KMD to 1 KMD",
+                "votes": 0,
+                "address": "RReduceB1ockRewardXXXXXXXXXXEsozaY",
+                "qr_code": ""
+            },
+            {
+                "name": "No",
+                "text": "Keep block reward as 3 KMD",
+                "votes": 0,
+                "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
+                "qr_code": ""
+            }
+        ],
+        "snapshot_at": 1713441600,
+        "airdrop_at": 1713700800,
+        "starts_at": 1713700800,
+        "ends_at": 1714780799,
+        "overtime_ended_at": null,
+        "first_overtime_block": null,
+        "final_ntx_block": null,
+        "current_block": {},
+        "updated_time": 0,
+        "status": "new"
+    }
+}
