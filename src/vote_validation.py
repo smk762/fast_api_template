@@ -3,10 +3,13 @@ import requests
 from decimal import Decimal
 import lib_rpc
 import lib_json
+from datetime import datetime
 
 deltas_json = []
-rpc = lib_rpc.get_rpc("VOTE2023")
-data = requests.get('https://kip0001.smk.dog/api/v3/polls/VOTE2023/info').json()
+year == int(datetime.now().year)
+chain = f"VOTE{year}"
+rpc = lib_rpc.get_rpc(chain)
+data = requests.get(f'https://kip0001.smk.dog/api/v3/polls/{chain}/info').json()
 for cat in data['categories']:
     for option in data['categories'][cat]["options"]:
         addr = option['address']
