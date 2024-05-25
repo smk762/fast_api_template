@@ -5,6 +5,7 @@ import random
 import uvicorn
 import requests
 from dotenv import load_dotenv
+from datetime import datetime
 from fastapi_utils.tasks import repeat_every
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -24,7 +25,6 @@ BALANCES = {}
 CURRENT_BLOCK = {}
 RPCIP = os.getenv("KMD_RPCIP")
 API_PORT = const.get_api_port()
-VOTE_ACTIVE = time.time() < 1682899199
 SSL_KEY, SSL_CERT = const.get_ssl_certs()
 API_ADDRESS = "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p"
 GEN_BLOCKS = False
@@ -108,28 +108,31 @@ def rpc_getinfo():
 @app.on_event("startup")
 @repeat_every(seconds=915)
 def update_candidates():
-    if VOTE_ACTIVE:
         try:
-            votes = {}
             poll_data = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-            for region in poll_data["VOTE2023"]["categories"]:
-                if region not in votes:
-                    votes.update({region: {}})
-                for i in poll_data["VOTE2023"]["categories"][region]["options"]:
-                    votes[region].update({i["candidate"]: i["votes"]})
-
-            candidates_data = requests.get("https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/candidates.json").json()                    
-            for region in candidates_data:
-                for i in candidates_data[region]:
-                    if i["candidate"] in votes[region]:
-                        i.update({"votes": votes[region][i["candidate"]]})
-                    else:
-                        i.update({"votes": 0})
-            
-            for region in poll_data["VOTE2023"]["categories"]:
-                poll_data["VOTE2023"]["categories"][region]["options"] = candidates_data[region]
-
-            lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', poll_data)
+            for k, v in poll_data.items():
+                if k.startswith("VOTE"):
+                    year = int(k.replace("VOTE", ""))
+                    if year == int(datetime.now().year):
+                        season = year - 2016
+                        logger.info(f"Updating candidates for {k} (season {season})")
+                        votes = {}
+                        for region in v["categories"]:
+                            if region not in votes:
+                                votes.update({region: {}})
+                            for i in v["categories"][region]["options"]:
+                                votes[region].update({i["candidate"]: i["votes"]})
+                        season_candidates = f"https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season{season}/candidates.json"
+                        candidates_data = requests.get(season_candidates).json()                    
+                        for region in candidates_data:
+                            for i in candidates_data[region]:
+                                if i["candidate"] in votes[region]:
+                                    i.update({"votes": votes[region][i["candidate"]]})
+                                else:
+                                    i.update({"votes": 0})
+                        for region in v["categories"]:
+                            v["categories"][region]["options"] = candidates_data[region]
+                        lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', poll_data)
         except Exception as e:
             logger.error(e)
 
@@ -279,6 +282,11 @@ def get_all_polls():
     if not polls:
         polls = {}
     return polls
+
+
+@app.get('/api/v3/vetrans', tags=[])
+def get_all_polls():
+    return lib_poll.get_veterans()
 
 
 @app.get('/api/v3/db/{chain}/{candidate}/{region}', tags=[])

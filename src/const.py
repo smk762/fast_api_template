@@ -52,6 +52,18 @@ coin_info = {
             "addnode": ["185.220.204.44", "178.159.2.6"]
         } 
     },
+    "VOTE2024": {
+        "explorer": "https://vote2024.explorer.lordofthechains.com",
+        "p2pport": 60915,
+        "rpcport": 60916,
+        "launch": {
+            "ac_name": "VOTE2024",
+            "ac_supply": "149826699",
+            "ac_public": "1",
+            "ac_staked": "10",
+            "addnode": ["65.21.52.182"]
+        }
+    },
     "KIP0001": {
         "explorer": "https://kip0001.explorer.kmd.io",
         "p2pport": 46855,

@@ -15,17 +15,22 @@ from const import coin_info
 script_path = os.path.realpath(os.path.dirname(__file__))
 
 def get_self_sent_txids(ticker):
-    if ticker.startswith("KIP"):
-        path = f'{script_path}/kip/{ticker.replace("KIP", "")}'
-    else:
-        path = f'{script_path}/vote/{ticker.replace("VOTE", "")}'
     try:
-        txids = lib_json.get_jsonfile_data(f'{path}/self_sent_txids.json')
-        if txids is None:
-            return []
-        return txids
+        if ticker.startswith("KIP"):
+            path = f'{script_path}/kip/{ticker.replace("KIP", "")}'
+        else:
+            path = f'{script_path}/vote/{ticker.replace("VOTE", "")}'
+        path = f'{path}/self_sent_txids.json'
+        if os.path.exists(path):
+            txids = lib_json.get_jsonfile_data(path)
+            if txids is not None:
+                return txids
+        with open(path, "w") as f:
+            f.write('[]')
     except Exception as e:
-        return []
+        with open(path, "w") as f:
+            f.write('[]')
+    return []
 
 def get_poll_options(polls, ticker, category):
     if ticker not in polls.keys():
@@ -37,37 +42,41 @@ def get_poll_options(polls, ticker, category):
 
 def validate_poll_results(polls, ticker, final_block):
     logger.calc(f'Validating poll results for {ticker}')
-    deltas_json = []
-    rpc = lib_rpc.get_rpc(
-        os.getenv("rpcuser"),
-        os.getenv("rpcpass"),
-        ticker.lower(),
-        coin_info[ticker]["rpcport"]
-    )
-    data = requests.get(f'http://127.0.0.1:8088/api/v3/polls/{ticker}/info').json()
-    explorer = coin_info[ticker]["explorer"]
-    for cat in data['categories']:
-        for option in data['categories'][cat]["options"]:
-            addr = option['address']
-            candidate = option['candidate']
-            logger.info(f'{candidate}: {addr} ({cat})')
-            params = {
-                "addresses": [addr],
-                "start":1,
-                "end":final_block
-            }
-            deltas = rpc.getaddressdeltas(params)
-            sats = Decimal(0)
-            for i in deltas:
-                sats += Decimal(i["satoshis"])
-            x = {
-                "candidate": candidate,
-                "region": cat,
-                "address": addr,
-                "votes": str(round(sats/100000000,8)),
-                "deltas": deltas
-            }
-            deltas_json.append(x)
+    try:
+        deltas_json = []
+        rpc = lib_rpc.get_rpc(
+            os.getenv("rpcuser"),
+            os.getenv("rpcpass"),
+            ticker.lower(),
+            coin_info[ticker]["rpcport"]
+        )
+        data = requests.get(f'http://127.0.0.1:8088/api/v3/polls/{ticker}/info').json()
+        explorer = coin_info[ticker]["explorer"]
+        for cat in data['categories']:
+            for option in data['categories'][cat]["options"]:
+                logger.calc(option)
+                addr = option['address']
+                candidate = option['candidate']
+                logger.info(f'{candidate}: {addr} ({cat})')
+                params = {
+                    "addresses": [addr],
+                    "start":1,
+                    "end":final_block
+                }
+                deltas = rpc.getaddressdeltas(params)
+                sats = Decimal(0)
+                for i in deltas:
+                    sats += Decimal(i["satoshis"])
+                x = {
+                    "candidate": candidate,
+                    "region": cat,
+                    "address": addr,
+                    "votes": str(round(sats/100000000,8)),
+                    "deltas": deltas
+                }
+                deltas_json.append(x)
+    except Exception as e:
+        logger.error(e)
 
     # Export to JSON and CSV
     if ticker.startswith("KIP"):
@@ -130,7 +139,8 @@ def get_polls_statuses(polls):
 
 
 def get_notary_addresses():
-    r = requests.get(f"https://stats.kmd.io/api/table/addresses/?season=Season_6&server=Main&coin=KMD").json()["results"]
+    season = requests.get("https://stats.kmd.io/api/info/notary_season/").json()["results"]
+    r = requests.get(f"https://stats.kmd.io/api/table/addresses/?season={season}&server=Main&coin=KMD").json()["results"]
     addresses = [i["address"] for i in r]
     return addresses
 
@@ -138,14 +148,21 @@ def get_notary_addresses():
 def is_ntx(tx_info):
     vouts = tx_info["vout"]
     vins = tx_info["vin"]
-    logger.info(f"len(vins): {len(vins)}")
     if len(vouts) == 2 and len(vins) == 13:
         vin_addresses = [i["address"] for i in vins]
         notary_addresses = get_notary_addresses()
+        # logger.info(vin_addresses)
+        # logger.calc([i for i in vin_addresses if i not in notary_addresses])
+        # if "scriptPubKey" in vouts[1]:
+            # if "asm" in vouts[1]["scriptPubKey"]:
+                # logger.calc(vouts[1]["scriptPubKey"]["asm"])
         if set(vin_addresses).issubset(notary_addresses):
+            # logger.info(vouts)
             if vouts[1]["scriptPubKey"]["asm"].find("OP_RETURN") > -1:
-                ntx_data = requests.get(f'https://stats.kmd.io/api/tools/decode_opreturn/?OP_RETURN={vouts[1]["scriptPubKey"]["asm"]}').json()
-                logger.info(f"ntx_data: {ntx_data}")
+                # logger.info(vouts)
+                url = f'https://stats.kmd.io/api/tools/decode_opreturn/?OP_RETURN={vouts[1]["scriptPubKey"]["asm"]}'
+                ntx_data = requests.get(url).json()
+                # logger.info(f"ntx_data: {ntx_data}")
                 return ntx_data
     return None
 
@@ -177,7 +194,9 @@ def reduce_notary_name(notary):
 def get_veterans():
     tenure = {}
     veterancy = {}
-    for i in range(1, 8):
+    season = requests.get("https://stats.kmd.io/api/info/notary_season/").json()["results"]
+    x = int(season.replace("Season_"))
+    for i in range(1, x + 1):
         url = f"https://stats.kmd.io/api/info/notary_nodes/?season=Season_{i}"
         data = requests.get(url).json()["results"]
         data = [reduce_notary_name(notary) for notary in data]
@@ -300,14 +319,20 @@ def update_option(option, ticker, explorer, category, poll_txid_list, addresses,
 def get_testnet_ids(ticker, candidate):
     try:
         id = ticker.replace("VOTE", "")
-        testnet_data = lib_json.get_jsonfile_data(f'{script_path}/vote/{id}/testnet.json')
+        path = f'{script_path}/vote/{id}/testnet.json'
+        if os.path.exists(path):
+            testnet_data = lib_json.get_jsonfile_data(path)
+        else:
+            with open(path, "w") as f:
+                f.write('{}')
+                return []
+        testnet_ids = []
+        for k, v in testnet_data.items():
+            if candidate == v: testnet_ids.append(k)
+        return testnet_ids
     except Exception as e:
         return []
-    if testnet_data is None:
-        return []        
-    testnet_ids = []
-    for k, v in testnet_data.items():
-        if candidate == v: testnet_ids.append(k)
+
     return testnet_ids
 
 
@@ -341,7 +366,7 @@ def update_balances(polls, ticker, final_block=0):
             "count_votes": coin_votes.get_num_votes()
         }
         polls[ticker].update(votes)
-        logger.calc(f"updated balances for {ticker}")
+        logger.calc(f"Updated balances for {ticker}")
     except Exception as e:
         logger.warning(f"Error in [update_balances] for {ticker}: {e}")
 
@@ -367,7 +392,6 @@ def update_polls():
         polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
         if not polls:
             polls = {}
-        logger.info(polls.keys())
         for ticker in polls:
             logger.debug(f"updating {ticker} poll")
             if ticker.startswith("KIP"):
@@ -386,7 +410,6 @@ def update_poll(polls, ticker):
             logger.info(f"Skipping {ticker} poll, official results are in")
         else:
             now = int(time.time())
-            logger.info(f"Updating {ticker} poll")
             rpc = lib_rpc.get_rpc(
                 os.getenv("rpcuser"),
                 os.getenv("rpcpass"),
@@ -407,7 +430,7 @@ def update_poll(polls, ticker):
                 "time": block_time
             }
             
-            if polls[ticker]["final_ntx_block"]:
+            if polls[ticker]["final_ntx_block"] is not None:
                 overtime_ended = polls[ticker]["overtime_ended_at"]
                 since_ended = now - overtime_ended
                 final_block = polls[ticker]["final_ntx_block"]["height"]
@@ -417,11 +440,14 @@ def update_poll(polls, ticker):
                     logger.info(f"Rescanning {ticker} votes, poll ended < day ago on block {final_block}.")
                     validate_poll_results(polls, ticker, polls[ticker]["final_ntx_block"]["height"])                
             else:
+                
                 ends_at = polls[ticker]["ends_at"]
-
+                logger.calc(f"{ticker} ends at {ends_at}. Tiptime is {info['tiptime']}.")
+                logger.calc(f"{ends_at - info['tiptime']} sec remaining until overtime")
                 if info["tiptime"] > ends_at and not polls[ticker]["first_overtime_block"]:
                     logger.info(f"Looking for first overtime block for {ticker}")
                     last_blockinfo = rpc.getblock(str(blocktip-2000))
+                    logger.info(f"Starting at {blocktip-2000} {last_blockinfo}")
                     for i in range(blocktip-2000, blocktip+1):
                         block_info = rpc.getblock(str(i))
                         if last_blockinfo['time'] < ends_at:
@@ -440,22 +466,24 @@ def update_poll(polls, ticker):
                                 break
                         last_blockinfo = block_info
                 
-                if polls[ticker]["first_overtime_block"] and not polls[ticker]["final_ntx_block"]:
+                if None not in [polls[ticker]["first_overtime_block"], polls[ticker]["final_ntx_block"]]:
                     logger.info(f"Looking for final ntx block for {ticker}")
                     polls[ticker]["status"] = "overtime"
 
                     if blocktip >= polls[ticker]["first_overtime_block"]["height"]:
-                        logger.info(f"longestchain: {blocktip}")
+                        logger.info(f'Scanning blocks {polls[ticker]["first_overtime_block"]["height"]} to {blocktip}')
 
                         for i in range(polls[ticker]["first_overtime_block"]["height"], blocktip+1):
-                            logger.info(f"Scanning block: {i}")
                             block_info = rpc.getblock(str(i))
+
                             for txid in block_info["tx"]:
                                 tx_info = rpc.getrawtransaction(txid, 1)
-                                logger.info(f"Scanning txid: {txid}")
 
-                                if is_ntx(tx_info):
-                                    ntx_data = is_ntx(tx_info)["results"]
+                                test = is_ntx(tx_info)
+                                
+                                if test:
+                                    ntx_data = test["results"]
+
                                     if ntx_data['notarised_block'] >= polls[ticker]["first_overtime_block"]["height"]:
                                         block_info = rpc.getblock(str(ntx_data['notarised_block']))
                                         polls[ticker]["final_ntx_block"] = {
@@ -471,10 +499,13 @@ def update_poll(polls, ticker):
                                         final_block = ntx_data['notarised_block']
                                         logger.info(f"Final {ticker} block detected: {final_block}")
                                         break
+
                             if polls[ticker]["final_ntx_block"]:
                                 break
+
                 update_balances(polls, ticker, final_block)
                 lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', polls)
+
     except Exception as e:
         logger.error(f"updating {ticker} failed: {e}")
 

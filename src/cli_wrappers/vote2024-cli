@@ -1,0 +1,2 @@
+#!/bin/bash
+docker exec -it vote2024 komodo-cli -ac_name=VOTE2024 "$@"

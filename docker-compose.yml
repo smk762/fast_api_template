@@ -1,5 +1,3 @@
-version: '3.7'
-
 x-zcash-params-volume:
   &zcash-params
   type: bind
@@ -39,6 +37,28 @@ services:
         max-size: "20m"
         max-file: "10"
     command: ["/run_VOTE2023.sh"]
+
+  vote2024:
+    env_file:
+      - src/.env
+    build:
+      context: ./src
+      dockerfile: Dockerfile.KMD
+    ports:
+      - "127.0.0.1:60915:60915"
+      - "127.0.0.1:60916:60916"
+    volumes:
+      - <<: *zcash-params
+      - /home/smk762/.komodo/VOTE2024:/home/komodian/.komodo/VOTE2024
+    container_name: vote2024
+    restart: always
+    stop_grace_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "10"
+    command: ["/run_VOTE2024.sh"]
 
   kip0001:
     env_file:
