@@ -70,10 +70,13 @@ def update_data():
         for coin in data:
             for protocol in ["tcp", "ssl", "wss"]:
                 for server in data[coin][protocol]:
-                    result = data[coin][protocol][server]['result'].replace("'", "")
+                    
+                    result = data[coin][protocol][server]['result']
+                    if not isinstance(result, int):
+                        result = result.replace("'", "")
                     last = data[coin][protocol][server]['last_connection']
                     if result == "Passed":
-                        row = (coin, server, protocol, result, last)
+                        row = (coin, server, protocol, result, 0, last)
                         lib_sqlite.update_electrum_row(row)
                     else:
                         row = (coin, server, protocol, result, last)

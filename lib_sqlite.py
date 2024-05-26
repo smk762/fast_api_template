@@ -123,8 +123,8 @@ def update_electrum_row(row):
     try:
         print(f"adding {row} added yo from database")
         sql = f"INSERT INTO electrum_status \
-                    (coin, server, protocol, result, last_connection) \
-                VALUES (?, ?, ?, ?, ?) \
+                    (coin, server, protocol, result, blockheight, last_connection) \
+                VALUES (?, ?, ?, ?, ?, ?) \
                 ON CONFLICT (server) DO UPDATE \
                 SET result='{row[3]}', last_connection='{row[4]}';"
         conn = get_sqlite(f"{script_dir}/electrum_status.db")
@@ -171,6 +171,7 @@ def create_tables():
         server TEXT NOT NULL UNIQUE,        \
         protocol TEXT NOT NULL,             \
         result TEXT,                        \
+        blockheight INTEGER,                \
         last_connection INTEGER);"
     conn = get_sqlite(f"{script_dir}/electrum_status.db")
     cursor = conn.cursor()
