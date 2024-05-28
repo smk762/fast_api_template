@@ -51,8 +51,8 @@ def get_table_row(cursor, table):
 
 def view_table_info(cursor, table):
     info = get_table_info(cursor, table)
-    print(f"\n\n## {table}\n")
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info(f"\n\n## {table}\n")
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "-"*10,
         "-"*21,
         "-"*18,
@@ -61,7 +61,7 @@ def view_table_info(cursor, table):
         "-"*13,
         )    
     )
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "ID",
         "Name",
         "Type",
@@ -70,7 +70,7 @@ def view_table_info(cursor, table):
         "PrimaryKey"
         )
     )
-    print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
         "-"*10,
         "-"*21,
         "-"*18,
@@ -81,7 +81,7 @@ def view_table_info(cursor, table):
     )
 
     for i in info:
-        print('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
             f'{i[0]}',
             f'{i[1]}',
             f'{i[2]}',
@@ -99,10 +99,24 @@ def delete_electrum_coin(coin):
         cursor = conn.cursor()
         cursor.execute(sql)
         conn.commit()
-        print(f"{coin} removed from database")
+        logger.info(f"{coin} removed from database")
     except Exception as e:
-        print(e)
-        print(sql)
+        logger.warning(e)
+        logger.warning(sql)
+
+
+def delete_electrum_server(server):
+    try:
+        sql = f"DELETE FROM electrum_status WHERE server = '{server}';"
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        conn.commit()
+        logger.info(f"{server} removed from database")
+    except Exception as e:
+        logger.warning(e)
+        logger.warning(sql)
+
 
 def get_db_coins():
     try:
@@ -115,46 +129,57 @@ def get_db_coins():
             resp.append(i[0])
         return resp
     except Exception as e:
-        print(e)
-        print(sql)
+        logger.warning(e)
+        logger.warning(sql)
+
+        
+def get_db_servers():
+    try:
+        sql = f"SELECT DISTINCT server FROM electrum_status;"
+        conn = get_sqlite(f"{script_dir}/electrum_status.db")
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        resp = []
+        for i in cursor.fetchall():
+            resp.append(i[0])
+        return resp
+    except Exception as e:
+        logger.warning(e)
+        logger.warning(sql)
 
 
 def update_electrum_row(row):
     try:
-        print(f"adding {row} added yo from database")
         sql = f"INSERT INTO electrum_status \
                     (coin, server, protocol, result, blockheight, last_connection) \
                 VALUES (?, ?, ?, ?, ?, ?) \
                 ON CONFLICT (server) DO UPDATE \
-                SET result='{row[3]}', last_connection='{row[4]}';"
+                SET result='{row[3]}', blockheight='{row[4]}', last_connection='{row[5]}';"
         conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
         conn.commit()
-        print(f"{row} added yo from database")
+        # logger.loop(f"{row} added to database")
     except Exception as e:
-        print(e)
-        print(sql)
+        logger.warning(e)
+        logger.warning(sql)
 
 
 def update_electrum_row_failed(row):
     try:
         sql = f"INSERT INTO electrum_status    \
-                    (coin,                     \
-                    server,                    \
-                    protocol,                  \
-                    result,                    \
-                    last_connection)           \
-                VALUES (?, ?, ?, ?, ?)         \
+                    (coin, server, protocol, result, blockheight, last_connection) \
+                VALUES (?, ?, ?, ?, ?, ?) \
                 ON CONFLICT (server) DO UPDATE \
                 SET result='{row[3]}';"
         conn = get_sqlite(f"{script_dir}/electrum_status.db")
         cursor = conn.cursor()
         cursor.execute(sql, row)
         conn.commit()
+        # logger.warning(f"{row} added to database FAILED")
     except Exception as e:
-        print(e)
-        print(sql)
+        logger.warning(e)
+        logger.warning(sql)
 
 
 def get_electrum_status_data():
@@ -186,6 +211,6 @@ if __name__ == '__main__':
         data = get_electrum_status_data()
         resp = [{k: item[k] for k in item.keys()} for item in data]
         for row in resp:
-            print(str(row))
+            logger.info(str(row))
 
 

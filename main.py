@@ -15,7 +15,7 @@ import lib_sqlite
 import lib_data
 import lib_json
 from lib_logger import logger
-from coins.utils import scan_electrums as scan
+import lib_coins as scan
 
 script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 
@@ -51,45 +51,70 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=600)
+@repeat_every(seconds=120)
 def update_data():
     try:
         logger.info("Updating electrum status")
         scan.get_electrums_report()
-        with open(f'{script_dir}/coins/utils/electrum_scan_report.json') as f:
-            data = json.load(f)
-        electrum_coins = list(data.keys())
-        db_coins = lib_sqlite.get_db_coins()
-        print(electrum_coins)
-        print(db_coins)
-        for coin in db_coins:
-            if coin not in electrum_coins:
-                print(f"Deleting {coin}")
-                lib_sqlite.delete_electrum_coin(coin)
-        logger.info("Electrum status table updated!")
-        for coin in data:
-            for protocol in ["tcp", "ssl", "wss"]:
-                for server in data[coin][protocol]:
-                    
-                    result = data[coin][protocol][server]['result']
-                    if not isinstance(result, int):
-                        result = result.replace("'", "")
-                    last = data[coin][protocol][server]['last_connection']
-                    if result == "Passed":
-                        row = (coin, server, protocol, result, 0, last)
-                        lib_sqlite.update_electrum_row(row)
-                    else:
-                        row = (coin, server, protocol, result, last)
-                        lib_sqlite.update_electrum_row_failed(row)
     except Exception as e:
         logger.error(f"Electrum status scan update Failed! {e}")
 
+@app.on_event("startup")
+@repeat_every(seconds=60)
+def update_db():
+    try:
+        logger.query("Updating electrum db")
+        scan.update_db()
+    except Exception as e:
+        logger.error(f"Electrum update_db Failed! {e}")
+
+@app.on_event("startup")
+@repeat_every(seconds=3600)
+def update_coins_data():
+    try:
+        url = "https://raw.githubusercontent.com/KomodoPlatform/coins/6914dbe31c71c9aa54851ae96350f542347f8f32/utils/coins_config_unfiltered.json"
+        # url = "https://komodoplatform.github.io/coins/utils/coins_config_unfiltered.json"
+        data = requests.get(url).json()
+        with open(f"{script_dir}/coins_config.json", "w+") as f:
+            json.dump(data, f, indent=2)
+        logger.query("Updating coins_config")
+        scan.update_db()
+    except Exception as e:
+        logger.error(f"coins_config update Failed! {e}")
+
 
 @app.get('/api/v1/electrums_status', tags=[])
-def get_electrums_status():
+def get_electrums_status(coin: str = None):
     data = lib_sqlite.get_electrum_status_data()
-    resp = [{k: item[k] for k in item.keys()} for item in data]
-    return resp
+    if coin is not None:
+        return [{k: item[k] for k in item.keys()} for item in data if item['coin'] == coin]
+    return [{k: item[k] for k in item.keys()} for item in data]
+
+
+@app.get('/api/v1/coins_status', tags=[])
+def get_coins_status(coin: str = None):
+    resp = {}
+    data = lib_sqlite.get_electrum_status_data()
+    status = [{k: item[k] for k in item.keys()} for item in data]
+    for i in status:
+        _coin = i["coin"]
+        result = i["result"]
+        protocol = i["protocol"]
+        blockheight = i["blockheight"]
+        if _coin not in resp:
+            resp.update({_coin: {
+                "coin": _coin,
+                "TCP": False,
+                "SSL": False,
+                "WSS": False,
+                "blockheight": blockheight
+            }})
+        if result == "Passed":
+            resp[_coin][protocol] = True
+            resp[_coin]["blockheight"] = blockheight
+    if coin is not None:
+        return [i for i in resp.values() if i['coin'] == coin] 
+    return [i for i in resp.values()] 
 
 
 if __name__ == '__main__':

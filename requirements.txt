@@ -6,3 +6,4 @@ fastapi-utils==0.2.1
 python-dotenv==1.0.0
 pytz==2023.3.post1
 base58==2.1.1
+pymemcache==4.0.0
