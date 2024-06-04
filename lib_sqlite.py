@@ -10,207 +10,207 @@ import sqlite3
 
 script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 
-def get_sqlite(db_file):
-    """ create a database connection to a SQLite database """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-    except sqlite3.Error as e:
-        logger.error(e)
-    return conn
 
-
-def get_tables(cursor):
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    return cursor.fetchall()
-
-
-def get_row(cursor, table):
-    cursor.execute(f"SELECT * FROM {table};")
-    return cursor.fetchone()
-
-
-def get_rows(cursor, table):
-    cursor.execute(f"SELECT * FROM {table};")
-    return cursor.fetchall()
-
-
-def get_column_names(row):
-    return row.keys()
-
-
-def get_table_info(cursor, table):
-    cursor.execute(f'pragma table_info({table})')
-    return cursor.fetchall()
-
-
-def get_table_row(cursor, table):
-    cursor.execute(f'pragma table_info({table})')
-    return cursor.fetchall()
-
-
-def view_table_info(cursor, table):
-    info = get_table_info(cursor, table)
-    logger.info(f"\n\n## {table}\n")
-    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
-        "-"*10,
-        "-"*21,
-        "-"*18,
-        "-"*11,
-        "-"*14,
-        "-"*13,
-        )    
-    )
-    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
-        "ID",
-        "Name",
-        "Type",
-        "NotNull",
-        "DefaultVal",
-        "PrimaryKey"
-        )
-    )
-    logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
-        "-"*10,
-        "-"*21,
-        "-"*18,
-        "-"*11,
-        "-"*14,
-        "-"*13,
-        )    
-    )
-
-    for i in info:
-        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
-            f'{i[0]}',
-            f'{i[1]}',
-            f'{i[2]}',
-            f'{i[3]}',
-            f'{i[4]}',
-            f'{i[5]}'
-        )
-    )
-
-
-def delete_electrum_coin(coin):
-    try:
-        sql = f"DELETE FROM electrum_status WHERE coin = '{coin}';"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        conn.commit()
-        logger.info(f"{coin} removed from database")
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
-
-
-def delete_electrum_server(server):
-    try:
-        sql = f"DELETE FROM electrum_status WHERE server = '{server}';"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        conn.commit()
-        logger.info(f"{server} removed from database")
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
-
-
-def get_db_coins():
-    try:
-        sql = f"SELECT DISTINCT coin FROM electrum_status;"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        resp = []
-        for i in cursor.fetchall():
-            resp.append(i[0])
-        return resp
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
-
+class StatusDB():
+    def __init__(self):
+        self.path = f"{script_dir}/electrum_status.db"
+        self._conn = None
+        self._cursor = None
+        self.create_tables()
         
-def get_db_servers():
-    try:
-        sql = f"SELECT DISTINCT server FROM electrum_status;"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        resp = []
-        for i in cursor.fetchall():
-            resp.append(i[0])
-        return resp
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
 
+    @property
+    def conn(self):
+        """ create a database connection to a SQLite database """
+        if self._conn is None:
+            try:
+                self._conn = sqlite3.connect(self.path)
+                self._conn.row_factory = sqlite3.Row
+            except sqlite3.Error as e:
+                logger.error(e)
+        return self._conn
+    
+    @property
+    def cursor(self):
+        if self._cursor is None:
+            self._cursor = self.conn.cursor()
+        return self._cursor
 
-def update_electrum_row(row):
-    try:
-        sql = f"INSERT INTO electrum_status \
-                    (coin, server, protocol, result, blockheight, last_connection) \
-                VALUES (?, ?, ?, ?, ?, ?) \
-                ON CONFLICT (server) DO UPDATE \
-                SET result='{row[3]}', blockheight='{row[4]}', last_connection='{row[5]}';"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql, row)
-        conn.commit()
-        # logger.loop(f"{row} added to database")
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
+    def delete_electrum_coin(self, coin):
+        try:
+            sql = f"DELETE FROM electrum_status WHERE coin = '{coin}';"
+            self.cursor.execute(sql)
+            self.conn.commit()
+            logger.info(f"{coin} removed from database")
+        except Exception as e:
+            logger.warning(f"{sql} | {e}")
 
+    def delete_electrum_server(self, server):
+        try:
+            sql = f"DELETE FROM electrum_status WHERE server = '{server}';"
+            self.cursor.execute(sql)
+            self.conn.commit()
+            logger.info(f"{server} removed from database")
+        except Exception as e:
+            logger.warning(f"{sql} | {e}")
 
-def update_electrum_row_failed(row):
-    try:
-        sql = f"INSERT INTO electrum_status    \
-                    (coin, server, protocol, result, blockheight, last_connection) \
-                VALUES (?, ?, ?, ?, ?, ?) \
-                ON CONFLICT (server) DO UPDATE \
-                SET result='{row[3]}';"
-        conn = get_sqlite(f"{script_dir}/electrum_status.db")
-        cursor = conn.cursor()
-        cursor.execute(sql, row)
-        conn.commit()
-        # logger.warning(f"{row} added to database FAILED")
-    except Exception as e:
-        logger.warning(e)
-        logger.warning(sql)
+    def get_db_coins(self):
+        try:
+            sql = f"SELECT DISTINCT coin FROM electrum_status;"
+            self.cursor.execute(sql)
+            return [i[0] for i in self.cursor.fetchall()]
+        except Exception as e:
+            logger.warning(f"{sql} | {e}")
+            
+    def get_db_servers(self):
+        try:
+            sql = f"SELECT DISTINCT server FROM electrum_status;"
+            self.cursor.execute(sql)
+            return [i[0] for i in self.cursor.fetchall()]
+        except Exception as e:
+            logger.warning(f"{sql} | {e}")
 
+    def update_server_status(self, data):
+        try:
+            if data['port'] != "":
+                server = f"{data['url']}:{data['port']}"
+            else:
+                server = data['url']
+            row = (
+                data['coin'],
+                data['category'],
+                server,
+                data['protocol'],
+                data['result'],
+                int(data['blockheight']),
+                int(data['last_connection'])
+            )
+            sql = f"INSERT INTO electrum_status \
+                        (coin, category, server, protocol, result, blockheight, last_connection) \
+                    VALUES (?, ?, ?, ?, ?, ?, ?) \
+                    ON CONFLICT (coin, server, protocol) DO UPDATE \
+                    SET result='{row[4]}', blockheight='{row[5]}', last_connection='{row[6]}';"
+            self.cursor.execute(sql, row)
+            self.conn.commit()
+            # logger.loop(f"{row} added to database")
+        except Exception as e:
+            logger.error(f"{sql} | {e}")
 
-def get_electrum_status_data():
-    conn = get_sqlite(f"{script_dir}/electrum_status.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    rows = cursor.execute("SELECT * FROM electrum_status ORDER BY coin").fetchall()
-    return rows
+    def update_server_status_failed(self, data):
+        try:
+            if data['port'] != "":
+                server = f"{data['url']}:{data['port']}"
+            else:
+                server = data['url']
+            row = (
+                data['coin'],
+                data['category'],
+                server,
+                data['protocol'],
+                data['result'],
+                int(data['blockheight']),
+                int(data['last_connection'])
+            )
+            sql = f"INSERT INTO electrum_status    \
+                        (coin, category, server, protocol, result, blockheight, last_connection) \
+                    VALUES (?, ?, ?, ?, ?, ?, ?) \
+                    ON CONFLICT (coin, server, protocol) DO UPDATE \
+                    SET result='{row[4]}';"
+            self.cursor.execute(sql, row)
+            self.conn.commit()
+            logger.warning(f"{row} added to database FAILED")
+        except Exception as e:
+            logger.error(f"{sql} | {e}")
 
-def create_tables():
-    sql = "CREATE TABLE electrum_status (   \
-        id INTEGER PRIMARY KEY,             \
-        coin TEXT NOT NULL,                 \
-        server TEXT NOT NULL UNIQUE,        \
-        protocol TEXT NOT NULL,             \
-        result TEXT,                        \
-        blockheight INTEGER,                \
-        last_connection INTEGER);"
-    conn = get_sqlite(f"{script_dir}/electrum_status.db")
-    cursor = conn.cursor()
-    cursor.execute(sql)
+    def get_electrum_status_data(self):
+        sql = "SELECT * FROM electrum_status ORDER BY coin"
+        return self.cursor.execute(sql).fetchall()
+
+    def create_tables(self):
+        try:
+            sql = "CREATE TABLE electrum_status (   \
+                id INTEGER PRIMARY KEY,             \
+                coin TEXT NOT NULL,                 \
+                category TEXT NOT NULL,             \
+                server TEXT NOT NULL,               \
+                protocol TEXT NOT NULL,             \
+                result TEXT,                        \
+                blockheight INTEGER,                \
+                last_connection INTEGER,            \
+                UNIQUE(coin, server, protocol));"
+            self.cursor.execute(sql)
+        except:
+            pass
+
+    def get_tables(self):
+        sql = "SELECT name FROM sqlite_master WHERE type='table';"
+        return self.cursor.execute().fetchall()
+        
+
+    def get_row(self, table):
+        sql = f"SELECT * FROM {table};"
+        self.cursor.execute(sql).fetchone()
+
+    def get_rows(self, table):
+        sql = f"SELECT * FROM {table};"
+        self.cursor.execute(sql).fetchall()
+
+    def get_column_names(self, row):
+        return row.keys()
+
+    def get_table_info(self, table):
+        sql = f'pragma table_info({table})'
+        self.cursor.execute(sql).fetchall()
+        return self.cursor
+
+    def view_table_info(self, table):
+        info = self.get_table_info(table)
+        logger.info(f"\n\n## {table}\n")
+        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+            "-"*10,
+            "-"*21,
+            "-"*18,
+            "-"*11,
+            "-"*14,
+            "-"*13,
+            )    
+        )
+        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+            "ID",
+            "Name",
+            "Type",
+            "NotNull",
+            "DefaultVal",
+            "PrimaryKey"
+            )
+        )
+        logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+            "-"*10,
+            "-"*21,
+            "-"*18,
+            "-"*11,
+            "-"*14,
+            "-"*13,
+            )    
+        )
+
+        for i in info:
+            logger.info('|{:^10s}|{:^21s}|{:^18s}|{:^11s}|{:^14s}|{:^13s}|'.format(
+                f'{i[0]}',
+                f'{i[1]}',
+                f'{i[2]}',
+                f'{i[3]}',
+                f'{i[4]}',
+                f'{i[5]}'
+            )
+        )
+
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "create_tables":
-            create_tables()
-    else:
-        data = get_electrum_status_data()
-        resp = [{k: item[k] for k in item.keys()} for item in data]
-        for row in resp:
-            logger.info(str(row))
+    data = get_electrum_status_data()
+    resp = [{k: item[k] for k in item.keys()} for item in data]
+    for row in resp:
+        logger.info(str(row))
 
 

@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
-import lib_sqlite
+from lib_sqlite import StatusDB
 import lib_data
 import lib_json
 from lib_logger import logger
@@ -55,7 +55,7 @@ app.add_middleware(
 def update_data():
     try:
         logger.info("Updating electrum status")
-        scan.get_electrums_report()
+        scan.update_servers_status()
     except Exception as e:
         logger.error(f"Electrum status scan update Failed! {e}")
 
@@ -85,16 +85,22 @@ def update_coins_data():
 
 @app.get('/api/v1/electrums_status', tags=[])
 def get_electrums_status(coin: str = None):
-    data = lib_sqlite.get_electrum_status_data()
+    DB = StatusDB()
+    data = DB.get_electrum_status_data()
     if coin is not None:
-        return [{k: item[k] for k in item.keys()} for item in data if item['coin'] == coin]
-    return [{k: item[k] for k in item.keys()} for item in data]
+        resp = [{k: item[k] for k in item.keys()} for item in data if item['coin'] == coin]
+        scan.cache(f"electrums_status_{coin}_cache", resp, 60)
+        return resp
+    resp = [{k: item[k] for k in item.keys()} for item in data]
+    scan.cache("electrums_status_all_cache", resp, 60) 
+    return resp
 
 
 @app.get('/api/v1/coins_status', tags=[])
 def get_coins_status(coin: str = None):
     resp = {}
-    data = lib_sqlite.get_electrum_status_data()
+    DB = StatusDB()
+    data = DB.get_electrum_status_data()
     status = [{k: item[k] for k in item.keys()} for item in data]
     for i in status:
         _coin = i["coin"]
@@ -113,8 +119,12 @@ def get_coins_status(coin: str = None):
             resp[_coin][protocol] = True
             resp[_coin]["blockheight"] = blockheight
     if coin is not None:
-        return [i for i in resp.values() if i['coin'] == coin] 
-    return [i for i in resp.values()] 
+        resp = [i for i in resp.values() if i['coin'] == coin] 
+        scan.cache(f"coins_status_{coin}_cache", resp, 60)
+        return resp
+    resp = [i for i in resp.values()] 
+    scan.cache(f"coins_status_all_cache", resp, 60)
+    return resp
 
 
 if __name__ == '__main__':
