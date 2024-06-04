@@ -11,11 +11,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import Depends, FastAPI, HTTPException, status, APIRouter, Body, Request, Response, status
 
-import lib_sqlite
+from lib_sqlite import StatusDB
 import lib_data
 import lib_json
 from lib_logger import logger
-from coins.utils import scan_electrums as scan
+import lib_coins as scan
 
 script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 
@@ -51,41 +51,79 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=600)
+@repeat_every(seconds=120)
 def update_data():
     try:
         logger.info("Updating electrum status")
-        scan.get_electrums_report()
-        with open(f'{script_dir}/coins/utils/electrum_scan_report.json') as f:
-            data = json.load(f)
-        electrum_coins = list(data.keys())
-        db_coins = lib_sqlite.get_db_coins()
-        print(electrum_coins)
-        print(db_coins)
-        for coin in db_coins:
-            if coin not in electrum_coins:
-                print(f"Deleting {coin}")
-                lib_sqlite.delete_electrum_coin(coin)
-        logger.info("Electrum status table updated!")
-        for coin in data:
-            for protocol in ["tcp", "ssl", "wss"]:
-                for server in data[coin][protocol]:
-                    result = data[coin][protocol][server]['result'].replace("'", "")
-                    last = data[coin][protocol][server]['last_connection']
-                    if result == "Passed":
-                        row = (coin, server, protocol, result, last)
-                        lib_sqlite.update_electrum_row(row)
-                    else:
-                        row = (coin, server, protocol, result, last)
-                        lib_sqlite.update_electrum_row_failed(row)
+        scan.update_servers_status()
     except Exception as e:
         logger.error(f"Electrum status scan update Failed! {e}")
 
+@app.on_event("startup")
+@repeat_every(seconds=60)
+def update_db():
+    try:
+        logger.query("Updating electrum db")
+        scan.update_db()
+    except Exception as e:
+        logger.error(f"Electrum update_db Failed! {e}")
+
+@app.on_event("startup")
+@repeat_every(seconds=3600)
+def update_coins_data():
+    try:
+        url = "https://raw.githubusercontent.com/KomodoPlatform/coins/6914dbe31c71c9aa54851ae96350f542347f8f32/utils/coins_config_unfiltered.json"
+        # url = "https://komodoplatform.github.io/coins/utils/coins_config_unfiltered.json"
+        data = requests.get(url).json()
+        with open(f"{script_dir}/coins_config.json", "w+") as f:
+            json.dump(data, f, indent=2)
+        logger.query("Updating coins_config")
+        scan.update_db()
+    except Exception as e:
+        logger.error(f"coins_config update Failed! {e}")
+
 
 @app.get('/api/v1/electrums_status', tags=[])
-def get_electrums_status():
-    data = lib_sqlite.get_electrum_status_data()
+def get_electrums_status(coin: str = None):
+    DB = StatusDB()
+    data = DB.get_electrum_status_data()
+    if coin is not None:
+        resp = [{k: item[k] for k in item.keys()} for item in data if item['coin'] == coin]
+        scan.cache(f"electrums_status_{coin}_cache", resp, 60)
+        return resp
     resp = [{k: item[k] for k in item.keys()} for item in data]
+    scan.cache("electrums_status_all_cache", resp, 60) 
+    return resp
+
+
+@app.get('/api/v1/coins_status', tags=[])
+def get_coins_status(coin: str = None):
+    resp = {}
+    DB = StatusDB()
+    data = DB.get_electrum_status_data()
+    status = [{k: item[k] for k in item.keys()} for item in data]
+    for i in status:
+        _coin = i["coin"]
+        result = i["result"]
+        protocol = i["protocol"]
+        blockheight = i["blockheight"]
+        if _coin not in resp:
+            resp.update({_coin: {
+                "coin": _coin,
+                "TCP": False,
+                "SSL": False,
+                "WSS": False,
+                "blockheight": blockheight
+            }})
+        if result == "Passed":
+            resp[_coin][protocol] = True
+            resp[_coin]["blockheight"] = blockheight
+    if coin is not None:
+        resp = [i for i in resp.values() if i['coin'] == coin] 
+        scan.cache(f"coins_status_{coin}_cache", resp, 60)
+        return resp
+    resp = [i for i in resp.values()] 
+    scan.cache(f"coins_status_all_cache", resp, 60)
     return resp
 
 

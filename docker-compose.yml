@@ -1,0 +1,13 @@
+services:
+  memcached:
+    container_name: memcached
+    image: memcached:latest
+    ports:
+      - "127.0.0.1:11211:11211"
+    restart: always
+    command: ["memcached", "-I", "40m", "-m", "100m"]
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
