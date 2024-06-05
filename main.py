@@ -51,7 +51,7 @@ app.add_middleware(
 )
 
 @app.on_event("startup")
-@repeat_every(seconds=120)
+@repeat_every(seconds=300)
 def update_data():
     try:
         logger.info("Updating electrum status")

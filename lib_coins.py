@@ -67,41 +67,59 @@ class Web3Server():
     def get_latest_block(self):
         if self.protocol == "WSS":
             try:
+                ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+                ssl_context.check_hostname = False
+                ssl_context.verify_mode = ssl.CERT_NONE
                 async def connect_and_query():
-                    url = self.url.replace("https://", "wss://").replace("http://", "ws://")
-                    async with AsyncWeb3(WebsocketProviderV2(url)) as w3:
-                        try:
-                            w3.middleware_onion.inject(geth_poa_middleware, layer=0)
-                            return await w3.get_block('latest')
-                        except Exception as e:
-                            return "server rejected WebSocket connection"
+                    async with websockets.connect(self.url, ssl=ssl_context, timeout=10) as websocket:
+                        # Request
+                        payload = {"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":0}
+                        await websocket.send(json.dumps(payload))
+                        await asyncio.sleep(1)
+                        status = await asyncio.wait_for(websocket.recv(), timeout=7)
+                        status = status.splitlines()
+                        if len(status) > 0:
+                            status = status[-1]
+                        return status
+                
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-                status = loop.run_until_complete(connect_and_query())
-                if 'number' in status:
-                    self.blockheight = int(status['number'])
+                status = json.loads(loop.run_until_complete(connect_and_query()))
+                logger.loop(f"[{self.protocol}] {self.coin} {self.url} | {status}")
+                if 'result' in status:
+                    self.blockheight = int(status['result'], 16)
                     self.last_connection = int(time.time())
                     self.result = "Passed"
-                else:            
-                    #logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {self.result}")
-                    self.result = status
+                    logger.info(f"[{self.protocol}] {self.coin} {self.url} Passed!")
+
             except Exception as e:
-                # logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {e}")
                 self.result = "server rejected WebSocket connection"
+                logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {e}")
         else:
             try:
-                w3 = Web3(Web3.HTTPProvider(self.url))
-                w3.middleware_onion.inject(geth_poa_middleware, layer=0)
-                data = w3.eth.get_block('latest')
-                if 'number' in data:
-                    self.blockheight = int(data['number'])
-                    self.last_connection = int(time.time())
-                    self.result = "Passed"
-                else:            
-                    logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {self.result}")
-                    self.result = data
+                if "block-proxy" in self.url:
+                    payload = {"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":0}
+                    status = requests.post(f"{self.url}", json=payload).json()
+                    if 'result' in status:
+                        self.blockheight = int(status['result'], 16)
+                        self.last_connection = int(time.time())
+                        self.result = "Passed"
+                    else:            
+                        self.result = status.text
+                        logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {self.result}")
+                else:
+                    w3 = Web3(Web3.HTTPProvider(self.url))
+                    w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+                    data = w3.eth.get_block('latest')
+                    if 'number' in data:
+                        self.blockheight = int(data['number'])
+                        self.last_connection = int(time.time())
+                        self.result = "Passed"
+                    else:            
+                        logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {self.result}")
+                        self.result = data
             except Exception as e:
-                # logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {e}")
+                logger.error(f"[{self.protocol}] {self.coin} {self.url} Failed | {e}")
                 if str(e).find('401 Client Error: Unauthorized') > -1:
                     self.result == "401 Client Error: Unauthorized"
                 else:
@@ -109,69 +127,73 @@ class Web3Server():
 
 
 class scan_evm_thread(threading.Thread):
-    def __init__(self, coin, url):
+    def __init__(self, coin, url, protocol):
         threading.Thread.__init__(self)
         self.coin = coin
         self.url = url
+        self.protocol = protocol
 
     def run(self):
-        try:
-            cache_id = f"EVM-{self.url}-WSS"
-            data = get(cache_id)
-            if data is None:
-                el_wss = Web3Server(
-                    self.coin,
-                    self.url,
-                    "WSS"
-                )
-                el_wss.get_latest_block()
-                if el_wss.blockheight > 0: 
-                    result = "Passed"
-                    logger.loop(f">>>> WSS <<<< {cache_id} OK! Height: {el_wss.blockheight}")
-                else:
-                    result = el_wss.result
-                    # logger.warning(f">>>> WSS <<<< {cache_id} Failed! | {el_wss.blockheight} | {result}")
-                data = {
-                    "coin": self.coin,
-                    "category": "EVM",
-                    "url": self.url,
-                    "port": "",
-                    "protocol": "WSS",
-                    "result": str(result),
-                    "blockheight": el_wss.blockheight,
-                    "last_connection": el_wss.last_connection
-                }
-                cache(f"{cache_id}", data, 300)
-                add_row(data)
-        except Exception as e:
-            logger.warning(f"{cache_id}: {e}")
-
-        try:
-            cache_id = f"EVM-{self.url}-SSL"
-            data = get(cache_id)
-            if data is None:
-                el_ssl = Web3Server(self.coin, self.url, "SSL")
-                el_ssl.get_latest_block()
-                if el_ssl.blockheight > 0: 
-                    result = "Passed"
-                    # logger.info(f">>>> SSL <<<< {cache_id} OK! Height: {el_ssl.blockheight}")
-                else:
-                    result = el_ssl.result
-                    # logger.warning(f">>>> SSL <<<< {cache_id} Failed! | {el_ssl.blockheight} | {result}")
-                data = {
-                    "coin": self.coin,
-                    "category": "EVM",
-                    "url": self.url,
-                    "port": "",
-                    "protocol": "SSL",
-                    "result": str(result),
-                    "blockheight": el_ssl.blockheight,
-                    "last_connection": el_ssl.last_connection
-                }
-                cache(f"{cache_id}", data, 300)
-                add_row(data)
-        except Exception as e:
-            logger.warning(f"{cache_id}: {e}")
+        if "node.komodo.earth" in self.url:
+            return
+        if self.protocol == "WSS":
+            try:
+                cache_id = f"EVM-{self.url}-WSS"
+                data = get(cache_id)
+                if data is None:
+                    el_wss = Web3Server(
+                        self.coin,
+                        self.url,
+                        "WSS"
+                    )
+                    el_wss.get_latest_block()
+                    if el_wss.blockheight > 0: 
+                        result = "Passed"
+                        # logger.loop(f">>>> WSS <<<< {cache_id} OK! Height: {el_wss.blockheight}")
+                    else:
+                        result = el_wss.result
+                        logger.warning(f">>>> WSS <<<< {cache_id} Failed! | {el_wss.blockheight} | {result}")
+                    data = {
+                        "coin": self.coin,
+                        "category": "EVM",
+                        "url": self.url,
+                        "port": "",
+                        "protocol": "WSS",
+                        "result": str(result),
+                        "blockheight": el_wss.blockheight,
+                        "last_connection": el_wss.last_connection
+                    }
+                    cache(f"{cache_id}", data, 300)
+                    add_row(data)
+            except Exception as e:
+                logger.warning(f"{cache_id}: {e}")
+        else:
+            try:
+                cache_id = f"EVM-{self.url}-SSL"
+                data = get(cache_id)
+                if data is None:
+                    el_ssl = Web3Server(self.coin, self.url, "SSL")
+                    el_ssl.get_latest_block()
+                    if el_ssl.blockheight > 0: 
+                        result = "Passed"
+                        logger.info(f">>>> SSL <<<< {cache_id} OK! Height: {el_ssl.blockheight}")
+                    else:
+                        result = el_ssl.result
+                        logger.warning(f">>>> SSL <<<< {cache_id} Failed! | {el_ssl.blockheight} | {result}")
+                    data = {
+                        "coin": self.coin,
+                        "category": "EVM",
+                        "url": self.url,
+                        "port": "",
+                        "protocol": "SSL",
+                        "result": str(result),
+                        "blockheight": el_ssl.blockheight,
+                        "last_connection": el_ssl.last_connection
+                    }
+                    cache(f"{cache_id}", data, 300)
+                    add_row(data)
+            except Exception as e:
+                logger.warning(f"{cache_id}: {e}")
 
 
 class TendermintServer():
@@ -184,12 +206,9 @@ class TendermintServer():
         self.result = None
         self.blockheight = -1
         self.last_connection = -1
-        if self.protocol == "WSS":
-            self.url = f"{self.url}/websocket".replace("https://", "wss://").replace("http://", "ws://")
         
     def get_latest_block(self):
-            if self.url.endswith("websocket"):
-
+            if self.protocol == "WSS":
                 try:
                     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
                     ssl_context.check_hostname = False
@@ -235,70 +254,72 @@ class TendermintServer():
 
 
 class scan_tendermint_thread(threading.Thread):
-    def __init__(self, coin, url):
+    def __init__(self, coin, url, protocol):
         threading.Thread.__init__(self)
         self.coin = coin
         self.url = url
+        self.protocol = protocol
 
     def run(self):
-        try:
-            cache_id = f"TENDERMINT-{self.coin}-{self.url}-WSS"
-            logger.calc(cache_id)
-            data = get(cache_id)
-            if data is None:
-                el_wss = TendermintServer(self.coin, self.url, "WSS")
-                el_wss.get_latest_block()
-                if el_wss.blockheight > 0: 
-                    result = "Passed"
-                    # logger.info(f">>>> WSS <<<< {cache_id} OK! Height: {el_wss.blockheight}")
-                else:
-                    result = el_wss.result
-                    # logger.warning(f">>>> WSS <<<< {cache_id} Failed! | {el_wss.blockheight} | {result}")
+        if self.protocol == "WSS":
+            try:
+                cache_id = f"TENDERMINT-{self.coin}-{self.url}-WSS"
+                logger.calc(cache_id)
+                data = get(cache_id)
+                if data is None:
+                    el_wss = TendermintServer(self.coin, self.url, "WSS")
+                    el_wss.get_latest_block()
+                    if el_wss.blockheight > 0: 
+                        result = "Passed"
+                        logger.info(f">>>> WSS <<<< {cache_id} OK! Height: {el_wss.blockheight}")
+                    else:
+                        result = el_wss.result
+                        logger.warning(f">>>> WSS <<<< {cache_id} Failed! | {el_wss.blockheight} | {result}")
 
-                data = {
-                    "coin": self.coin,
-                    "category": "Tendermint",
-                    "url": self.url,
-                    "port": "",
-                    "protocol": "WSS",
-                    "result": str(result),
-                    "blockheight": el_wss.blockheight,
-                    "last_connection": el_wss.last_connection
-                }
-                cache(f"{cache_id}", data, 300)
-                add_row(data)
-        except Exception as e:
-            logger.error(f"{cache_id} Failed | {e}")
-            self.result = f"{e} | {self.result}"
-                
-        try:
-            cache_id = f"TENDERMINT-{self.coin}-{self.url}-SSL"
-            data = get(cache_id)
-            if data is None:
-                el_ssl = TendermintServer(self.coin, self.url, "SSL")
-                el_ssl.get_latest_block()
-                if el_ssl.blockheight > 0: 
-                    result = "Passed"
-                    # logger.info(f">>>> SSL <<<< {cache_id} OK! Height: {el_ssl.blockheight}")
-                else:
-                    result = el_ssl.result
-                    # logger.warning(f">>>> SSL <<<< {cache_id} Failed! | {el_ssl.blockheight} | {result}")
-                    
-                data = {
-                    "coin": self.coin,
-                    "category": "Tendermint",
-                    "url": self.url,
-                    "port": "",
-                    "protocol": "SSL",
-                    "result": str(result),
-                    "blockheight": el_ssl.blockheight,
-                    "last_connection": el_ssl.last_connection
-                }
-                cache(f"{cache_id}", data, 300)
-                add_row(data)
-        except Exception as e:
-            logger.error(f"{cache_id} Failed | {e}")
-            self.result = f"{e} | {self.result}"
+                    data = {
+                        "coin": self.coin,
+                        "category": "Tendermint",
+                        "url": self.url,
+                        "port": "",
+                        "protocol": "WSS",
+                        "result": str(result),
+                        "blockheight": el_wss.blockheight,
+                        "last_connection": el_wss.last_connection
+                    }
+                    cache(f"{cache_id}", data, 300)
+                    add_row(data)
+            except Exception as e:
+                logger.error(f"{cache_id} Failed | {e}")
+                self.result = f"{e} | {self.result}"
+        else:
+            try:
+                cache_id = f"TENDERMINT-{self.coin}-{self.url}-SSL"
+                data = get(cache_id)
+                if data is None:
+                    el_ssl = TendermintServer(self.coin, self.url, "SSL")
+                    el_ssl.get_latest_block()
+                    if el_ssl.blockheight > 0: 
+                        result = "Passed"
+                        # logger.info(f">>>> SSL <<<< {cache_id} OK! Height: {el_ssl.blockheight}")
+                    else:
+                        result = el_ssl.result
+                        # logger.warning(f">>>> SSL <<<< {cache_id} Failed! | {el_ssl.blockheight} | {result}")
+                        
+                    data = {
+                        "coin": self.coin,
+                        "category": "Tendermint",
+                        "url": self.url,
+                        "port": "",
+                        "protocol": "SSL",
+                        "result": str(result),
+                        "blockheight": el_ssl.blockheight,
+                        "last_connection": el_ssl.last_connection
+                    }
+                    cache(f"{cache_id}", data, 300)
+                    add_row(data)
+            except Exception as e:
+                logger.error(f"{cache_id} Failed | {e}")
+                self.result = f"{e} | {self.result}"
 
 
 class ElectrumServer:
@@ -636,13 +657,24 @@ def scan_coin_servers(electrum_dict, evm_dict, tendermint_dict):
         logger.info(f"Tendermint servers: {len(tendermint_dict)}")
         for coin in tendermint_dict:
             for server in tendermint_dict[coin]:
-                url = server["url"]
-                thread_list.append(
-                    scan_tendermint_thread(
-                        coin,
-                        url
+                if "url" in server:
+                    url = server["url"]
+                    thread_list.append(
+                        scan_tendermint_thread(
+                            coin,
+                            url,
+                            "SSL"
+                        )
                     )
-                )
+                if "ws_url" in server:
+                    url = server["ws_url"]
+                    thread_list.append(
+                        scan_tendermint_thread(
+                            coin,
+                            url,
+                            "WSS"
+                        )
+                    )
     except Exception as e:
         logger.warning(e)
   
@@ -651,13 +683,24 @@ def scan_coin_servers(electrum_dict, evm_dict, tendermint_dict):
         logger.info(f"EMV servers: {len(evm_dict)}")
         for coin in evm_dict:
             for server in evm_dict[coin]:
-                url = server["url"]
-                thread_list.append(
-                    scan_evm_thread(
-                        coin,
-                        url
+                if "url" in server:
+                    url = server["url"]
+                    thread_list.append(
+                        scan_evm_thread(
+                            coin,
+                            url,
+                            "SSL"
+                        )
                     )
-                )
+                if "ws_url" in server:
+                    url = server["ws_url"]
+                    thread_list.append(
+                        scan_evm_thread(
+                            coin,
+                            url,
+                            "WSS"
+                        )
+                    )
     except Exception as e:
         logger.warning(e)
 
@@ -719,6 +762,7 @@ def get_repo_evm_servers():
         logger.error(f"repo_evm_servers failed to parse, exiting.")
         sys.exit(1)
     return repo_evm_servers
+
 
 def get_repo_electrums():
     try:
