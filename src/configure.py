@@ -111,6 +111,7 @@ def create_conf(ticker):
         rpcpass = os.getenv("rpcpass")
         conf.write(f'rpcuser={rpcuser}\n')
         conf.write(f'rpcpassword={rpcpass}\n')
+        conf.write('addressindex=1\n')
         conf.write('txindex=1\n')
         conf.write('server=1\n')
         conf.write('daemon=1\n')

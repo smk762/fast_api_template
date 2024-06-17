@@ -3,28 +3,32 @@
         "explorer": "https://kip0001.explorer.kmd.io",
         "results_official": true,
         "title": "Should KMD's Active User Reward be reduced?",
-        "options": [
-            {
-                "candidate": "Yes",
-                "address": "RReduceRewardsXXXXXXXXXXXXXXUxPxuC",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/qrcodes/RReduceRewardsXXXXXXXXXXXXXXUxPxuC.png",
-                "text": "Reduce the active user reward amount to 0.01% APR in order to decrease the KMD total supply over time.",
-                "votes": 11263467.493214,
-                "testnet": [],
-                "veteran": false,
-                "utxos": []
-            },
-            {
-                "candidate": "No",
-                "address": "RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF",
-                "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/qrcodes/RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF.png",
-                "text": "Keep the active user reward amount at 5.1% APR.",
-                "votes": 2209606.348421,
-                "testnet": [],
-                "veteran": false,
-                "utxos": []
+        "categories": {
+            "KIP0001": {
+                "options": [
+                    {
+                        "candidate": "Yes",
+                        "address": "RReduceRewardsXXXXXXXXXXXXXXUxPxuC",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/src/qrcodes/RReduceRewardsXXXXXXXXXXXXXXUxPxuC.png",
+                        "text": "Reduce the active user reward amount to 0.01% APR in order to decrease the KMD total supply over time.",
+                        "votes": 11263467.493214,
+                        "testnet": [],
+                        "veteran": false,
+                        "utxos": []
+                    },
+                    {
+                        "candidate": "No",
+                        "address": "RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF",
+                        "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_docker/vote/src/qrcodes/RKeepRewardsXXXXXXXXXXXXXXXXYKRSuF.png",
+                        "text": "Keep the active user reward amount at 5.1% APR.",
+                        "votes": 2209606.348421,
+                        "testnet": [],
+                        "veteran": false,
+                        "utxos": []
+                    }
+                ]
             }
-        ],
+        },
         "ends_at": 1680307199,
         "overtime_ended_at": 1680308596,
         "first_overtime_block": {
@@ -866,186 +870,119 @@
                         "candidate": "decker",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/decker_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
-                        "votes": 647776.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 647776.001
                     },
                     {
                         "address": "RRfaF1s266XULS8HsF1kCFcfLASCCgEdSN",
                         "candidate": "goldenman",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/goldenman_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/goldenman/README.md",
-                        "votes": 334898.105447,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 334898.105447
                     },
                     {
                         "address": "RT3PBi6wBLvUySxtykehejsVTLKgCEwbzu",
                         "candidate": "dragonhound",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/dragonhound_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dragonhound/README.md",
-                        "votes": 395862.769801,
-                        "testnet": [
-                            "dragonhound"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 395862.769801
                     },
                     {
                         "address": "RDLQrPQPDK3W3L6EdGGXstyNNYFT8fVLqH",
                         "candidate": "chmex",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/chmex_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/chmex/README.md",
-                        "votes": 501111.001,
-                        "testnet": [
-                            "CHMEX"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 501111.001
                     },
                     {
                         "address": "RSMDSHtX6f26fsi9dPY4WdCoF9zJygYLoE",
                         "candidate": "smdmitry",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/smdmitry_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/smdmitry/README.md",
-                        "votes": 377504.723086,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 377504.723086
                     },
                     {
                         "address": "RUbzhiGcGNeY2Nffi3NfH4pfjcjmhRcAiv",
                         "candidate": "gcharang",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/gcharang_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/gcharang/README.md",
-                        "votes": 685417.931016,
-                        "testnet": [
-                            "gcharang"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 685417.931016
                     },
                     {
                         "address": "RBrgAEXWTDQ4Vi5oEG2JfDB1rjG2jQwi9j",
                         "candidate": "mrcryster",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/mrcryster_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/mrcryster/README.md",
-                        "votes": 0.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 0.001
                     },
                     {
                         "address": "RE1NaK7Bp5Xy127nbFLmu4QVxPPnQkoe4h",
                         "candidate": "cipi",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/cipi_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/cipi/README.md",
-                        "votes": 550564.496721,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 550564.496721
                     },
                     {
                         "address": "RKCXF7EYaAJHmiyDKmubhQ88dYc7CbTZxx",
                         "candidate": "kolo",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/kolo_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/kolo/README.md",
-                        "votes": 196.999801,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 196.999801
                     },
                     {
                         "address": "RPFUCG4nE5EfR41P4rcYmMbKgxmu9Ex8kX",
                         "candidate": "kolox",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/kolox_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/kolo/README.md",
-                        "votes": 180.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 180.001
                     },
                     {
                         "address": "RLpHDdR1Ez3YyLY1QVbsKxuPNn8eeLR47z",
                         "candidate": "tonyl",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/tonyl_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/tonyl/README.md",
-                        "votes": 511116.11099,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 511116.11099
                     },
                     {
                         "address": "RSmGPk9KjoK8rGeAGKPkBxA8XSBQ3RinJ7",
                         "candidate": "dimxy",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/dimxy_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dimxy/README.md",
-                        "votes": 521355.848561,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
-                    },
-                    {
-                        "address": "RT6ftBsPBPCwErGSti35hLJuzWLEyH3RK4",
-                        "candidate": "mcrypt",
-                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/mcrypt_AR.png",
-                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/mcrypt/README.md",
-                        "votes": 0.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 521355.848561
                     },
                     {
                         "address": "RPZYurYawfnRLdsLqHzf79KJuNicTJVVfV",
                         "candidate": "marmara",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/marmara_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/marmara/README.md",
-                        "votes": 631914.299187,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 631914.299187
                     },
                     {
                         "address": "RAhjfR4ZThUKfgFf1evmJmTtAZmGfHp2BM",
                         "candidate": "artem.pikulin",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/artem.pikulin_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/artem.pikulin/README.md",
-                        "votes": 338303.336133,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 338303.336133
                     },
                     {
                         "address": "RUEYAufF3Di8c5sycJgsVZdsH4BSqhM59u",
                         "candidate": "batman",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/batman_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/batman/README.md",
-                        "votes": 601304.859944,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 601304.859944
                     },
                     {
                         "address": "RYRyw6fzDGNoRc7SBSB1UJRRmoaajkAfae",
                         "candidate": "madmax",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/madmax_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/madmax/README.md",
-                        "votes": 11718.8609,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 11718.8609
                     },
                     {
                         "address": "RQonayk6bF8RrpxCbMmkqfJgkBfCnR1TDJ",
                         "candidate": "dimxy2",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/dimxy2_AR.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dimxy/README.md",
-                        "votes": 3111.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 3111.001
                     }
                 ]
             },
@@ -1057,201 +994,133 @@
                         "candidate": "decker",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/decker_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
-                        "votes": 838998.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 838998.001
                     },
                     {
                         "address": "RUHbExoy17yC3ig146D1xuKTi2EdJdHoSH",
                         "candidate": "ptyx",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/ptyx_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/ptyx/README.md",
-                        "votes": 0.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 0.001
                     },
                     {
                         "address": "RTVKa9Dqa1bfzLDCSUo5zmfHFZBZyr3ftW",
                         "candidate": "chmex",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/chmex_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/chmex/README.md",
-                        "votes": 782442.809696,
-                        "testnet": [
-                            "CHMEX"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 782442.809696
                     },
                     {
                         "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9",
                         "candidate": "smdmitry2",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/smdmitry2_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/smdmitry/README.md",
-                        "votes": 616.083644,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 616.083644
                     },
                     {
                         "address": "RJvm1a6SoGfjS6WDobLTPJEjHrAFHv7md1",
                         "candidate": "fediakash",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/fediakash_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/fediakash/README.md",
-                        "votes": 1000.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 1000.001
                     },
                     {
                         "address": "RJLHaPxyj26J7tEq3twBbELhSBhKKtur58",
                         "candidate": "alien",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/alien_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/alien/README.md",
-                        "votes": 851000.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 851000.001
                     },
                     {
                         "address": "RENN26kwEn8EemrMQBiWy7d1pquP2TxqhH",
                         "candidate": "alienx",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/alienx_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/alien/README.md",
-                        "votes": 65939.487912,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 65939.487912
                     },
                     {
                         "address": "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p",
                         "candidate": "dragonhound",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/dragonhound_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dragonhound/README.md",
-                        "votes": 742807.413667,
-                        "testnet": [
-                            "dragonhound"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 742807.413667
                     },
                     {
                         "address": "RWRJ71K8CaBqkftHegSKiGu3koYn9s31dq",
                         "candidate": "artist",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/artist_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/artist/README.md",
-                        "votes": 60606.940824,
-                        "testnet": [
-                            "artistahmed"
-                        ],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 60606.940824
                     },
                     {
                         "address": "RTMSZ28BvFvy9eGE8FTSstX1APXMXimXdN",
                         "candidate": "cipi",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/cipi_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/cipi/README.md",
-                        "votes": 856399.764216,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 856399.764216
                     },
                     {
                         "address": "RM4YM5gPfP3ooueQxSpyv5cL7hp6xpaBik",
                         "candidate": "cipi2",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/cipi2_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/cipi/README.md",
-                        "votes": 112203.147122,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 112203.147122
                     },
                     {
                         "address": "RAGTPcaNh3DRmsckA1ugSJZdo64jXGn8jo",
                         "candidate": "mx222",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/mx222_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/mx222/README.md",
-                        "votes": 0.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 0.001
                     },
                     {
                         "address": "RYa7pC7dNLejeu5q2Kst7Mef1VBTEoqiMD",
                         "candidate": "marmara",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/marmara_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/marmara/README.md",
-                        "votes": 832526.977021,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 832526.977021
                     },
                     {
                         "address": "RVwVrUqgAM863ydJNf479Xvt1RfEthynyh",
                         "candidate": "batman",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/batman_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/batman/README.md",
-                        "votes": 603808.862782,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 603808.862782
                     },
                     {
                         "address": "RRWV31MTaEnddDjSzonSLMXVSqEWkPBHX1",
                         "candidate": "colmapol",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/colmapol_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/colmapol/README.md",
-                        "votes": 732899.720633,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 732899.720633
                     },
                     {
                         "address": "RJDNzABv4VsfTUvVzhg5UsEAVmXq5cjrUH",
                         "candidate": "caglarkaya",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/caglarkaya_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/caglarkaya/README.md",
-                        "votes": 805303.6209,
-                        "testnet": [
-                            "caglarkaya"
-                        ],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 805303.6209
                     },
                     {
                         "address": "RKUnQ7nLXQ5dUFanYVYxwsgLDPcRDD9iJm",
                         "candidate": "webworker01",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/webworker01_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/webworker01/README.md",
-                        "votes": 734711.271838,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 734711.271838
                     },
                     {
                         "address": "RRiPromiseToNotarizeThisTime9FchTZ",
                         "candidate": "alright",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/alright_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/alright/README.md",
-                        "votes": 738575.035408,
-                        "testnet": [
-                            "Alright0",
-                            "Alright1"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 738575.035408
                     },
                     {
                         "address": "REy7zH2xmvheTDvVbnxQDm8m8mcp1RdeBy",
                         "candidate": "ca333",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/ca333_EU.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/ca333/README.md",
-                        "votes": 740467.596968,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 740467.596968
                     }
                 ]
             },
@@ -1263,171 +1132,112 @@
                         "candidate": "decker",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/decker_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/decker/README.md",
-                        "votes": 455764.368773,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 455764.368773
                     },
                     {
                         "address": "RStrobNmEspEAgB8Jtt6ncK8tCWcGm77na",
                         "candidate": "strob",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/strob_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/strob/README.md",
-                        "votes": 274056.100256,
-                        "testnet": [
-                            "strob"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 274056.100256
                     },
                     {
                         "address": "RMKfy7zjSvvKgC7tQReYrRSFfEFFGkZkFc",
                         "candidate": "chmex",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/chmex_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/chmex/README.md",
-                        "votes": 554108.704205,
-                        "testnet": [
-                            "CHMEX"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 554108.704205
                     },
                     {
                         "address": "RHZAnQxv6tGajPppWywpkP5W8JXQR3QEvi",
                         "candidate": "ptyx",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/ptyx_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/ptyx/README.md",
-                        "votes": 0.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 0.001
                     },
                     {
                         "address": "RKpigLeT5rgXy31yubpgWcJ91i1TZbZg5h",
                         "candidate": "dragonhound",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/dragonhound_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/dragonhound/README.md",
-                        "votes": 432011.148914,
-                        "testnet": [
-                            "dragonhound"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 432011.148914
                     },
                     {
                         "address": "RSMDNAqCKFZKyVAbr1Bm3qh3mcB13E6rzU",
                         "candidate": "smdmitry",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/smdmitry_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/smdmitry/README.md",
-                        "votes": 297354.151463,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 297354.151463
                     },
                     {
                         "address": "RComputerGenieForNotaryNode2wnZhnX",
                         "candidate": "computergenie",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/computergenie_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/computergenie/README.md",
-                        "votes": 620777.777633,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 620777.777633
                     },
                     {
                         "address": "RANNhna6cLTUxV13jgM3eb52XzLbTHUPhf",
                         "candidate": "alienx",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/alienx_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/alien/README.md",
-                        "votes": 420895.595222,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 420895.595222
                     },
                     {
                         "address": "RSKESo2oSPgaHwqn6Jt5fEEktRGFbWANKQ",
                         "candidate": "pbca26",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/pbca26_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/pbca26/README.md",
-                        "votes": 600949.991,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 600949.991
                     },
                     {
                         "address": "RNjeQcneBWgkPFk1stynJWN9gnNLpgBzud",
                         "candidate": "nodeone",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/nodeone_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/nodeone/README.md",
-                        "votes": 508994.109727,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 508994.109727
                     },
                     {
                         "address": "RXbwWvgd3RoMVmxwvHqBMDPTt33CxN6nzP",
                         "candidate": "theerbeen",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/theerbeen_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/theerbeen/README.md",
-                        "votes": 44.415449,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 44.415449
                     },
                     {
                         "address": "RStrobARDwHKBDntCa2Ko6oi91n4YMpgSB",
                         "candidate": "strob2",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/strob2_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/strob/README.md",
-                        "votes": 7.777778,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 7.777778
                     },
                     {
                         "address": "RGayMoe7ptHwmAfVcDsZPnrxM4EsW1REMy",
                         "candidate": "cipi",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/cipi_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/cipi/README.md",
-                        "votes": 564352.962151,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 564352.962151
                     },
                     {
                         "address": "RSP8FSK2fcgmRjEhjRJg7nJ9uaxNwsmWBx",
                         "candidate": "ozkanonur",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/ozkanonur_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/ozkanonur/README.md",
-                        "votes": 553341.62099,
-                        "testnet": [
-                            "ozkanonur"
-                        ],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 553341.62099
                     },
                     {
                         "address": "RGCCcjSkszZNMMfH9fRcY1MHc5CHWbt6gQ",
                         "candidate": "who-biz",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/who-biz_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/who-biz/README.md",
-                        "votes": 400615.888923,
-                        "testnet": [
-                            "who-biz1",
-                            "who-biz2"
-                        ],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 400615.888923
                     },
                     {
                         "address": "RRhPGq2dwNwpNreeAemcnK5e6pVrq9pkPV",
                         "candidate": "webworker01",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/webworker01_NA.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/webworker01/README.md",
-                        "votes": 406343.125188,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 406343.125188
                     }
                 ]
             },
@@ -1439,169 +1249,112 @@
                         "candidate": "strob",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/strob_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/strob/README.md",
-                        "votes": 50009.976867,
-                        "testnet": [
-                            "strob"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 50009.976867
                     },
                     {
                         "address": "RJajXoXCioyt3cxwRc2XD4qw1xUTKGShjX",
                         "candidate": "ptyx",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/ptyx_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/ptyx/README.md",
-                        "votes": 455199.0006,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 455199.0006
                     },
                     {
                         "address": "RQxfyScivdSERChE2vYT9oFA7dWQzzPR4K",
                         "candidate": "chmex",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/chmex_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/chmex/README.md",
-                        "votes": 404158.78681,
-                        "testnet": [
-                            "CHMEX"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 404158.78681
                     },
                     {
                         "address": "RYJV8pCtv4wtsvwFhLm1tn7hW3KDv9gcjR",
                         "candidate": "chmex2",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/chmex2_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/chmex/README.md",
-                        "votes": 166010.001,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 166010.001
                     },
                     {
                         "address": "RTWgfK47pbhyHWcqEMQUyEK6dtf7VpBYYB",
                         "candidate": "gcharang",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/gcharang_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/gcharang/README.md",
-                        "votes": 623101.779527,
-                        "testnet": [
-                            "gcharang"
-                        ],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 623101.779527
                     },
                     {
                         "address": "RKUz1GrTmY7B6FGUtM4LSywBRM9RQco3zE",
                         "candidate": "kmdude",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/kmdude_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/kmdude/README.md",
-                        "votes": 55000.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 55000.001
                     },
                     {
                         "address": "RSSHE5ek7JWbAUuByYXt25VJZSE6dH6R5R",
                         "candidate": "alien",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/alien_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/alien/README.md",
-                        "votes": 406596.039891,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 406596.039891
                     },
                     {
                         "address": "RDFx92kdrjg2hMdyYXZY58c2EChF5zA2sb",
                         "candidate": "pbca26",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/pbca26_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/pbca26/README.md",
-                        "votes": 294303.6379,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 294303.6379
                     },
                     {
                         "address": "R9hH4fEW9Xy8kxSQF7GQQKJ3SDy1Qy3auQ",
                         "candidate": "shin-ra77",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/shin-ra77_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/shin-ra77/README.md",
-                        "votes": 51000.001,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 51000.001
                     },
                     {
                         "address": "RR7CECKj4aT7BC7Exq6a5AteVoPRyHEFyx",
                         "candidate": "sheeba",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/sheeba_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/sheeba/README.md",
-                        "votes": 402946.299471,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 402946.299471
                     },
                     {
                         "address": "RRqTDgBX3hhKh4JdYFzTcmxegA5n7GQeW7",
                         "candidate": "shamardy",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/shamardy_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/shamardy/README.md",
-                        "votes": 203447.172933,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 203447.172933
                     },
                     {
                         "address": "RSukahoT7BDPNmhWF3ZLHetBUpbRoaaFzq",
                         "candidate": "xenbug",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/xenbug_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/xenbug/README.md",
-                        "votes": 0.951,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 0.951
                     },
                     {
                         "address": "RKPfsdqTYXLPpW2XXbx5kExoT7JUs2pijG",
                         "candidate": "mcrypt",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/mcrypt_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/mcrypt/README.md",
-                        "votes": 114590.876745,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 114590.876745
                     },
                     {
                         "address": "RNBBQDQQJtucpMUa6FKhz17XfTvXzbeWAy",
                         "candidate": "prettygag",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/prettygag_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/prettygag/README.md",
-                        "votes": 50313.99768,
-                        "testnet": [],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 50313.99768
                     },
                     {
                         "address": "REyFgygqWpDtYjKhz214CkA6hrA27d6cxX",
                         "candidate": "who-biz",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/who-biz_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/who-biz/README.md",
-                        "votes": 8647.471596,
-                        "testnet": [
-                            "who-biz1",
-                            "who-biz2"
-                        ],
-                        "veteran": false,
-                        "utxos": []
+                        "votes": 8647.471596
                     },
                     {
                         "address": "RYBMXPrMQGw21bdc3MHNh2ZBwmBiPhitsh",
                         "candidate": "phm87",
                         "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season7/qr_codes/phm87_SH.png",
                         "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season7/candidates/phm87/README.md",
-                        "votes": 333998.391484,
-                        "testnet": [],
-                        "veteran": true,
-                        "utxos": []
+                        "votes": 333998.391484
                     }
                 ]
             }
@@ -1665,7 +1418,7 @@
         "recent_votes": [
             {
                 "txid": "6d6d2cbe0bc496e38ee7ab3af467240ade39daee222679488fd635c5c9d29ecd",
-                "amount": 50000.0,
+                "amount": 50000,
                 "height": 51208,
                 "time": 1682899042,
                 "candidate": "cipi",
@@ -1681,7 +1434,7 @@
             },
             {
                 "txid": "10cdd0ab09a0b306774620c8eaa52a99e94c25a58baf8b89a8e2a2ad563a18f2",
-                "amount": 50000.0,
+                "amount": 50000,
                 "height": 51208,
                 "time": 1682899042,
                 "candidate": "chmex2",
@@ -1729,7 +1482,7 @@
             },
             {
                 "txid": "1faa7d3ce18696d3356b498bd151c800e96ab41c7078eca9983bf5ccf78ed8a3",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51180,
                 "time": 1682898907,
                 "candidate": "chmex2",
@@ -1745,7 +1498,7 @@
             },
             {
                 "txid": "c32b0459227925ff85daab6117a8d8e87e0fbaad3a60bb3ba5019ec7f41b5c48",
-                "amount": 4000.0,
+                "amount": 4000,
                 "height": 51178,
                 "time": 1682898871,
                 "candidate": "artem.pikulin",
@@ -1753,7 +1506,7 @@
             },
             {
                 "txid": "dff8611c30eeea17329ff3f7d4db26daf8782d2c1f9a8696c5c5601a031a4677",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51177,
                 "time": 1682898835,
                 "candidate": "decker",
@@ -1761,7 +1514,7 @@
             },
             {
                 "txid": "60e9f7ec164e80215f9860e4940dadf0555dc21c157ad7b08a003882d853622f",
-                "amount": 10000.0,
+                "amount": 10000,
                 "height": 51177,
                 "time": 1682898835,
                 "candidate": "smdmitry",
@@ -1777,7 +1530,7 @@
             },
             {
                 "txid": "dff8611c30eeea17329ff3f7d4db26daf8782d2c1f9a8696c5c5601a031a4677",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51177,
                 "time": 1682898835,
                 "candidate": "decker",
@@ -1825,7 +1578,7 @@
             },
             {
                 "txid": "af0116a5c8560a000dc763ace0f1231345ab103ba84d8d81f4a718d7e1c63153",
-                "amount": 3000.0,
+                "amount": 3000,
                 "height": 51168,
                 "time": 1682898539,
                 "candidate": "cipi",
@@ -1841,7 +1594,7 @@
             },
             {
                 "txid": "b74ff48030fdaccf9e076211a51e13edc065c033149a83e3242f37456b52474f",
-                "amount": 777.0,
+                "amount": 777,
                 "height": 51167,
                 "time": 1682898451,
                 "candidate": "artem.pikulin",
@@ -1849,7 +1602,7 @@
             },
             {
                 "txid": "1cb6fffb2a2f045a383263f64c795377f755658fe6ed9f255061327e425f3eb7",
-                "amount": 20000.0,
+                "amount": 20000,
                 "height": 51166,
                 "time": 1682898422,
                 "candidate": "cipi",
@@ -1857,7 +1610,7 @@
             },
             {
                 "txid": "b7699d3587892eb436995417cf3455b98454d08524835a279e4f8adc61cd8214",
-                "amount": 55000.0,
+                "amount": 55000,
                 "height": 51163,
                 "time": 1682898400,
                 "candidate": "kmdude",
@@ -1865,7 +1618,7 @@
             },
             {
                 "txid": "43da418f9273f2e6bd423afe1100733be676a93d6d78f77b3d5f694a4c89b756",
-                "amount": 400000.0,
+                "amount": 400000,
                 "height": 51165,
                 "time": 1682898354,
                 "candidate": "nodeone",
@@ -1897,7 +1650,7 @@
             },
             {
                 "txid": "eae7f17f90a069a8f50a5298871f1701e6ca3884f49c723a85872795cdae39c5",
-                "amount": 20000.0,
+                "amount": 20000,
                 "height": 51157,
                 "time": 1682898089,
                 "candidate": "goldenman",
@@ -1905,7 +1658,7 @@
             },
             {
                 "txid": "1fb981b533fbfdb3f9ab7c964aa42952a3341ac1ebfb8919f800cc89f4493f6f",
-                "amount": 5000.0,
+                "amount": 5000,
                 "height": 51157,
                 "time": 1682898089,
                 "candidate": "smdmitry",
@@ -1913,7 +1666,7 @@
             },
             {
                 "txid": "05398769027a111760ebf0d5f320795a53028d301a042c451a0abda527228ad3",
-                "amount": 5000.0,
+                "amount": 5000,
                 "height": 51158,
                 "time": 1682898048,
                 "candidate": "smdmitry",
@@ -1953,7 +1706,7 @@
             },
             {
                 "txid": "d5f8ba83d8786ad558ef4dc3135ac02250c8b7a4d5663296319f019ca3cd5170",
-                "amount": 22000.0,
+                "amount": 22000,
                 "height": 51154,
                 "time": 1682897811,
                 "candidate": "cipi",
@@ -1961,7 +1714,7 @@
             },
             {
                 "txid": "eec82403fc63a08db9dcfd46daab4a86c490c810d56c6c1e8a2e3037c59f79d5",
-                "amount": 42000.0,
+                "amount": 42000,
                 "height": 51154,
                 "time": 1682897811,
                 "candidate": "pbca26",
@@ -1969,7 +1722,7 @@
             },
             {
                 "txid": "29838b2c545b371c66cf7f43c7e8cff5bc9986f03ba9b5577818356ca9073164",
-                "amount": 100.0,
+                "amount": 100,
                 "height": 51152,
                 "time": 1682897694,
                 "candidate": "marmara",
@@ -2001,7 +1754,7 @@
             },
             {
                 "txid": "34ec7af0f28b7294ae3045753a0239aff4dc057c2d7d2fc67ae7122f831ff1a1",
-                "amount": 50000.0,
+                "amount": 50000,
                 "height": 51149,
                 "time": 1682897635,
                 "candidate": "shin-ra77",
@@ -2009,7 +1762,7 @@
             },
             {
                 "txid": "f9992e53f754890f4007109b9aec8a5a8d74ee756500bbb7f02c2919c9885a2b",
-                "amount": 112658.0,
+                "amount": 112658,
                 "height": 51146,
                 "time": 1682897367,
                 "candidate": "gcharang",
@@ -2017,7 +1770,7 @@
             },
             {
                 "txid": "b1e9c8ff12f8de0d25c37fb628ea07d33e5edcb5e70b9934e812dbc9e0490863",
-                "amount": 20000.0,
+                "amount": 20000,
                 "height": 51144,
                 "time": 1682897229,
                 "candidate": "smdmitry",
@@ -2041,7 +1794,7 @@
             },
             {
                 "txid": "69485cb868b5375ee228868d6dd199a95ad1c27615c547f2c98524c598d9b7ba",
-                "amount": 10000.0,
+                "amount": 10000,
                 "height": 51141,
                 "time": 1682897109,
                 "candidate": "cipi",
@@ -2049,7 +1802,7 @@
             },
             {
                 "txid": "2189f12f737b09cf2ea734854fa98886f2ce93ee6d3a16baf6273c116b68216d",
-                "amount": 50000.0,
+                "amount": 50000,
                 "height": 51141,
                 "time": 1682897109,
                 "candidate": "smdmitry",
@@ -2065,7 +1818,7 @@
             },
             {
                 "txid": "a0a0ce599757f83950d9c4826fb149d2422965d3a12b46ff66a9efe355123d80",
-                "amount": 51807.0,
+                "amount": 51807,
                 "height": 51134,
                 "time": 1682896779,
                 "candidate": "pbca26",
@@ -2073,7 +1826,7 @@
             },
             {
                 "txid": "75e0e9daaa23d0a8e89188d9093eb09f01f3080f8f812c47b6f8e860ddfccb64",
-                "amount": 1000.0,
+                "amount": 1000,
                 "height": 51131,
                 "time": 1682896655,
                 "candidate": "strob",
@@ -2097,7 +1850,7 @@
             },
             {
                 "txid": "e7a7d96dc161d076a51573c1ad353c16ba091d9615ed62a966719265bb9d51b1",
-                "amount": 5500.0,
+                "amount": 5500,
                 "height": 51129,
                 "time": 1682896492,
                 "candidate": "alright",
@@ -2105,7 +1858,7 @@
             },
             {
                 "txid": "1a7e114120ed9da8959839cfadb098137848698efa33f8a04b33eaf3c7deccd7",
-                "amount": 5500.0,
+                "amount": 5500,
                 "height": 51128,
                 "time": 1682896418,
                 "candidate": "decker",
@@ -2113,7 +1866,7 @@
             },
             {
                 "txid": "4c45f17c3ddab4383b47b0805796dea60abd7c64698403cd8a4e1630e5fbb365",
-                "amount": 5500.0,
+                "amount": 5500,
                 "height": 51128,
                 "time": 1682896418,
                 "candidate": "dragonhound",
@@ -2121,7 +1874,7 @@
             },
             {
                 "txid": "1c27efdef878514d8e46728dc6b6ae2435503ba2559082ce4d21ade81561ae6d",
-                "amount": 5500.0,
+                "amount": 5500,
                 "height": 51128,
                 "time": 1682896418,
                 "candidate": "cipi",
@@ -2129,7 +1882,7 @@
             },
             {
                 "txid": "0e7c6f45d379a3376fd699abaa99b5abe0293e052c0890795934a01c1a019375",
-                "amount": 5700.0,
+                "amount": 5700,
                 "height": 51128,
                 "time": 1682896418,
                 "candidate": "caglarkaya",
@@ -2137,7 +1890,7 @@
             },
             {
                 "txid": "29b1e584254e5b0f374b4f4ceba94bf1910a05bef6c4035b86b24e9b7d4ef0b0",
-                "amount": 5500.0,
+                "amount": 5500,
                 "height": 51128,
                 "time": 1682896418,
                 "candidate": "ca333",
@@ -2145,7 +1898,7 @@
             },
             {
                 "txid": "5999c991552017a2b31354fccf1f771da4e372fe125c5330258ad4ae1a35eb99",
-                "amount": 3000.0,
+                "amount": 3000,
                 "height": 51127,
                 "time": 1682896245,
                 "candidate": "dragonhound",
@@ -2153,7 +1906,7 @@
             },
             {
                 "txid": "38d09c3d9ade454df1ac69f3f8980cf0e8282a66edb3dc00c74e7e3dcd586118",
-                "amount": 1000.0,
+                "amount": 1000,
                 "height": 51127,
                 "time": 1682896245,
                 "candidate": "alright",
@@ -2161,7 +1914,7 @@
             },
             {
                 "txid": "fe172f756e269f6b655250985c981a07664cc2959e06e8ee5a8387a6a10cc714",
-                "amount": 6000.0,
+                "amount": 6000,
                 "height": 51125,
                 "time": 1682896118,
                 "candidate": "alright",
@@ -2169,7 +1922,7 @@
             },
             {
                 "txid": "58a6d0e02705132f830977180c51a9bdf4d96c97515942421118d4d5665d47b6",
-                "amount": 3000.0,
+                "amount": 3000,
                 "height": 51123,
                 "time": 1682896092,
                 "candidate": "decker",
@@ -2177,7 +1930,7 @@
             },
             {
                 "txid": "8b249b6a95f9f0a9adf2dc8ae679bc5b4db8806c6a60eec1357285e0b0e2006d",
-                "amount": 3000.0,
+                "amount": 3000,
                 "height": 51123,
                 "time": 1682896092,
                 "candidate": "cipi",
@@ -2185,7 +1938,7 @@
             },
             {
                 "txid": "5ae1a5f3bf58128598c2847ba8a734d10d1eefe28b8dac56f7566aad88822fe0",
-                "amount": 3000.0,
+                "amount": 3000,
                 "height": 51123,
                 "time": 1682896092,
                 "candidate": "caglarkaya",
@@ -2193,7 +1946,7 @@
             },
             {
                 "txid": "0a2940107d4c9e738497ae7f47e767b132bdedfdabfa0548a8c863bb65bce44f",
-                "amount": 5000.0,
+                "amount": 5000,
                 "height": 51123,
                 "time": 1682896092,
                 "candidate": "webworker01",
@@ -2201,7 +1954,7 @@
             },
             {
                 "txid": "a796dad99d81b491a2fac72fdc0bbc694ee7b30dfd94bcf609bbeeb816c16847",
-                "amount": 5000.0,
+                "amount": 5000,
                 "height": 51123,
                 "time": 1682896092,
                 "candidate": "ca333",
@@ -2217,7 +1970,7 @@
             },
             {
                 "txid": "9eba8725a2a6c959e4ae3944b045ab67560347dcfafe4938e43d851533bb0af4",
-                "amount": 30000.0,
+                "amount": 30000,
                 "height": 51119,
                 "time": 1682895923,
                 "candidate": "decker",
@@ -2225,7 +1978,7 @@
             },
             {
                 "txid": "75775f1fff7052d031d90ef1aea149738be90af4009f848c1e4d8d9179b22943",
-                "amount": 27500.0,
+                "amount": 27500,
                 "height": 51119,
                 "time": 1682895923,
                 "candidate": "caglarkaya",
@@ -2233,7 +1986,7 @@
             },
             {
                 "txid": "11f26e4b0dcb8a8f93743b40ab65620a95a10fa5bcb939b34b5d6aebde21ce91",
-                "amount": 10000.0,
+                "amount": 10000,
                 "height": 51119,
                 "time": 1682895923,
                 "candidate": "webworker01",
@@ -2241,7 +1994,7 @@
             },
             {
                 "txid": "d377f73c716578a8ce1534560e45a641ff609328a2b55eb632b70ecba7084c55",
-                "amount": 25000.0,
+                "amount": 25000,
                 "height": 51118,
                 "time": 1682895896,
                 "candidate": "dragonhound",
@@ -2249,7 +2002,7 @@
             },
             {
                 "txid": "0ddc026ca8347e1c741a18fe8a9127ffc2bc3f0469c1b3d7d3a6a04ca0bb7a12",
-                "amount": 25000.0,
+                "amount": 25000,
                 "height": 51118,
                 "time": 1682895896,
                 "candidate": "cipi",
@@ -2257,7 +2010,7 @@
             },
             {
                 "txid": "81269b8d7f613aad25605c7a12d8980d5a09a8c471fe2bf5717302109009718d",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51118,
                 "time": 1682895896,
                 "candidate": "webworker01",
@@ -2265,7 +2018,7 @@
             },
             {
                 "txid": "5bf265e8bbaed6592fd6750a4768d028da62211daad2205c588e8e0a3f47309e",
-                "amount": 25000.0,
+                "amount": 25000,
                 "height": 51118,
                 "time": 1682895896,
                 "candidate": "ca333",
@@ -2281,7 +2034,7 @@
             },
             {
                 "txid": "d3bcdeecc678157712848d20eff8c3c0e1a5bb10976cb1c556af7bba650804a3",
-                "amount": 200000.0,
+                "amount": 200000,
                 "height": 51114,
                 "time": 1682895704,
                 "candidate": "sheeba",
@@ -2289,7 +2042,7 @@
             },
             {
                 "txid": "bf3e7e6efcd171979e328709bbb40da6e52ea2a9da3ce2320c1517aebf1005e6",
-                "amount": 55555.0,
+                "amount": 55555,
                 "height": 51112,
                 "time": 1682895667,
                 "candidate": "decker",
@@ -2297,7 +2050,7 @@
             },
             {
                 "txid": "4428e77c902aef4b041284afe588804e887bd4f981d1a542f80f6f89029670f9",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51111,
                 "time": 1682895627,
                 "candidate": "alright",
@@ -2305,7 +2058,7 @@
             },
             {
                 "txid": "934aee5155d7adce04e5eeb60a8c2a6d0724f5e94f4ee18d6b78a9a3c6b36d89",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51109,
                 "time": 1682895613,
                 "candidate": "dragonhound",
@@ -2313,7 +2066,7 @@
             },
             {
                 "txid": "4591903ddd6b14f81b2e0a5fa443d144b21660c242e91fdeb596117012d7ca4d",
-                "amount": 100000.0,
+                "amount": 100000,
                 "height": 51109,
                 "time": 1682895613,
                 "candidate": "cipi",
@@ -2321,7 +2074,7 @@
             },
             {
                 "txid": "4bc8cbd210f0143e7778646b754e2f40528bcbef36c088dfe64488f223c6b533",
-                "amount": 222222.0,
+                "amount": 222222,
                 "height": 51107,
                 "time": 1682895578,
                 "candidate": "ca333",
@@ -2345,7 +2098,7 @@
             },
             {
                 "txid": "6768c459de90a65abb9b5cc963533ba39fd8dbb88cde44ebfd60b5c9b726c475",
-                "amount": 270000.0,
+                "amount": 270000,
                 "height": 51095,
                 "time": 1682895212,
                 "candidate": "webworker01",
@@ -2369,7 +2122,7 @@
             },
             {
                 "txid": "d1045ea7f0cf81c3e25d53c68fe8efa17a23627c4762517386ec0f7e19e994b0",
-                "amount": 10000.0,
+                "amount": 10000,
                 "height": 51093,
                 "time": 1682895192,
                 "candidate": "alienx",
@@ -2377,7 +2130,7 @@
             },
             {
                 "txid": "7c1619fd6149e8c61d0b502c9740522a4258727b222dd6fb6e394cede01f7c25",
-                "amount": 12000.0,
+                "amount": 12000,
                 "height": 51093,
                 "time": 1682895192,
                 "candidate": "cipi",
@@ -2385,7 +2138,7 @@
             },
             {
                 "txid": "42f853ffc2ab1e63e60e0b05638948b7d4af46ee46b20bc917f06a2b2d94bf8f",
-                "amount": 1000.0,
+                "amount": 1000,
                 "height": 51094,
                 "time": 1682895174,
                 "candidate": "cipi",
@@ -2393,7 +2146,7 @@
             },
             {
                 "txid": "53f08d009f1e39311f51c6f4b5fcd1aef94320f83bada1851921f78009874ae3",
-                "amount": 175000.0,
+                "amount": 175000,
                 "height": 51094,
                 "time": 1682895174,
                 "candidate": "alright",
@@ -2401,7 +2154,7 @@
             },
             {
                 "txid": "cb02a2fab947679bd61c2698801ce448c8351b8a2fc537f7d5cfb3ef94b4aa81",
-                "amount": 30000.0,
+                "amount": 30000,
                 "height": 51091,
                 "time": 1682895058,
                 "candidate": "chmex",
@@ -2409,7 +2162,7 @@
             },
             {
                 "txid": "a4b91acf51cb3095078a92ce91772314a902a33f9f71f7146e6e1d88a45dad57",
-                "amount": 177000.0,
+                "amount": 177000,
                 "height": 51088,
                 "time": 1682894958,
                 "candidate": "chmex",
@@ -2417,7 +2170,7 @@
             },
             {
                 "txid": "898ff56eea3d089fb76796d7b4870754d6fe5baaafb96a980a252f6af8fcc564",
-                "amount": 175000.0,
+                "amount": 175000,
                 "height": 51087,
                 "time": 1682894917,
                 "candidate": "dragonhound",
@@ -2425,7 +2178,7 @@
             },
             {
                 "txid": "842c0533a72ce66289c466311fac68c696735a9e794bd36ebd3c34c65ccc2544",
-                "amount": 148678.0,
+                "amount": 148678,
                 "height": 51086,
                 "time": 1682894911,
                 "candidate": "chmex",
@@ -2433,7 +2186,7 @@
             },
             {
                 "txid": "813400d2bf3bb017b3cf1ec03ba13aee1e058a12b189dfc2e75d30f7b7026923",
-                "amount": 170000.0,
+                "amount": 170000,
                 "height": 51086,
                 "time": 1682894911,
                 "candidate": "cipi",
@@ -2441,7 +2194,7 @@
             },
             {
                 "txid": "ae319602aa7ee924427ac318b279bd81464614eb2c5b29948553311190ca235d",
-                "amount": 15000.0,
+                "amount": 15000,
                 "height": 51084,
                 "time": 1682894876,
                 "candidate": "cipi",
@@ -2449,7 +2202,7 @@
             },
             {
                 "txid": "a60023848416c399bf1e9e30fe5b020f7daeaf84f6091c8781c207adada7452d",
-                "amount": 153879.0,
+                "amount": 153879,
                 "height": 51071,
                 "time": 1682894043,
                 "candidate": "chmex",
@@ -2477,7 +2230,7 @@
                     {
                         "name": "Yes",
                         "text": "Reduce block reward from 3 KMD to 1 KMD",
-                        "votes": 0,
+                        "votes": 13555466.524659,
                         "address": "RReduceB1ockRewardXXXXXXXXXXEsozaY",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RReduceB1ockRewardXXXXXXXXXXEsozaY.png",
                         "utxos": []
@@ -2485,7 +2238,7 @@
                     {
                         "name": "No",
                         "text": "Keep block reward as 3 KMD",
-                        "votes": 0,
+                        "votes": 598558.643599,
                         "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
                         "utxos": []
@@ -2497,20 +2250,390 @@
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
         "ends_at": 1714780799,
-        "overtime_ended_at": null,
-        "first_overtime_block": null,
-        "results_official": null,
-        "final_ntx_block": null,
-        "current_block": {
-            "height": 14494,
-            "hash": "090b413081342a95dce123a88e44ac07ae6e9a3486d477dfde4732a3a1c07ddd",
-            "time": 1713186132
+        "overtime_ended_at": 1714830011,
+        "first_overtime_block": {
+            "height": 41027,
+            "hash": "0a3e292f9e39ba27343d438df288a9a28d5baa9e692f7e0648af2ae64ef5bd73",
+            "time": 1714780839
         },
-        "updated_time": 1713186236,
-        "status": "new",
-        "recent_votes": [],
-        "sum_votes": 0,
-        "count_votes": 0
+        "results_official": null,
+        "final_ntx_block": {
+            "height": 41032,
+            "hash": "0160286a6811310644a2bbff45b8ebda21b7d832b91a150395ba7ec0244d2c2d",
+            "time": 1714781085
+        },
+        "current_block": {
+            "height": 95796,
+            "hash": "0983507f390d8ae9cb434d80be39e898abe579a923a2e485b34428204c1cd754",
+            "time": 1718587433
+        },
+        "updated_time": 1718590108,
+        "status": "historical",
+        "recent_votes": [
+            {
+                "txid": "7059615ab0ae5170a010469121341e4ce76d812787bd28467e7576150f8c7950",
+                "amount": 68747.86500684,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "d73bd5332baca809c7f9d35f18a1577d7b15873fee2916b7271e218188457e9f",
+                "amount": 32813.07262647,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "f07009a5b66758562ff3e734672c9d8ce5d0773f46fe840607a0cc14abf47616",
+                "amount": 29530.19114579,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "6ae8ed4afe402547a8b9c1e73ec288d927cc055aeb4049388ed90966ac909df1",
+                "amount": 42264.96305748,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "8a9220c943536cf2f797de86f2132188d1d89bb937b8899c5ba450edb6e1779e",
+                "amount": 106907.34187979,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "2ff8a5f8b47d815d03404a650ae53af4d0d32fe82937c89abd6bb9c6c2dec58e",
+                "amount": 11043.94381844,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "24279df48a998811496a772a5e78daf9d696f1082c7f6faee85939a1812683bc",
+                "amount": 64953.33705129,
+                "height": 41019,
+                "time": 1714780503,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "7df43428caf47a27028ffcc358a0d6e6f0a76ec1ef1b552a327c782c9c0f10b8",
+                "amount": 35894.47976871,
+                "height": 41014,
+                "time": 1714780055,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "8ccbf8a0b4ba484793e7dfb8c503665e2e0228399179c134b76f029de5bf32bc",
+                "amount": 76787.44999673,
+                "height": 41011,
+                "time": 1714779874,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "303840a7636d3792d319824b5df91d67dbd9dfa0d5805dd953ef550942d2a1bd",
+                "amount": 6803.70218866,
+                "height": 41011,
+                "time": 1714779874,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "d3a1875ad5cd07545b3f7ecb64a4a071b7900b707a027efae1829e8056a7e86e",
+                "amount": 542316.0216969,
+                "height": 40955,
+                "time": 1714776205,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "1ab8b7ff2526e38afea1e16c2acb9a1c18cc53ce10314ab6e4b010ef4f7fa21e",
+                "amount": 232438.63437781,
+                "height": 40763,
+                "time": 1714764798,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "430a27cd9263265624cccdf06ea3a616c153b2ec1ec533144a3b9153a35696d3",
+                "amount": 111923.9360314,
+                "height": 40754,
+                "time": 1714764376,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "50fa3b7f91786cb61a8d65fec7f69d3729b0f4e30a3d43b0a2b33d76349f2dae",
+                "amount": 17100,
+                "height": 40333,
+                "time": 1714738867,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "e9fe6443a89924cb14a6e5ef85706350cf49cde92afb53424b4c87fa6635d81a",
+                "amount": 4189.36947659,
+                "height": 40290,
+                "time": 1714736284,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "1c0b666c064354e1146e3b1f8454817ba8204b2aae5d01d8799d6eb9dddc17ec",
+                "amount": 140341.99806741,
+                "height": 39860,
+                "time": 1714710954,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "6e00a50ea0c137bad1051d3b8b7d5fe6e17a4e14491ca48862d4bb51b80a27c2",
+                "amount": 206487.88581175,
+                "height": 38760,
+                "time": 1714644377,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "16dc183447aff80c938dcc3ecabd02586614939a3b1a8fc3260a44ba8aabdf8c",
+                "amount": 4979.49794717,
+                "height": 38671,
+                "time": 1714639139,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "2789112493fcb8ad82141bd8f9c6a2c3f4cd3c1742cda3f792ef9b906231c54c",
+                "amount": 15775.35298811,
+                "height": 38570,
+                "time": 1714633046,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "314de1b6028a18b957e55d7b1af78e694404b03b8f7978bcd417e27374fc93fd",
+                "amount": 251812.96127076,
+                "height": 34955,
+                "time": 1714415595,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "b91260417b585e5742fdf342b91dc8ac131c576ba7dffc863d24cca8e65bccf6",
+                "amount": 11872457.99188616,
+                "height": 32168,
+                "time": 1714248184,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "39652d73f8dcc7d29c10317e897ce81dbdbe5fb3af9a49eadf9b43d6c1104f66",
+                "amount": 4142.93969642,
+                "height": 30581,
+                "time": 1714152447,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "60d289fde7daf865cd00641d8ff3edebaef4c858207f6ecf8f09951530910fb7",
+                "amount": 205.33829717,
+                "height": 29446,
+                "time": 1714084726,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "1eebac784c6116f334931a2490706d16cd13fec2135fd9107c08eaf255486089",
+                "amount": 836.3293606,
+                "height": 29104,
+                "time": 1714063686,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "a51cf8d84c8901da3733c17deda227bd4f44a9596d87053ec6bd8ad86c115889",
+                "amount": 10000.51020973,
+                "height": 28455,
+                "time": 1714024758,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "1ddf850a990ea0e3d5428ff0de469240776c8ba0cb2d456abddaf428052c39e0",
+                "amount": 526.34740956,
+                "height": 27620,
+                "time": 1713974870,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "47d40fa37aa33ab4716cf3d618c1dd2fb6c7b785e3e7b31ff65a4a83aca87c12",
+                "amount": 501.13938814,
+                "height": 27450,
+                "time": 1713964556,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "acde8d68eb2463b6d9b0b816a7d1461a59d2e752e5042d1cf1fbd4be36e79183",
+                "amount": 1.0042508,
+                "height": 26560,
+                "time": 1713911264,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "cceb0cd284eb529d39090615b0d26bed9b6e18811bab1f57dc7ceaeed2982e21",
+                "amount": 2349.99399,
+                "height": 25743,
+                "time": 1713861803,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "7e73ba4a15f557cb326a10c2f2f3e2378fae48b7336b741532a405215fd9d9a6",
+                "amount": 11.67925193,
+                "height": 25206,
+                "time": 1713829414,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "ce6db1499115f372a3c93a49cc6cc0a156a05a4a797246fdb10963c280578fe3",
+                "amount": 1904.572768,
+                "height": 25116,
+                "time": 1713824201,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "78683c98135313487d31c884dd6b59ec60be6a71dbe802abf9e6b8bfb25a7095",
+                "amount": 80619.84982605,
+                "height": 24987,
+                "time": 1713816489,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "fe138846a53e177fa608bba7a44d64a6dac29e2eb0e2d45a4c0b30da2e99d384",
+                "amount": 116107.2744086,
+                "height": 24864,
+                "time": 1713809085,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "fd3dabead8ad65d341b5254b2d995c60ca884b8c106947b1571ddc35439effdb",
+                "amount": 0.81098976,
+                "height": 24815,
+                "time": 1713806073,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "8aea3c3ca9e64fdcd25f9148956eb1b1325d96340eaba2813e5c9a5dac22b9d1",
+                "amount": 5090.27134602,
+                "height": 24327,
+                "time": 1713776723,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "1da025c651d4e9f9208d5ca67f999593c5f5704a4ce9705975a058b24a9871c6",
+                "amount": 0.99998,
+                "height": 24326,
+                "time": 1713776671,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "d682cae021285b433f0d40d9b6710c0fc54048279ce6ebf749ef371816ee1fe8",
+                "amount": 30001.47819752,
+                "height": 24148,
+                "time": 1713766334,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "6bcf2a95701add67dc5807e2dccfee602cf03a21b7d288ce1a6f68bdbc60a35c",
+                "amount": 2499.2531665,
+                "height": 24120,
+                "time": 1713764432,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "c5cf0a345bdcc5649a8f7e9116375baee0c83d2b4c66990d55119eb009ae1756",
+                "amount": 156.90823793,
+                "height": 24085,
+                "time": 1713762097,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "a9f8fbee91ad2bdba31ad2171082c45374386418b5c87752b2abdafb252a046e",
+                "amount": 2937.00363662,
+                "height": 23716,
+                "time": 1713740031,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "e21e99b926a96c8cbcf05450ae334a31860601243b0d3811467180baa955b8bb",
+                "amount": 140.03851846,
+                "height": 23676,
+                "time": 1713737760,
+                "candidate": "No",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "11340233215cb00dbe9793d57418120531777477f2149a7c5c0ce4697d9dd4cb",
+                "amount": 20321.42723394,
+                "height": 23231,
+                "time": 1713710953,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "a6f254a50f32c3a107bee0cb41272fef8d4ab5a357d8b73c1a7d790804cd34ab",
+                "amount": 100,
+                "height": 23226,
+                "time": 1713710691,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "fffc807ad1b0bf1e9473d04a438bdaf96e395448440dff264ba229610e0f7377",
+                "amount": 0.001,
+                "height": 15957,
+                "time": 1713273935,
+                "candidate": "Yes",
+                "region": "KIP0002"
+            },
+            {
+                "txid": "fffc807ad1b0bf1e9473d04a438bdaf96e395448440dff264ba229610e0f7377",
+                "amount": 0.001,
+                "height": 15957,
+                "time": 1713273935,
+                "candidate": "No",
+                "region": "KIP0002"
+            }
+        ],
+        "sum_votes": 14154025.168258,
+        "count_votes": 45,
+        "final_ntx_block_tx": "1c04160d68b91e3b7032ae27085d4d5af43934a49baa834f21a46bb84be98bc0"
     },
     "KIP0003": {
         "explorer": "https://kip0003.kmdexplorer.io",
@@ -2521,7 +2644,7 @@
                     {
                         "name": "No Change",
                         "text": "No change to transaction fees",
-                        "votes": 0,
+                        "votes": 1311915.054719,
                         "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
                         "utxos": []
@@ -2529,7 +2652,7 @@
                     {
                         "name": "Burn, but no transaction fee increase",
                         "text": "Do not increase transaction fees and burn 100% of existing fees.",
-                        "votes": 0,
+                        "votes": 12218959.573843,
                         "address": "RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurn1XFeeXXXXXXXXXXXXXXXXXXrbe6NL.png",
                         "utxos": []
@@ -2537,7 +2660,7 @@
                     {
                         "name": "Increase 10x with Burn",
                         "text": "Increase transaction fees by 10x and burn 100% of transaction fees.",
-                        "votes": 0,
+                        "votes": 482285.711007,
                         "address": "RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnTenXFeeXXXXXXXXXXXXXXXXSh3yBe.png",
                         "utxos": []
@@ -2545,7 +2668,7 @@
                     {
                         "name": "Increase 100x with Burn",
                         "text": "Increase transaction fees by 100x and burn 100% of transaction fees.",
-                        "votes": 0,
+                        "votes": 25400.926181,
                         "address": "RBurnHundredXFeeXXXXXXXXXXXXj2Furm",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RBurnHundredXFeeXXXXXXXXXXXXj2Furm.png",
                         "utxos": []
@@ -2553,7 +2676,7 @@
                     {
                         "name": "Increase 10x without Burn",
                         "text": "Increase transaction fees by 10x and do not burn the transaction fees.",
-                        "votes": 0,
+                        "votes": 83153.910497,
                         "address": "RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnTenXFeeXXXXXXXXXXXXXX1PMoXA.png",
                         "utxos": []
@@ -2561,7 +2684,7 @@
                     {
                         "name": "Increase 100x without Burn",
                         "text": "Increase transaction fees by 100x and do not burn the transaction fees.",
-                        "votes": 0,
+                        "votes": 31906.051966,
                         "address": "RNoBurnHundredXFeeXXXXXXXXXXiG5upG",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoBurnHundredXFeeXXXXXXXXXXiG5upG.png",
                         "utxos": []
@@ -2573,31 +2696,425 @@
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
         "ends_at": 1714780799,
-        "overtime_ended_at": null,
-        "first_overtime_block": null,
-        "results_official": null,
-        "final_ntx_block": null,
-        "current_block": {
-            "height": 14485,
-            "hash": "0a271ebdd3f7b4f28f7829d3c7e6f1de11ff1036ff6ba0c4df66fa4f51eb5aa4",
-            "time": 1713186221
+        "overtime_ended_at": 1714829929,
+        "first_overtime_block": {
+            "height": 41018,
+            "hash": "04f40059f9f8b611e4a182546d77d441ccca65ce1f9b8eb2f095039b58e3db63",
+            "time": 1714780910
         },
-        "updated_time": 1713186213,
-        "status": "new",
-        "recent_votes": [],
-        "sum_votes": 0,
-        "count_votes": 0
+        "results_official": null,
+        "final_ntx_block": {
+            "height": 41022,
+            "hash": "04100df56ec8005f5f6e2e133debf77061b12ca6a578116f8a0776f5cf1112c0",
+            "time": 1714781104
+        },
+        "current_block": {
+            "height": 95555,
+            "hash": "0bab1d3acd4e102acbba95334ecbf141c0a722589429d7f45238dd2ed0ee0090",
+            "time": 1718587937
+        },
+        "updated_time": 1718590108,
+        "status": "historical",
+        "recent_votes": [
+            {
+                "txid": "b76b5e7ee390f23a47391c20d8d9eed3b9d24c0bcb97e3ff93b9031eb4d9b78e",
+                "amount": 76787.44999673,
+                "height": 40965,
+                "time": 1714777628,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "384864cf828faec96cd5823ce8260705d1da179d6cb9f9c01e0da82634dd9880",
+                "amount": 6803.70218866,
+                "height": 40963,
+                "time": 1714777543,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "525c214c55ef6761ecebd1acf702563e86f06eabc1717f8dc4a3dcb3519db49b",
+                "amount": 64953.33705129,
+                "height": 40960,
+                "time": 1714777411,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "f04df0886c85fe319a5f1b34ad5d11dbf832e535cf6edb1d4ebdc8651f09f756",
+                "amount": 106907.34187979,
+                "height": 40960,
+                "time": 1714777411,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "4420a132da3d6421f3326e5e09e2a1f53f75e1fe29ba1030c3f8636ace422050",
+                "amount": 11043.94381844,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "da2d26fd5966bb7be0758bc0a80c9e858258e767b0081d8833c027a1b09b3e83",
+                "amount": 68747.86500684,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "d007dddb4e9b35ca379e276754480aba3e13ff0ebe9c3bb91cc3e133278524f7",
+                "amount": 29530.19114579,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "dd17db3b0fff545a0cae96b0ece51dea356412ace21f689e02f6d59786958f13",
+                "amount": 35894.47976871,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "20a4ac00dec3b38310ba4d0d85a49eb8c3100b2efeafe3963d6215a2945106db",
+                "amount": 42264.96305748,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "6fa3cf815efe32697378d0b944c0ed2c0962da0a18abcafc271510a9e167fd6f",
+                "amount": 32813.07262647,
+                "height": 40959,
+                "time": 1714777349,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "ff64946ee9f6815e0fcbf87f0631aa74bcde13bbb26857f2e214358b2a43a9ed",
+                "amount": 542316.0216969,
+                "height": 40947,
+                "time": 1714776629,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "df7dd991094f45b79ad497915ef2b1def487dc462ef3604f01b8ba7ebabf390e",
+                "amount": 232438.63437781,
+                "height": 40752,
+                "time": 1714764869,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "f6bedf18455429da332fb03a4838441d818821461d351fa98e78fee41ba1584a",
+                "amount": 111923.9360314,
+                "height": 40746,
+                "time": 1714764412,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "b5cc7e1c165de462c1206c29b9077ddab4b7430e479f09bc2d5bb4f00afe1d75",
+                "amount": 17100,
+                "height": 40318,
+                "time": 1714738817,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "68f6a58ef823db28615b818beaebf8dd18a632d6b07ad7c4b6888ef2bc9fb201",
+                "amount": 4189.36947659,
+                "height": 40279,
+                "time": 1714736481,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "15c6b5b675e8d2f5b5d291bb22d34f84b49f7f2bbc4b94fba3f04438a54e094c",
+                "amount": 140341.99806741,
+                "height": 39853,
+                "time": 1714710926,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "448917621c22e75f72997f86fad6f0bf1eb52099978d6f16ffc3c8ee0fd468d6",
+                "amount": 206487.88581175,
+                "height": 38749,
+                "time": 1714644740,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "53fed62f67ea3ea3ee72bd8cda49364ddde20094bc12388f92cab9bbb757822f",
+                "amount": 4979.49794717,
+                "height": 38658,
+                "time": 1714639188,
+                "candidate": "Increase 100x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "a452a2af45d4ca0cebed1fe09557a05c26dc5a40a55ed3052b331f1c40f8f38d",
+                "amount": 15775.35298811,
+                "height": 38557,
+                "time": 1714632975,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "a7fea3fa7a3d6f6d4b8c665db086b93a3d91e5fba5911690e68bf14fb73b38fe",
+                "amount": 251812.96127076,
+                "height": 34939,
+                "time": 1714415701,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "6f36daca78a8e3dbd3374058011b87c8337a73e2ce8c8d828659a5ad067200a7",
+                "amount": 2534.05967078,
+                "height": 33133,
+                "time": 1714307019,
+                "candidate": "Increase 10x without Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "785ad7d0ed84310156c539c83786606598b0dcbb0eb2924cbe4a4e775a6d27f8",
+                "amount": 11872457.99188616,
+                "height": 32163,
+                "time": 1714248687,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "6ce2f9bb5839ba0ec3ca66730e950a1d472cac702f335aacc6659accf3bffa18",
+                "amount": 4142.93969642,
+                "height": 30553,
+                "time": 1714152059,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "205b4bb434903271f4a37940072452ed7ee6955ddf3763ad5d6d7c4a41c7916b",
+                "amount": 205.33829717,
+                "height": 29423,
+                "time": 1714084361,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "338dd9181ee0d10fa32fad59bd3a84268595432f31fe68b0ba55f6d8a7d908f9",
+                "amount": 836.3293606,
+                "height": 29085,
+                "time": 1714063986,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "5d07a97fee137892b6f05e193804153d12e40654993af84556a2740360d68d58",
+                "amount": 10000.51020973,
+                "height": 28443,
+                "time": 1714025115,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "5e80d3228f5d52a52e527444428cf74964f986f19de620b7ae6184b1d085863a",
+                "amount": 526.34740956,
+                "height": 27605,
+                "time": 1713974917,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "0dbff77ed7b5262ad8a405e7c81c8bd48a22839a2fc65663c3386001e9e6e7d8",
+                "amount": 501.13938814,
+                "height": 27439,
+                "time": 1713964691,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "076e7091db002db3cb21d0178d42bac2ae70963f7248edb45c0e5ae865c57aaf",
+                "amount": 1.0042508,
+                "height": 26543,
+                "time": 1713911283,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "8a461f8a2b1f7c7e953c472e2d877b805ef0a369cfdd76eaee73cb1664579d03",
+                "amount": 2349.99399,
+                "height": 25731,
+                "time": 1713861778,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "8f80559409165d1808c67e73460eedf6522830da5e80f00cf8c237e07e2bbce8",
+                "amount": 11.67925193,
+                "height": 25186,
+                "time": 1713829431,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "6719b30e49cc9e511d32b904317986d57110f26926f603c7e731a2843abdbb73",
+                "amount": 1904.572768,
+                "height": 25103,
+                "time": 1713824447,
+                "candidate": "Increase 100x without Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "f0f63794228eceb5cc218c00e88db57149d069a057a9efeb35c436b99eda2368",
+                "amount": 80619.84982605,
+                "height": 24970,
+                "time": 1713816570,
+                "candidate": "Increase 10x without Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "f68daa75f7367105fb6ff8894ab51f0e282cbe0cf4927cc982421e6a55f49151",
+                "amount": 116107.2743086,
+                "height": 24850,
+                "time": 1713809245,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "d3a262f801389d469e1e6bdab10d375e27abde6e1df1c89732e506b57c76a687",
+                "amount": 0.81098976,
+                "height": 24798,
+                "time": 1713806123,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "7e911bb47b20bf54984f19e87baf4a6f431402ef41112cafc6f7617298b956d1",
+                "amount": 5090.27134602,
+                "height": 24322,
+                "time": 1713777207,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "d05a6f25c98c9ca18277a4bd8bb1b0249f08ac308c07ddbd4e129c51e9d38526",
+                "amount": 30001.47819752,
+                "height": 24145,
+                "time": 1713766678,
+                "candidate": "Increase 100x without Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "a2a68b44e8fda9bb934d3baf9abf2b1033e445172c71a5e0552677c3b60c7bf7",
+                "amount": 2499.2531665,
+                "height": 24113,
+                "time": 1713764540,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "7fb69c4fa83798773f01559a2e103af84f96419b97ea8a8fa960deaa19e37a8e",
+                "amount": 156.90823793,
+                "height": 24074,
+                "time": 1713762243,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "1cdf36fa5d24c8d43a15e350d38f6abb86bb035f591160b77f08296f40e6164f",
+                "amount": 140.03851846,
+                "height": 23667,
+                "time": 1713737850,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "1d79e11bd6069ece1fe1a99cb24221abb3dc411b5f08ba712a90e835102d8dfb",
+                "amount": 20321.42723394,
+                "height": 23226,
+                "time": 1713711269,
+                "candidate": "Increase 100x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "9b8a2011a5869c0b337bde55919a4b16d4b5179390dc769d1b4bbb0de91c1f2d",
+                "amount": 100,
+                "height": 23221,
+                "time": 1713711011,
+                "candidate": "Increase 100x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "No Change",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "Burn, but no transaction fee increase",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "Increase 10x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "Increase 100x with Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "Increase 10x without Burn",
+                "region": "KIP0003"
+            },
+            {
+                "txid": "38e7e5717477ff29438b6da5a329edd053e261e4c547d38fa9a8c4eac771e6a4",
+                "amount": 0.001,
+                "height": 15946,
+                "time": 1713274046,
+                "candidate": "Increase 100x without Burn",
+                "region": "KIP0003"
+            }
+        ],
+        "sum_votes": 14153621.228212,
+        "count_votes": 48,
+        "final_ntx_block_tx": "325cfa4f00b55ffe9af5733b0db16449b487d260aadd73e2f73024146a6cd3db"
     },
     "KIP0004": {
         "explorer": "https://kip0004.kmdexplorer.io",
         "title": "2025 Consensus Upgrade",
         "categories": {
-            "KIP0003": {
+            "KIP0004": {
                 "options": [
                     {
                         "name": "No change",
                         "text": "No change to consensus mechanism - keep Proof of Work (PoW)",
-                        "votes": 0,
+                        "votes": 633158.672948,
                         "address": "RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RNoChangeXXXXXXXXXXXXXXXXXXXYRvSwz.png",
                         "utxos": []
@@ -2605,7 +3122,7 @@
                     {
                         "name": "PoS",
                         "text": "Change PoW to Proof of Stake",
-                        "votes": 0,
+                        "votes": 13022611.385747,
                         "address": "RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RStakeXXXXXXXXXXXXXXXXXXXXXXWvVS8u.png",
                         "utxos": []
@@ -2613,7 +3130,7 @@
                     {
                         "name": "PoS + Masternodes",
                         "text": " Change PoW to PoS and add nodal reward component equal to 50% of block reward",
-                        "votes": 0,
+                        "votes": 6316.498947,
                         "address": "RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNStakeXXXXXXXXXXXXXXXXXXXXVWUPDF.png",
                         "utxos": []
@@ -2621,7 +3138,7 @@
                     {
                         "name": "Gridcoin v1 style PoS",
                         "text": " Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block.",
-                        "votes": 0,
+                        "votes": 476404.395166,
                         "address": "RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RGridXXXXXXXXXXXXXXXXXXXXXXXQyajqY.png",
                         "utxos": []
@@ -2629,7 +3146,7 @@
                     {
                         "name": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
                         "text": "Change PoW to PoS based on Gridcoin system; allowing consumer hardware to crunch solutions to scientific problems and receive a reward upon staking a block and add nodal reward component equal to 50% of block reward.",
-                        "votes": 0,
+                        "votes": 31906.862955,
                         "address": "RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z",
                         "qr_code": "https://raw.githubusercontent.com/smk762/fast_api_template/vote/src/qrcodes/RMNGridXXXXXXXXXXXXXXXXXXXXXpyzf3Z.png",
                         "utxos": []
@@ -2641,19 +3158,1644 @@
         "airdrop_at": 1713700800,
         "starts_at": 1713700800,
         "ends_at": 1714780799,
+        "overtime_ended_at": 1714830046,
+        "first_overtime_block": {
+            "height": 41036,
+            "hash": "03d3f2e3b0f8c41a3db7bd9a2e113e65c94b93e34a1388bddc273b1a1042b109",
+            "time": 1714780802
+        },
+        "results_official": null,
+        "final_ntx_block": {
+            "height": 41044,
+            "hash": "03fc5dc3f9a783d493626e74af0abf9a964cbc011341431812166c44e5de7536",
+            "time": 1714781190
+        },
+        "current_block": {
+            "height": 95843,
+            "hash": "01b520c2f1d7b20121b315736e5b61c88d3038b35bd7908bac0db340868d310a",
+            "time": 1718588961
+        },
+        "updated_time": 1718590108,
+        "status": "historical",
+        "recent_votes": [
+            {
+                "txid": "ac7c47b56ff368c50d27b4dad927d8d45f155000b4aad098098331dca56fe094",
+                "amount": 76787.44999673,
+                "height": 40990,
+                "time": 1714777626,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "baf96e7d3652980c117d3b9a8d6b413a832615ad5c15b977f6432580b9c88707",
+                "amount": 6803.70218866,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "d1bda5f2d4d0ea2f58aa478876920684be2e0888bd2d30864182ecf424626636",
+                "amount": 29530.19114579,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "0dc4c2ef0c18e53aafc8dd932f475f272ceddd693a3d4881bfe5385e1c1b9cd2",
+                "amount": 64953.33705129,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "c7e6bc0f4c9a55c4c4a99751493584b484fbf9fe596270cd382eed528a3d8479",
+                "amount": 68747.86500684,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "6227d101aaf00172f6df70c07a2b0cba7ef926775de55fee8d779ca224e81686",
+                "amount": 32813.07262647,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "525a04dec2bcda41d5ae990e9fd6e62c622130ac5e4df61638e37ce53f5820d5",
+                "amount": 106907.34187979,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "a3c88e2feca7e4219af14a9da24d412093410246b1f33d2ad90c7a37717485d5",
+                "amount": 42264.96305748,
+                "height": 40983,
+                "time": 1714777167,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "6a2ae914bfe85b15c319a60f950e443296b78170727d3872472c2a38102699bd",
+                "amount": 11043.94381844,
+                "height": 40982,
+                "time": 1714777083,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "cf120d75599a3dd6293f425a8c7023135ce89d157448a015683ad8ee7bd2dcf1",
+                "amount": 35894.47976871,
+                "height": 40982,
+                "time": 1714777083,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "13af89290e6b5ac465ee7a9b1760a4cdc5f1e1971fddd420ea01489faff802ac",
+                "amount": 542316.0216969,
+                "height": 40977,
+                "time": 1714776759,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "80c997159e70c024561ffecae32e8a55bdc51101165dfe7994fd663789da674e",
+                "amount": 232438.63437781,
+                "height": 40774,
+                "time": 1714764810,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "6bed4e19fb1a5c343d34a87885ed6079e78820a249634fdc825913763d393aff",
+                "amount": 111923.9360314,
+                "height": 40767,
+                "time": 1714764412,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "11d24722e6e65a746e5b57b80b043e06e4479cdbf77d7fa93b828c04eb5bff1e",
+                "amount": 15.51095607,
+                "height": 40737,
+                "time": 1714762569,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "a8c07ba7a03f0c8a00285ab113b7f4360eb58542bc0d89ffbe84935f9f16fda5",
+                "amount": 17100,
+                "height": 40344,
+                "time": 1714738840,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "8dc9d5db58d37fefb64005e775a5f9784b6283a07df490db9b367d84871dce67",
+                "amount": 4189.36947659,
+                "height": 40312,
+                "time": 1714736697,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "6f369fac4213c1992d3f5654c0daffa414ae17aa0a509e453c91ef98d1def2d5",
+                "amount": 140341.99806741,
+                "height": 39877,
+                "time": 1714710834,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "be636c5965f28d8ae996a40c9c2b99da6930e38a46b1636e1d7418b25705ad26",
+                "amount": 206487.88581175,
+                "height": 38774,
+                "time": 1714644548,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "9188f05c9227e9e2693b9769b2623d9cd4fc2cc8c6d029461efae2adc9deb25e",
+                "amount": 4979.49794717,
+                "height": 38686,
+                "time": 1714639223,
+                "candidate": "PoS + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "1f197cdb47f7e7e93375b239f47ffa9b6402fa10cca9af5c11e6f54fdb42225d",
+                "amount": 15775.35298811,
+                "height": 38586,
+                "time": 1714633146,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "d1d1b8e52ce13cc85b0a858b12aba7d8c15b0813edb169a2cfeeb49057864b1c",
+                "amount": 251812.96127076,
+                "height": 34963,
+                "time": 1714415716,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "cd85dae3a90db4ba3b54572f6e56f6cc96d84ae34ae23eedcc9fc0f98f539077",
+                "amount": 11872457.99188616,
+                "height": 32197,
+                "time": 1714249086,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "8cb94592be8ee1889d942ef3e310fa535d026f94f17efe9b86e4d406cbd03325",
+                "amount": 1337,
+                "height": 30588,
+                "time": 1714152247,
+                "candidate": "PoS + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "38b7da27e0fbbb4049e8c11eb1d55d60599ba8698375d298a49d8f85e5b60f9a",
+                "amount": 836.3293606,
+                "height": 29106,
+                "time": 1714063233,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "fe1272e8d0242ac59ec910df71aad5db70f3b7107397f9674e98cfa58ee65eba",
+                "amount": 22101.07696258,
+                "height": 28945,
+                "time": 1714053825,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "fe72ef9b7060382a111a26c7b8abb93eb7324d7c50f72e86ad3e866ee078716b",
+                "amount": 10000.51020973,
+                "height": 28477,
+                "time": 1714025432,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "3d559b70185fe70744e62ed1d962b57871014bcc2e25413c8b101d25ff8025f1",
+                "amount": 526.34740956,
+                "height": 27638,
+                "time": 1713975047,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "4115f2b1df0134fff2838e7ddcfdf7fd8257d7480e20003dfbae0f4db6cd5c0f",
+                "amount": 501.13938814,
+                "height": 27465,
+                "time": 1713964831,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "d970d62dbbfdabf03256f7e0a835ede0feb21c0c713ad48e13dbaaa0cf74bd54",
+                "amount": 1.0042508,
+                "height": 26575,
+                "time": 1713911382,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "73bdc0f819a20eccadcb6ed0746283e22e9e308a9ae724c06a8a4702f08b291e",
+                "amount": 2349.99399,
+                "height": 25761,
+                "time": 1713861909,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "4aa908848b19566186404b7514b1c76831a19af2fd3b61cc1abc4bafe9d6132d",
+                "amount": 11.67925193,
+                "height": 25218,
+                "time": 1713829513,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "9d9032d12d9887014fbb3161255b34b836a9086c7e1fb17fc18de2e8e15a62f1",
+                "amount": 1904.572768,
+                "height": 25138,
+                "time": 1713824673,
+                "candidate": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "123152f44586455bf93e8eb725c91ac1d4e0fc5f5c0df7b89e195fce792ec43a",
+                "amount": 80619.84982605,
+                "height": 25004,
+                "time": 1713816661,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "172787ce46fb1a7f5201cff0fae3ea88248e7c33ab45fb638af4893a1109d215",
+                "amount": 116107.2743086,
+                "height": 24884,
+                "time": 1713809445,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "c1de12466f38827d0f4d360b3dfedde5ca90c399d01737787b5f1582d1f4b8f8",
+                "amount": 0.81098976,
+                "height": 24832,
+                "time": 1713806454,
+                "candidate": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "50eaf73c14a5c4040e74eaa15277dc4ed5a7044a15779f117c74c99db37527f6",
+                "amount": 5090.27134602,
+                "height": 24793,
+                "time": 1713803878,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "3c6e79bb2cb885a19529833c20cf8ed861d82f170d553d8ecdb1a28c01b3f6d5",
+                "amount": 205.33829717,
+                "height": 24237,
+                "time": 1713770448,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "367ba1e38174d6751d6417f5d5d37e0ef7b2bb5cfb1f4ac9d45169fb37c34b26",
+                "amount": 30001.47819752,
+                "height": 24180,
+                "time": 1713766955,
+                "candidate": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "7c9ec7845ff0c50c493d3e9dd9369e522daa23080efbba771e0252d92fbed283",
+                "amount": 2499.2531665,
+                "height": 24142,
+                "time": 1713764747,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "43ac0cef7d13a2fdd24fb8f495dbb40913976c5870842d630e518e04eed722fe",
+                "amount": 156.90823793,
+                "height": 24098,
+                "time": 1713762329,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "7999d1fd0f6f7c0313c440b66c26bcc6d8e5ae4bdf65f5d2a4e65306d8a74ebe",
+                "amount": 140.03851846,
+                "height": 23696,
+                "time": 1713738049,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "8db42185351bd9ea9d36238c180867484ca06609e15f7d194c8d664759b2e4f6",
+                "amount": 20321.42723394,
+                "height": 23252,
+                "time": 1713711268,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "1bad5ef43f1abf2921005cf271b648c7ef4352bfd015a65e092718f200fba80f",
+                "amount": 100,
+                "height": 23248,
+                "time": 1713711112,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "02ef5d6f71418e4a8ca5142c73854414b2cc9601467c04aac727fb293eef593a",
+                "amount": 0.001,
+                "height": 15979,
+                "time": 1713274305,
+                "candidate": "No change",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "02ef5d6f71418e4a8ca5142c73854414b2cc9601467c04aac727fb293eef593a",
+                "amount": 0.001,
+                "height": 15979,
+                "time": 1713274305,
+                "candidate": "PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "02ef5d6f71418e4a8ca5142c73854414b2cc9601467c04aac727fb293eef593a",
+                "amount": 0.001,
+                "height": 15979,
+                "time": 1713274305,
+                "candidate": "PoS + Masternodes",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "02ef5d6f71418e4a8ca5142c73854414b2cc9601467c04aac727fb293eef593a",
+                "amount": 0.001,
+                "height": 15979,
+                "time": 1713274305,
+                "candidate": "Gridcoin v1 style PoS",
+                "region": "KIP0004"
+            },
+            {
+                "txid": "02ef5d6f71418e4a8ca5142c73854414b2cc9601467c04aac727fb293eef593a",
+                "amount": 0.001,
+                "height": 15979,
+                "time": 1713274305,
+                "candidate": "\u201cGridcoin v1 style PoS\u201d + Masternodes",
+                "region": "KIP0004"
+            }
+        ],
+        "sum_votes": 14170397.815764,
+        "count_votes": 48,
+        "final_ntx_block_tx": "c7723f9a560af6a5a9f2b3d7faebcbf15bc16f46d05ee7c728293baedfdda4e4"
+    },
+    "VOTE2024": {
+        "explorer": "https://vote2024.explorer.lordofthechains.com",
+        "categories": {
+            "AR": {
+                "title": "Which candidates would you like to serve in the Asia / Russia region?",
+                "options": [
+                    {
+                        "address": "RKrbBiMcmNDaBkYpSja4MbaKzizay6LisW",
+                        "candidate": "decker",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/decker_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/decker/README.md",
+                        "votes": 50717.079005,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RNNFGdQtFQUa4CEeEqxF524P9putjxtb7d",
+                        "candidate": "decker2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/decker2_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/decker/README.md",
+                        "votes": 50000,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RT3PBi6wBLvUySxtykehejsVTLKgCEwbzu",
+                        "candidate": "dragonhound",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dragonhound_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dragonhound/README.md",
+                        "votes": 3046.91815,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RWVxF9QknWNonxKufWgH3QfppgoaZe5MYq",
+                        "candidate": "madmax",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/madmax_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/madmax/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RNXjviuNGLia5PAK7pesT8ENVdXtXqMGUH",
+                        "candidate": "fediakash2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/fediakash2_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/fediakash/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RDLQrPQPDK3W3L6EdGGXstyNNYFT8fVLqH",
+                        "candidate": "chmex",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/chmex_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/chmex/README.md",
+                        "votes": 0.017166,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RKCXF7EYaAJHmiyDKmubhQ88dYc7CbTZxx",
+                        "candidate": "kolo",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/kolo_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/kolo/README.md",
+                        "votes": 0.403676,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RPZYurYawfnRLdsLqHzf79KJuNicTJVVfV",
+                        "candidate": "marmarachain",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/marmarachain_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/marmarachain/README.md",
+                        "votes": 1078.532172,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RAa3D9aEbseHuZYrQYpHQk3ATHQouh1x9N",
+                        "candidate": "alien",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/alien_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/alien/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RUbzhiGcGNeY2Nffi3NfH4pfjcjmhRcAiv",
+                        "candidate": "gcharang",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/gcharang_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/gcharang/README.md",
+                        "votes": 2166.471346,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RGcGrmjSAxVYpE4ud3hBmGwDUMKnSofttf",
+                        "candidate": "gcharang2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/gcharang2_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/gcharang/README.md",
+                        "votes": 76.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RXbwWvgd3RoMVmxwvHqBMDPTt33CxN6nzP",
+                        "candidate": "theerbeen",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/theerbeen_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/theerbeen/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "REtjHDh1fTBpovuo33eX7Nv8WymtEwfpGi",
+                        "candidate": "tonyl",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/tonyl_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/tonyl/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RJnyuKnkcUHgV35zny8eLyjWBqw8xeXL4v",
+                        "candidate": "dimxy",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dimxy_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dimxy/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RNFXanBgn2pYmiQo1eyJCQQEgDLFPhMKA7",
+                        "candidate": "dragonhound2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dragonhound2_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dragonhound/README.md",
+                        "votes": 3254.590807,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RV6MDNZ6t3zJWhvgyZTJfzMj55LBiMsmJM",
+                        "candidate": "who-biz",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/who-biz_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/who-biz/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RE1NaK7Bp5Xy127nbFLmu4QVxPPnQkoe4h",
+                        "candidate": "cipi",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/cipi_AR.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/cipi/README.md",
+                        "votes": 54.988213,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    }
+                ]
+            },
+            "EU": {
+                "title": "Which candidates would you like to serve in the Europe region?",
+                "options": [
+                    {
+                        "address": "RTj2SYWR7AM5fGN1RHSatpnmHSwyNsvz1p",
+                        "candidate": "dragonhound",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dragonhound_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dragonhound/README.md",
+                        "votes": 11681.888194,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RTNoubB1yEx6mG7eNzaZv6TQVUbowamKAv",
+                        "candidate": "decker",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/decker_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/decker/README.md",
+                        "votes": 50000,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RSMDNNEUvCRii6ebwJJRt2D1zucW4Sf5M9",
+                        "candidate": "smdmitry2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/smdmitry2_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/smdmitry/README.md",
+                        "votes": 125.919129,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RJvm1a6SoGfjS6WDobLTPJEjHrAFHv7md1",
+                        "candidate": "fediakash",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/fediakash_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/fediakash/README.md",
+                        "votes": 0.22723,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RTVKa9Dqa1bfzLDCSUo5zmfHFZBZyr3ftW",
+                        "candidate": "chmex",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/chmex_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/chmex/README.md",
+                        "votes": 0.03327,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RYa7pC7dNLejeu5q2Kst7Mef1VBTEoqiMD",
+                        "candidate": "marmarachain",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/marmarachain_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/marmarachain/README.md",
+                        "votes": 1076.416147,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "REgjTtTYS8PRBnAUBUDLYXZDLbf4L5EdzX",
+                        "candidate": "alien",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/alien_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/alien/README.md",
+                        "votes": 76.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RFzsR6zF1QUixxJqz7fjpVgRpeVa4AhGSB",
+                        "candidate": "pbca26",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/pbca26_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/pbca26/README.md",
+                        "votes": 0.211304,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RRWV31MTaEnddDjSzonSLMXVSqEWkPBHX1",
+                        "candidate": "colmapol",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/colmapol_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/colmapol/README.md",
+                        "votes": 370220.430349,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "R9Pyw4ZHRJsvLe62azkj2ie7wXqRUHLfeL",
+                        "candidate": "onur-ozkan",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/onur-ozkan_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/onur-ozkan/README.md",
+                        "votes": 76.2,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RQsKCs2pRLe1j1evDK32tAHdR1mcMHg3o6",
+                        "candidate": "tonyl",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/tonyl_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/tonyl/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RGocYAr1f8ygMPA6gz2SxhfNkTjK2PWmNq",
+                        "candidate": "batman",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/batman_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/batman/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RTMSZ28BvFvy9eGE8FTSstX1APXMXimXdN",
+                        "candidate": "cipi",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/cipi_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/cipi/README.md",
+                        "votes": 42.326494,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RM4YM5gPfP3ooueQxSpyv5cL7hp6xpaBik",
+                        "candidate": "cipi2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/cipi2_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/cipi/README.md",
+                        "votes": 47.470734,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RQDjqo9W3b744cujYWyCwqiwZsLjDy5wZq",
+                        "candidate": "kmdude",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/kmdude_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/kmdude/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "TBA",
+                        "candidate": "ca333",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/ca333_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/ca333/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": []
+                    },
+                    {
+                        "address": "RGHcUzknR6JSUzdtxjMZWDEZ2v65air8MB",
+                        "candidate": "naezith",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/naezith_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/naezith/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RAGTPcaNh3DRmsckA1ugSJZdo64jXGn8jo",
+                        "candidate": "mx222",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/mx222_EU.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/mx222/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    }
+                ]
+            },
+            "NA": {
+                "title": "Which candidates would you like to serve in the North America region?",
+                "options": [
+                    {
+                        "address": "RKpigLeT5rgXy31yubpgWcJ91i1TZbZg5h",
+                        "candidate": "dragonhound",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dragonhound_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dragonhound/README.md",
+                        "votes": 3009.892316,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RSMDNAqCKFZKyVAbr1Bm3qh3mcB13E6rzU",
+                        "candidate": "smdmitry",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/smdmitry_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/smdmitry/README.md",
+                        "votes": 0.21175,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RLr5mRgJhm5C55Cbf6BLHwkRNXvWGYDMjD",
+                        "candidate": "fediakash",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/fediakash_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/fediakash/README.md",
+                        "votes": 0.21175,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RStrobNmEspEAgB8Jtt6ncK8tCWcGm77na",
+                        "candidate": "strob",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/strob_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/strob/README.md",
+                        "votes": 0.31997,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RMKfy7zjSvvKgC7tQReYrRSFfEFFGkZkFc",
+                        "candidate": "chmex",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/chmex_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/chmex/README.md",
+                        "votes": 3992.519969,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RRtcwQxK3VodVxnEikFsq8VEMZHS4pNK1u",
+                        "candidate": "mario",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/mario_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/mario/README.md",
+                        "votes": 64.170358,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "REW3bSxqRxnezXLKoW1X8EfrzWgzxEMRgF",
+                        "candidate": "pbca26",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/pbca26_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/pbca26/README.md",
+                        "votes": 0.129454,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RSP8FSK2fcgmRjEhjRJg7nJ9uaxNwsmWBx",
+                        "candidate": "onur-ozkan",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/onur-ozkan_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/onur-ozkan/README.md",
+                        "votes": 586.5903,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RKPfsdqTYXLPpW2XXbx5kExoT7JUs2pijG",
+                        "candidate": "mcrypt",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/mcrypt_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/mcrypt/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RGwD7zbY5sbpnpbShwY61vCPWPV4vs6cuE",
+                        "candidate": "tonyl",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/tonyl_NA.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/tonyl/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    }
+                ]
+            },
+            "SH": {
+                "title": "Which candidates would you like to serve in the Southern Hemisphere region?",
+                "options": [
+                    {
+                        "address": "RWLtG5n97g5dJFvn9zhxU7QBvTmJ2BqKyw",
+                        "candidate": "decker",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/decker_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/decker/README.md",
+                        "votes": 50000,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RSMDSHtX6f26fsi9dPY4WdCoF9zJygYLoE",
+                        "candidate": "smdmitry2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/smdmitry2_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/smdmitry/README.md",
+                        "votes": 186.075408,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RT4YEVxV1ZibzjqeNP3dpW35vV3RXyXMAK",
+                        "candidate": "fediakash",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/fediakash_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/fediakash/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RStrobSH68ke1eFmxNehVuJczTEpFX3C4f",
+                        "candidate": "strob",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/strob_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/strob/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RRQHGqgKivuwvWgeWAvTnGg5VJr1aWNRx5",
+                        "candidate": "artist",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/artist_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/artist/README.md",
+                        "votes": 76.2,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RQxfyScivdSERChE2vYT9oFA7dWQzzPR4K",
+                        "candidate": "chmex",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/chmex_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/chmex/README.md",
+                        "votes": 4615.184074,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RYJV8pCtv4wtsvwFhLm1tn7hW3KDv9gcjR",
+                        "candidate": "chmexvet",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/chmexvet_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/chmex/README.md",
+                        "votes": 76.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RYKWAWuAcTgpP3TwgfXhjjedju2YXtmTYy",
+                        "candidate": "pbca26",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/pbca26_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/pbca26/README.md",
+                        "votes": 0.19998,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RJMeGKJtG58zJyfRyRk5uzEqoQENdiBHhn",
+                        "candidate": "dragonhound",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/dragonhound_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/dragonhound/README.md",
+                        "votes": 3033.83822,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RTWgfK47pbhyHWcqEMQUyEK6dtf7VpBYYB",
+                        "candidate": "gcharang",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/gcharang_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/gcharang/README.md",
+                        "votes": 3076.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RGcGUdBQnwXhicMFNRr6Cmdpv4t7z8YK9F",
+                        "candidate": "gcharang2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/gcharang2_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/gcharang/README.md",
+                        "votes": 76.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RJ99jW6q1HS6Hb81SVN6QreryCb16ETo42",
+                        "candidate": "ptyx",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/ptyx_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/ptyx/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RFCL229ZpA8rTZC6QBnHL5ztHULABwWDFV",
+                        "candidate": "francois",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/francois_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/francois/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RGcGUdBQnwXhicMFNRr6Cmdpv4t7z8YK9F",
+                        "candidate": "gcharang2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/gcharang2_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/gcharang/README.md",
+                        "votes": 76.2,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RJ99jW6q1HS6Hb81SVN6QreryCb16ETo42",
+                        "candidate": "ptyx",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/ptyx_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/ptyx/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RFCL229ZpA8rTZC6QBnHL5ztHULABwWDFV",
+                        "candidate": "francois",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/francois_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/francois/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RT6ftBsPBPCwErGSti35hLJuzWLEyH3RK4",
+                        "candidate": "mcrypt",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/mcrypt_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/mcrypt/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RRqTDgBX3hhKh4JdYFzTcmxegA5n7GQeW7",
+                        "candidate": "shamardy",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/shamardy_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/shamardy/README.md",
+                        "votes": 67.049536,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "R9hH4fEW9Xy8kxSQF7GQQKJ3SDy1Qy3auQ",
+                        "candidate": "shin-ra77",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/shin-ra77_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/shin-ra77/README.md",
+                        "votes": 0,
+                        "veteran": false,
+                        "testnet": [],
+                        "utxos": []
+                    },
+                    {
+                        "address": "RStrobARDwHKBDntCa2Ko6oi91n4YMpgSB",
+                        "candidate": "strob2",
+                        "qr_code": "https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season8/qr_codes/strob2_SH.png",
+                        "text": "https://github.com/KomodoPlatform/NotaryNodes/tree/master/season8/candidates/strob/README.md",
+                        "votes": 0,
+                        "veteran": true,
+                        "testnet": [],
+                        "utxos": []
+                    }
+                ]
+            }
+        },
+        "snapshot_at": 1717199999,
+        "airdrop_at": 1717804799,
+        "airdropped_supply": 149826699,
+        "starts_at": 1718409599,
+        "ends_at": 1719878399,
+        "results_official": false,
         "overtime_ended_at": null,
         "first_overtime_block": null,
-        "results_official": null,
         "final_ntx_block": null,
         "current_block": {
-            "height": 14511,
-            "hash": "0cbcbde3f0f4c207f289d132f7ae5cc38970e4d2d635bd98ac36928c243fec98",
-            "time": 1713186237
+            "height": 59250,
+            "hash": "02b61e623b4a508bf14337e6986dc3dd6c71b084cd7dae632d32180e668c2340",
+            "time": 1718590154
         },
-        "updated_time": 1713186215,
-        "status": "new",
-        "recent_votes": [],
-        "sum_votes": 0,
-        "count_votes": 0
+        "updated_time": 1718590108,
+        "status": "",
+        "extra_info": {
+            "last_season_winners": {
+                "AR": {
+                    "1": "Smdmitry",
+                    "2": "Fediakash",
+                    "3": "Smdmitry2",
+                    "4": "Blackice",
+                    "5": "Blackice2"
+                },
+                "EU": {
+                    "1": "Smdmitry",
+                    "2": "Alien",
+                    "3": "Van",
+                    "4": "Chmex",
+                    "5": "Computergenie"
+                },
+                "NA": {
+                    "1": "Alienx",
+                    "2": "Alien",
+                    "3": "Blackice",
+                    "4": "Chmex",
+                    "5": "Who-biz"
+                },
+                "SH": {
+                    "1": "Kmdude",
+                    "2": "Smdmitry",
+                    "3": "Alien",
+                    "4": "Sheeba",
+                    "5": "Sheeba2"
+                }
+            }
+        },
+        "recent_votes": [
+            {
+                "txid": "6dde2cd29844e3e7cf09cbf0cef2345e87e9c8992b41ccf0f204fded14a87416",
+                "amount": 2090.27134602,
+                "height": 53946,
+                "time": 1718271727,
+                "candidate": "gcharang",
+                "region": "AR"
+            },
+            {
+                "txid": "150bf08b272a412206894abdd779fab5cc747ccea7ecbd30d33ee830fa3af5ba",
+                "amount": 3000,
+                "height": 53946,
+                "time": 1718271727,
+                "candidate": "gcharang",
+                "region": "SH"
+            },
+            {
+                "txid": "a250690f0678210bc70d969195151a28e49255dcd8c2e8614ab7c8f86ca04ca6",
+                "amount": 0.19998,
+                "height": 53883,
+                "time": 1718267930,
+                "candidate": "pbca26",
+                "region": "SH"
+            },
+            {
+                "txid": "14a3a981bdf75d6fe495005ea747b166c16cd83f71ffdb0a2e4178e9816506f9",
+                "amount": 0.12945359,
+                "height": 53882,
+                "time": 1718267900,
+                "candidate": "pbca26",
+                "region": "NA"
+            },
+            {
+                "txid": "9fcb31af7e0fc685cacfc4502668e8de33f832380c51cbc584c7ecd3f2bfb311",
+                "amount": 0.01716626,
+                "height": 53836,
+                "time": 1718265292,
+                "candidate": "chmex",
+                "region": "AR"
+            },
+            {
+                "txid": "c1c109ed3972106c004f589bf514a5db81ce80c24ff964e26a435b04ab780149",
+                "amount": 1004.10823595,
+                "height": 53833,
+                "time": 1718265090,
+                "candidate": "dragonhound2",
+                "region": "AR"
+            },
+            {
+                "txid": "10727dcc7ad3af42607b4226d03365e2f135bcf0e351ccb1842559822d8484c3",
+                "amount": 0.22722987,
+                "height": 53830,
+                "time": 1718264922,
+                "candidate": "fediakash",
+                "region": "EU"
+            },
+            {
+                "txid": "139d32e66878622b3f3546804a5e957a2be14fd0bb2efe9b174edb3a913110c3",
+                "amount": 8673.76332078,
+                "height": 53826,
+                "time": 1718264627,
+                "candidate": "dragonhound",
+                "region": "EU"
+            },
+            {
+                "txid": "4ff7c66f84383ce4941ad01c39274978b7036cb245972e30e5fcf55e89bf0fcf",
+                "amount": 77.69999,
+                "height": 53823,
+                "time": 1718264487,
+                "candidate": "dragonhound",
+                "region": "AR"
+            },
+            {
+                "txid": "1ae7e2f06471becf4966133ba7f8f00a4080c018aac086321dc9a980b013b48c",
+                "amount": 0.21130394,
+                "height": 53820,
+                "time": 1718264333,
+                "candidate": "pbca26",
+                "region": "EU"
+            },
+            {
+                "txid": "48ed9599628646b931a479fcb8f0c3bbb94b48e7e2e9103e37da7c7a1d2c82f9",
+                "amount": 49.99999,
+                "height": 53819,
+                "time": 1718264301,
+                "candidate": "dragonhound",
+                "region": "SH"
+            },
+            {
+                "txid": "a67003e8f5e17778601aceb79d581fbd22d8a1dc2b307b6d22e6cf9ec5518618",
+                "amount": 0.21174975,
+                "height": 53818,
+                "time": 1718264247,
+                "candidate": "fediakash",
+                "region": "NA"
+            },
+            {
+                "txid": "c8df005d35eb55728e107a7a3f875ccc7ef6e08970226606d004f6159850e8d9",
+                "amount": 0.21174975,
+                "height": 53816,
+                "time": 1718263997,
+                "candidate": "smdmitry",
+                "region": "NA"
+            },
+            {
+                "txid": "43f9ec0c532beb21e61a51d4f6637fe6838a370960885000671568b64fb8ba9a",
+                "amount": 0.03327,
+                "height": 53799,
+                "time": 1718262702,
+                "candidate": "chmex",
+                "region": "EU"
+            },
+            {
+                "txid": "ef6500dc6872a94a8ac9f5d80f2f27838d76c87c31d64289cf95b454b7fde77e",
+                "amount": 202.19999,
+                "height": 53792,
+                "time": 1718262354,
+                "candidate": "dragonhound2",
+                "region": "AR"
+            },
+            {
+                "txid": "2020ef3e128051b8bdd3f3d7942ebad554c4a3a4fcdbcdac795f1bd3344a0f18",
+                "amount": 4.99999,
+                "height": 53771,
+                "time": 1718261340,
+                "candidate": "dragonhound2",
+                "region": "AR"
+            },
+            {
+                "txid": "a2747a4ed7b3693e42df355140cc24fe5195997d69603578e46fbeb100882610",
+                "amount": 25.98209333,
+                "height": 53767,
+                "time": 1718260950,
+                "candidate": "dragonhound",
+                "region": "EU"
+            },
+            {
+                "txid": "2c8b6d0d0db46c7511a1556aea5ebf5f6173e6f90985660b20cc55f075c7f4d2",
+                "amount": 431.67351487,
+                "height": 53753,
+                "time": 1718259990,
+                "candidate": "dragonhound2",
+                "region": "AR"
+            },
+            {
+                "txid": "6a597749562a6f54a67611e683ead4a3518419fc333eace9becd804bbd5afa68",
+                "amount": 0.31997,
+                "height": 53738,
+                "time": 1718259184,
+                "candidate": "strob",
+                "region": "NA"
+            },
+            {
+                "txid": "21153fa28ed1107583cb5bf6b481011881b21e3b318eb262c667b4a4103d130f",
+                "amount": 2472.66289631,
+                "height": 53733,
+                "time": 1718258978,
+                "candidate": "dragonhound",
+                "region": "NA"
+            },
+            {
+                "txid": "60f5c20fb905011ce1b36c2e6b17e8f270e69f5017d7fd6640203898ccf45c65",
+                "amount": 76.2,
+                "height": 53730,
+                "time": 1718258800,
+                "candidate": "alien",
+                "region": "EU"
+            },
+            {
+                "txid": "bb6d13ca8b0bf85cca6837d80e9d7527b0c20a305ffa7eb282e2d2982fc627ea",
+                "amount": 76.2,
+                "height": 53729,
+                "time": 1718258768,
+                "candidate": "onur-ozkan",
+                "region": "EU"
+            },
+            {
+                "txid": "9da3c8c571105be792dd43970305898c01582900d072b3644df872b8fa8d5fc8",
+                "amount": 76.2,
+                "height": 53729,
+                "time": 1718258768,
+                "candidate": "chmexvet",
+                "region": "SH"
+            },
+            {
+                "txid": "0ab6c286ee67b547719afbcd43dabcc8aff1fe661a91e4aa7dea552d86176423",
+                "amount": 76.2,
+                "height": 53728,
+                "time": 1718258686,
+                "candidate": "gcharang",
+                "region": "AR"
+            },
+            {
+                "txid": "57cf633cab10efb82d7404afca82f15f43f0663a2193b4283da64cb379d25a56",
+                "amount": 76.2,
+                "height": 53728,
+                "time": 1718258686,
+                "candidate": "gcharang2",
+                "region": "AR"
+            },
+            {
+                "txid": "6c768207601537f042ad1b4227cdd2b2b002a8df673fd512f6f1b9df1e36322c",
+                "amount": 76.2,
+                "height": 53727,
+                "time": 1718258650,
+                "candidate": "gcharang",
+                "region": "SH"
+            },
+            {
+                "txid": "f6d737a291354b7099f1695816da60d34e347ce91a91685b714eab0069785a70",
+                "amount": 76.2,
+                "height": 53727,
+                "time": 1718258650,
+                "candidate": "gcharang2",
+                "region": "SH"
+            },
+            {
+                "txid": "c8a0104551cf577eb412654b8e50750a697b5ab38686c1dd1ebb24d9d816c8ee",
+                "amount": 64.17035795,
+                "height": 53726,
+                "time": 1718258618,
+                "candidate": "mario",
+                "region": "NA"
+            },
+            {
+                "txid": "adaba10a9e6ed778317a200672e0ff42d7f128ca3a8fec71c86666fc44f60936",
+                "amount": 76.2,
+                "height": 53726,
+                "time": 1718258618,
+                "candidate": "artist",
+                "region": "SH"
+            },
+            {
+                "txid": "4a9119860b29e1487652757a27d74467f5f6a555365cf38d2c9cd6588b14768a",
+                "amount": 1611.60907588,
+                "height": 53723,
+                "time": 1718258308,
+                "candidate": "dragonhound2",
+                "region": "AR"
+            },
+            {
+                "txid": "89d97d9bd62dd1fd219202c8f3e20c150eb11b852dcc9d4c43e286c07ac7b1c6",
+                "amount": 537.22942,
+                "height": 53717,
+                "time": 1718257845,
+                "candidate": "dragonhound",
+                "region": "NA"
+            },
+            {
+                "txid": "ee957880e6c4bcaa3aba313de5997e96d92da4451a79aa4bcb000e0c53e22e41",
+                "amount": 2983.83823,
+                "height": 53716,
+                "time": 1718257791,
+                "candidate": "dragonhound",
+                "region": "SH"
+            },
+            {
+                "txid": "bfebf4db28bca7dde6456e7e02e52ab630f7622caa8a1d8dea88e0ffce6041dc",
+                "amount": 2969.21816,
+                "height": 53715,
+                "time": 1718257761,
+                "candidate": "dragonhound",
+                "region": "AR"
+            },
+            {
+                "txid": "8fd88fae7b02d6f4f4d88a5409ca6ff62e898c97ca09bad6c86142144ed38fba",
+                "amount": 2977.16738,
+                "height": 53713,
+                "time": 1718257573,
+                "candidate": "dragonhound",
+                "region": "EU"
+            },
+            {
+                "txid": "ded008f81a3738b071c8098d4209fb2e58fd67ba55efdc83cecd689afcd2ab41",
+                "amount": 50000,
+                "height": 51575,
+                "time": 1718129294,
+                "candidate": "decker",
+                "region": "EU"
+            },
+            {
+                "txid": "ef8dd41c09b428d80aa79e2730f95cab19f3d14c28010759cf11f6ff9c340b43",
+                "amount": 50000,
+                "height": 51575,
+                "time": 1718129294,
+                "candidate": "decker",
+                "region": "SH"
+            },
+            {
+                "txid": "ef73d8fc048a3173e8684f1f70f5fa864dde0acc532955d7f66a3a4d5fa7f2f1",
+                "amount": 50000,
+                "height": 51574,
+                "time": 1718129254,
+                "candidate": "decker",
+                "region": "AR"
+            },
+            {
+                "txid": "33caf322bc0a0af687eb5c5552c311b6fff5a1d6d95f8b3dd4488ea28a42426a",
+                "amount": 50000,
+                "height": 51574,
+                "time": 1718129254,
+                "candidate": "decker2",
+                "region": "AR"
+            },
+            {
+                "txid": "0717321908f7fa9297a03f576834e36e282c348b0922fe503ccf7d98bf494807",
+                "amount": 717.0790046,
+                "height": 46100,
+                "time": 1717801235,
+                "candidate": "decker",
+                "region": "AR"
+            },
+            {
+                "txid": "5790a6764dd7780f79b4c91df4e69a2515a36e126aca17c6bff822eb675f49ce",
+                "amount": 0.40367581,
+                "height": 45912,
+                "time": 1717790349,
+                "candidate": "kolo",
+                "region": "AR"
+            },
+            {
+                "txid": "ca8d94f2b56f281949eba32c268f856a3d006dc0fd95522d38003153006b81cb",
+                "amount": 4.97539999,
+                "height": 45886,
+                "time": 1717788877,
+                "candidate": "dragonhound",
+                "region": "EU"
+            },
+            {
+                "txid": "99b2550222e1c764ca0d5cee40bf21969a38fd20a0b32ea5513e31a3126acb82",
+                "amount": 54.21043526,
+                "height": 45881,
+                "time": 1717788595,
+                "candidate": "cipi",
+                "region": "AR"
+            },
+            {
+                "txid": "802023ad5277a27ab8c0971915bfb58355264d483eba49b7cb7273bcc13204a5",
+                "amount": 41.54871588,
+                "height": 45881,
+                "time": 1717788595,
+                "candidate": "cipi",
+                "region": "EU"
+            },
+            {
+                "txid": "565fdbb118257353ee855e68d0041d4cda0722a0cd8cf9d36a48e274b89889c5",
+                "amount": 47.47073372,
+                "height": 45881,
+                "time": 1717788595,
+                "candidate": "cipi2",
+                "region": "EU"
+            },
+            {
+                "txid": "236e6a6466be0d844dd013f9e5270c795817cb122ad2becee78bc150412da75c",
+                "amount": 41.64801906,
+                "height": 45881,
+                "time": 1717788595,
+                "candidate": "cipi",
+                "region": "NA"
+            },
+            {
+                "txid": "af05180b38b75fb23fd3078cb265f93f21cd7993afae5f22b25abe23e9c4b538",
+                "amount": 67.04953589,
+                "height": 45881,
+                "time": 1717788595,
+                "candidate": "shamardy",
+                "region": "SH"
+            },
+            {
+                "txid": "c8d195b79cb7486f431af51bf167694a4974d8fcc80a6e57bb262ea448b274de",
+                "amount": 125.14135084,
+                "height": 45880,
+                "time": 1717788470,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "e102262ffb9c6ada3253b69867d8f780e4ab1426836cca55666f6585a7ba102e",
+                "amount": 186.0754078,
+                "height": 45880,
+                "time": 1717788470,
+                "candidate": "smdmitry2",
+                "region": "SH"
+            },
+            {
+                "txid": "5ddd42f426c1f9ea52345140a6f5b814b3d70b01c6c2e7985b3f51a14bb68475",
+                "amount": 1077.75439423,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "marmarachain",
+                "region": "AR"
+            },
+            {
+                "txid": "b75236772f04a5e8db6f592d8d7f0d813cd794b9f902631500428b2502a00641",
+                "amount": 1075.63836891,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "marmarachain",
+                "region": "EU"
+            },
+            {
+                "txid": "262a0e861fc7b8d7b12ab41e657bb9382d829527680cfe4d17808aa477577ebd",
+                "amount": 370220.43034868,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "colmapol",
+                "region": "EU"
+            },
+            {
+                "txid": "cfa22722e23b53503fdb3726afe7e5621b94a28e15dc5ffe319293de61873d77",
+                "amount": 3991.74219114,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "chmex",
+                "region": "NA"
+            },
+            {
+                "txid": "d43cb03cbd6a7e05217f2b27e4c5f248241b80dd38acf0c2ab325d5ef3dc7dc5",
+                "amount": 4614.40629614,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "chmex",
+                "region": "SH"
+            },
+            {
+                "txid": "bea5f22187b35e5a9dc4ac7ae8beb6baa5b74ef77f0f2a5f16463ce8fd3e3460",
+                "amount": 585.81252234,
+                "height": 45879,
+                "time": 1717788350,
+                "candidate": "onur-ozkan",
+                "region": "NA"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            },
+            {
+                "txid": "cf638b83aabe82563e9f4cd21a0282302ff47f883e50ad4579bf957be5d66f48",
+                "amount": 0.77777777,
+                "height": 4,
+                "time": 1715021918,
+                "candidate": "smdmitry2",
+                "region": "EU"
+            }
+        ],
+        "sum_votes": 612646.142264,
+        "count_votes": 63,
+        "final_ntx_block_tx": ""
     }
 }

@@ -7,3 +7,4 @@ pytz==2022.7.1
 slick-bitcoinrpc==0.1.4
 segno==1.6.1
 base58==2.1.1 
+pymemcache==4.0.0

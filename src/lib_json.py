@@ -9,10 +9,11 @@ def get_jsonfile_data(filename):
         logger.warning(f"Failed to read {filename}: {e}")
         return None
 
-def write_jsonfile_data(filename, data, indent=4):
+def write_jsonfile_data(filename, data, indent=4, log=True):
     try:
         with open(filename, 'w+') as json_file:
             json.dump(data, json_file, indent=indent)
-            logger.saved(f"Updated {filename}!")
+            if log:
+                logger.saved(f"Updated {filename}!")
     except Exception as e:
         logger.warning(f"Failed to write {filename}: {e}")

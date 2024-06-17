@@ -5,7 +5,7 @@ import random
 import uvicorn
 import requests
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime as dt
 from fastapi_utils.tasks import repeat_every
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -17,6 +17,8 @@ import lib_rpc
 import const
 import lib_sqlite as db
 from lib_logger import logger
+from lib_notary_vote import update_notary_vote
+import memcached
 
 load_dotenv()
 
@@ -50,28 +52,28 @@ app = create_app()
 #    allow_headers=["*"],
 #)
 
+LOCK_FILE = False
 
 # Update poll data
 @app.on_event("startup")
 @repeat_every(seconds=20)
 def update_poll_data():
     try:
-        logger.info("Updating poll data...")
-        lib_poll.update_polls()
-        logger.info("Poll data updated!")
+        if LOCK_FILE is False:
+            logger.info("Updating poll data...")
+            lib_poll.update_polls()
+            logger.info("Poll data updated!")
     except Exception as e:
         logger.warning(f"Error in [update_poll_data]: {e}")
        
 
 # TX generator
 @app.on_event("startup")
-@repeat_every(seconds=30)
+@repeat_every(seconds=60)
 def move_chains():
     if GEN_BLOCKS:
         try:
-            polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-            if not polls:
-                polls = {}
+            polls = memcached.get_polls()
             tickers = polls.keys()
             for ticker in tickers:
                 rpc = lib_rpc.get_rpc(
@@ -87,12 +89,10 @@ def move_chains():
  
 
 @app.on_event("startup")
-@repeat_every(seconds=60)
+@repeat_every(seconds=300)
 def rpc_getinfo():
     try:
-        polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-        if not polls:
-            polls = {}
+        polls = memcached.get_polls()
         for ticker in polls:
             rpc = lib_rpc.get_rpc(
                 os.getenv("rpcuser"),
@@ -100,49 +100,39 @@ def rpc_getinfo():
                 ticker.lower(),
                 const.coin_info[ticker]["rpcport"]
             )
-            #logger.info(rpc.getinfo())
+            logger.loop(rpc.getinfo())
     except Exception as e:
         logger.warning(f"RPC (getinfo) not responding: {e}")
 
 
 @app.on_event("startup")
-@repeat_every(seconds=915)
+@repeat_every(seconds=300)
 def update_candidates():
-        try:
-            poll_data = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-            for k, v in poll_data.items():
-                if k.startswith("VOTE"):
-                    year = int(k.replace("VOTE", ""))
-                    if year == int(datetime.now().year):
-                        season = year - 2016
-                        logger.info(f"Updating candidates for {k} (season {season})")
-                        votes = {}
-                        for region in v["categories"]:
-                            if region not in votes:
-                                votes.update({region: {}})
-                            for i in v["categories"][region]["options"]:
-                                votes[region].update({i["candidate"]: i["votes"]})
-                        season_candidates = f"https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season{season}/candidates.json"
-                        candidates_data = requests.get(season_candidates).json()                    
-                        for region in candidates_data:
-                            for i in candidates_data[region]:
-                                if i["candidate"] in votes[region]:
-                                    i.update({"votes": votes[region][i["candidate"]]})
-                                else:
-                                    i.update({"votes": 0})
-                        for region in v["categories"]:
-                            v["categories"][region]["options"] = candidates_data[region]
-                        lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', poll_data)
-        except Exception as e:
-            logger.error(e)
+    # We dont need this once proposal window closes
+    return
+    LOCK_FILE = True
+    try:
+        current_year = dt.now().year
+        season = int(current_year) - 2016
+        vote_chain = f"VOTE{current_year}"
+        logger.calc(f"Updating {vote_chain} (season {season}) candidates")
+        polls = memcached.get_polls()
+        url = f"https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season{season}/candidates.json"
+        candidates = requests.get(url).json()
+        txids = db.VoteTXIDs(vote_chain)
+        logger.merge(f"Rescanning {vote_chain} Candidates")
+        txids.rescan(candidates)
+        polls = update_notary_vote(candidates, polls, vote_chain, loop=True)
+        memcached.set_polls(polls)
+    except Exception as e:
+        logger.error(e)
+    LOCK_FILE = False
 
 
 
 @app.get('/api/v3/polls_list', tags=[])
 def get_polls_v3_list():
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
+    polls = memcached.get_polls()
     statuses = lib_poll.get_polls_statuses(polls)
     return statuses
 
@@ -150,10 +140,7 @@ def get_polls_v3_list():
 @app.get("/api/v3/polls/{chain}/info", tags=[])
 def get_poll_info(chain: str):
     chain = chain.upper()
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    logger.calc(chain)
+    polls = memcached.get_polls()
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     options = polls[chain]
@@ -163,9 +150,7 @@ def get_poll_info(chain: str):
 @app.get("/api/v3/polls/{chain}/categories", tags=[])
 def get_poll_categories(chain: str):
     chain = chain.upper()
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
+    polls = memcached.get_polls()
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     categories = list(polls[chain]["categories"].keys())
@@ -175,9 +160,7 @@ def get_poll_categories(chain: str):
 @app.get("/api/v3/polls/{chain}/status", tags=[])
 def get_poll_status(chain: str):
     chain = chain.upper()
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
+    polls = memcached.get_polls()
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     statuses = lib_poll.get_polls_statuses(polls)
@@ -201,9 +184,7 @@ def get_poll_status(chain: str):
 @app.get("/api/v3/polls/{chain}/{category}/info", tags=[])
 def get_poll_category_info(chain: str, category: str):
     chain = chain.upper()
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
+    polls = memcached.get_polls()
     if chain not in polls.keys():
         return {"error": f"{chain} does not exist!"}
     if category not in polls[chain]["categories"].keys():
@@ -214,10 +195,8 @@ def get_poll_category_info(chain: str, category: str):
 @app.get("/api/v3/polls/{chain}/{category}/tally", tags=[])
 def get_poll_tally(chain: str, category: str):
     chain = chain.upper()
-    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    options = lib_poll.get_poll_options(polls_v3, chain, category)
+    polls = memcached.get_polls()
+    options = lib_poll.get_poll_options(polls, chain, category)
     tally = {}
     for option in options:
         tally.update({options[option]["address"]: options[option]["votes"]})
@@ -227,20 +206,16 @@ def get_poll_tally(chain: str, category: str):
 @app.get("/api/v3/polls/{chain}/{category}/options", tags=[])
 def get_poll_options(chain: str, category: str):
     chain = chain.upper()    
-    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    options = lib_poll.get_poll_options(polls_v3, chain, category)
+    polls = memcached.get_polls()
+    options = lib_poll.get_poll_options(polls, chain, category)
     return options
 
 
 @app.get("/api/v3/polls/{chain}/{category}/addresses", tags=[])
 def get_poll_options_addresses(chain: str, category: str):
     chain = chain.upper()
-    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    options = lib_poll.get_poll_options(polls_v3, chain, category)
+    polls = memcached.get_polls()
+    options = lib_poll.get_poll_options(polls, chain, category)
     if "error" in options: return options
     addresses = {}
     for option in options:
@@ -251,10 +226,8 @@ def get_poll_options_addresses(chain: str, category: str):
 @app.get("/api/v3/polls/{chain}/{category}/qr_codes", tags=[])
 def get_poll_options_qr_codes(chain: str, category: str):
     chain = chain.upper()
-    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    options = lib_poll.get_poll_options(polls_v3, chain, category)
+    polls = memcached.get_polls()
+    options = lib_poll.get_poll_options(polls, chain, category)
     if "error" in options: return options
     qr_codes = {}
     for option in options:
@@ -265,10 +238,8 @@ def get_poll_options_qr_codes(chain: str, category: str):
 @app.get("/api/v3/polls/{chain}/{category}/text", tags=[])
 def get_poll_options_text(chain: str, category: str):
     chain = chain.upper()
-    polls_v3 = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
-    options = lib_poll.get_poll_options(polls_v3, chain, category)
+    polls = memcached.get_polls()
+    options = lib_poll.get_poll_options(polls, chain, category)
     if "error" in options: return options
     option_text = {}
     for option in options:
@@ -278,15 +249,15 @@ def get_poll_options_text(chain: str, category: str):
 
 @app.get('/api/v3/all_polls', tags=[])
 def get_all_polls():
-    polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-    if not polls:
-        polls = {}
+    polls = memcached.get_polls()
     return polls
 
 
-@app.get('/api/v3/vetrans', tags=[])
+@app.get('/api/v3/veterans', tags=[])
 def get_all_polls():
-    return lib_poll.get_veterans()
+    data = lib_poll.get_veterans()
+    lib_json.write_jsonfile_data(f'{script_path}/veterans.json', data)
+    return data
 
 
 @app.get('/api/v3/db/{chain}/{candidate}/{region}', tags=[])

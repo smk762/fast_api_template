@@ -10,6 +10,7 @@ import lib_json
 from lib_logger import logger
 import lib_sqlite as db
 from const import coin_info
+import memcached
 
 
 script_path = os.path.realpath(os.path.dirname(__file__))
@@ -40,8 +41,16 @@ def get_poll_options(polls, ticker, category):
     return polls[ticker]["categories"][category]["options"]
 
 
+def get_candidates():
+    season = requests.get("https://stats.kmd.io/api/info/notary_season/").json()["results"].split('_')[1]
+    url = f"https://raw.githubusercontent.com/KomodoPlatform/NotaryNodes/master/season{season}/candidates.json"
+    return requests.get(url).json()
+
+
 def validate_poll_results(polls, ticker, final_block):
+    candidates = get_candidates()
     logger.calc(f'Validating poll results for {ticker}')
+    logger.calc(f'Candidates:  {candidates}')
     try:
         deltas_json = []
         rpc = lib_rpc.get_rpc(
@@ -54,10 +63,14 @@ def validate_poll_results(polls, ticker, final_block):
         explorer = coin_info[ticker]["explorer"]
         for cat in data['categories']:
             for option in data['categories'][cat]["options"]:
-                logger.calc(option)
                 addr = option['address']
-                candidate = option['candidate']
-                logger.info(f'{candidate}: {addr} ({cat})')
+                # recalc candidate and region in case of pre window close shift
+                candidate = db.get_address_owner(candidates, addr)
+                region = get_address_region(candidates, addr)
+                logger.info(f'{candidate}_{region}: {addr}')
+                if candidate not in candidates:
+                    logger.warning(f"{candidate} not in candidates!")
+                    continue
                 params = {
                     "addresses": [addr],
                     "start":1,
@@ -69,11 +82,16 @@ def validate_poll_results(polls, ticker, final_block):
                     sats += Decimal(i["satoshis"])
                 x = {
                     "candidate": candidate,
-                    "region": cat,
+                    "region": region,
                     "address": addr,
                     "votes": str(round(sats/100000000,8)),
                     "deltas": deltas
                 }
+                if ticker.startswith("VOTE"):
+                    x.update({
+                        "veteran": is_veteran(candidate),
+                        "testnet": get_testnet_ids(ticker, candidate)
+                    })
                 deltas_json.append(x)
     except Exception as e:
         logger.error(e)
@@ -85,7 +103,7 @@ def validate_poll_results(polls, ticker, final_block):
         path = f'{script_path}/vote/{ticker.replace("VOTE", "")}'
     lib_json.write_jsonfile_data(f'{path}/{ticker}_summary.json', deltas_json)
     with open(f'{script_path}/{ticker}_summary.csv', 'w') as csvfile:
-        field_names = ["candidate", "region", "address", "votes", "deltas"]
+        field_names = ["candidate", "region", "address", "votes", "deltas", "veteran", "testnet"]
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
         writer.writerows(deltas_json)
@@ -104,8 +122,10 @@ def validate_poll_results(polls, ticker, final_block):
         logger.info(f'Rescanning for {row.option}: {row.address} ({row.category})')
         for delta in i["deltas"]:
             txid = delta["txid"]
+            logger.merge(txid)
             if not is_self_send(txid, ticker, row.address, addresses, self_sent_txids):
                 tx_info = requests.get(f"{explorer}/insight-api-komodo/tx/{txid}").json()
+                logger.merge(tx_info)
                 if "blockheight" in tx_info.keys():
                     if tx_info["blockheight"] <= final_block:
                         row.txid = txid
@@ -114,7 +134,7 @@ def validate_poll_results(polls, ticker, final_block):
                         row.blocktime = tx_info["blocktime"]
                         row.insert()
     update_balances(polls, ticker, final_block)
-    lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', polls)
+    polls = memcached.set_polls(polls)
 
 
 
@@ -181,9 +201,13 @@ def get_txid_time(explorer, txid):
 
 
 def reduce_notary_name(notary):
+    if notary.startswith("0_"):
+        notary = notary.replace("0_", "")
     notary = notary.split("_")[0]
-    if notary in ["kolox", "ptyx2"]:
+    if notary in ["kolox"] or notary.endswith("2"):
         notary = notary[:-1]
+    if notary == "chmexvet":
+        notary = "chmex"
     if notary == "blackice":
         notary = "decker"
     if notary == "strobnidan":
@@ -195,12 +219,13 @@ def get_veterans():
     tenure = {}
     veterancy = {}
     season = requests.get("https://stats.kmd.io/api/info/notary_season/").json()["results"]
-    x = int(season.replace("Season_"))
+    x = int(season.replace("Season_", ""))
     for i in range(1, x + 1):
         url = f"https://stats.kmd.io/api/info/notary_nodes/?season=Season_{i}"
         data = requests.get(url).json()["results"]
         data = [reduce_notary_name(notary) for notary in data]
         data = list(set(data))
+        logger.info(data)
         for notary in data:
             if notary not in tenure:
                 tenure[notary] = 0
@@ -292,15 +317,13 @@ def update_option(option, ticker, explorer, category, poll_txid_list, addresses,
             path = f'{script_path}/kip/{ticker.replace("KIP", "")}'
         else:
             path = f'{script_path}/vote/{ticker.replace("VOTE", "")}'
-        lib_json.write_jsonfile_data(f'{path}/self_sent_txids.json', self_sent_txids)
+        # This gets written to in a loop too often, do it better.
+        lib_json.write_jsonfile_data(f'{path}/self_sent_txids.json', self_sent_txids, log=False)
         logger.info(f"Getting {ticker} votes for {candidate}")
         if final_block != 0:
             candidate_votes = db.VoteTXIDs(coin=ticker, address=address, final_block=final_block)
         else:
             candidate_votes = db.VoteTXIDs(coin=ticker, address=address)
-        candidate_recent_txids = candidate_votes.get_recent_votes()
-        candidate_recent_votes = recast_recent_votes(candidate_recent_txids)
-
         option.update({
             "votes": candidate_votes.get_sum_votes(),
             "utxos": []
@@ -312,7 +335,7 @@ def update_option(option, ticker, explorer, category, poll_txid_list, addresses,
             })
                 
     except Exception as e:
-        logger.error(f"Error in [update_option] for {ticker}: {e}")
+        logger.error(f"Error in [update_option] for {ticker} {option}: {e}")
     return option
 
 
@@ -338,8 +361,10 @@ def get_testnet_ids(ticker, candidate):
 
 def is_veteran(candidate):
     veterans = lib_json.get_jsonfile_data(f'{script_path}/veterans.json')
-    if candidate in veterans: return True
-    else: return False
+    if reduce_notary_name(candidate) in veterans:
+        return True
+    else:
+        return False
 
 
 def update_balances(polls, ticker, final_block=0):
@@ -353,6 +378,7 @@ def update_balances(polls, ticker, final_block=0):
             coin_votes = db.VoteTXIDs(ticker)
         addresses = coin_votes.get_addresses_list()
         poll_txid_list = coin_votes.get_txids_list()
+        logger.calc(f"poll_txid_list {poll_txid_list}")
         for category in polls[ticker]["categories"]:
             options = polls[ticker]["categories"][category]["options"]
             for option in options:
@@ -388,10 +414,7 @@ def recast_recent_votes(recent_txids):
 
 def update_polls():
     try:
-        
-        polls = lib_json.get_jsonfile_data(f'{script_path}/poll_config.json')
-        if not polls:
-            polls = {}
+        polls = memcached.get_polls()
         for ticker in polls:
             logger.debug(f"updating {ticker} poll")
             if ticker.startswith("KIP"):
@@ -444,6 +467,11 @@ def update_poll(polls, ticker):
                 ends_at = polls[ticker]["ends_at"]
                 logger.calc(f"{ticker} ends at {ends_at}. Tiptime is {info['tiptime']}.")
                 logger.calc(f"{ends_at - info['tiptime']} sec remaining until overtime")
+                # Uncomment this after candidate proposal window closes
+                # To repair votes cast before region swaps
+                # Then comment out again once repaired
+                # validate_poll_results(polls, ticker, blocktip) 
+                # Does not fix recent votes :/
                 if info["tiptime"] > ends_at and not polls[ticker]["first_overtime_block"]:
                     logger.info(f"Looking for first overtime block for {ticker}")
                     last_blockinfo = rpc.getblock(str(blocktip-2000))
@@ -504,7 +532,8 @@ def update_poll(polls, ticker):
                                 break
 
                 update_balances(polls, ticker, final_block)
-                lib_json.write_jsonfile_data(f'{script_path}/poll_config.json', polls)
+                memcached.set_polls(polls)
+
 
     except Exception as e:
         logger.error(f"updating {ticker} failed: {e}")

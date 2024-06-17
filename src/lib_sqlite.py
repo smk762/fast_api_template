@@ -120,7 +120,7 @@ class VoteTXIDs():
         self.option = option
         self.final_block = final_block
 
-    def get_recent_votes(self):
+    def get_recent_votes(self, limit=100):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
@@ -129,11 +129,13 @@ class VoteTXIDs():
                 constraints.append(f"blockheight <= {self.final_block}")
             if self.address:
                 constraints.append(f"address='{self.address}'")
-            sql = f"SELECT * FROM voting WHERE {' AND '.join(constraints)} ORDER BY blocktime desc LIMIT 100;"
+            sql = f"SELECT * FROM voting WHERE {' AND '.join(constraints)} ORDER BY blocktime desc LIMIT {limit};"
+            logger.loop(sql)
             cursor.execute(sql)
             data = cursor.fetchall()
             try:
                 recent = [dict(i) for i in data]
+                # logger.loop(recent)
                 return recent
             except:
                 return []
@@ -211,7 +213,8 @@ class VoteTXIDs():
                 else:
                     cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND blockheight <= {self.final_block};")
                 return cursor.fetchall()
-    
+
+
     def get_txids_count(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -228,7 +231,8 @@ class VoteTXIDs():
                 return cursor.fetchone()[0]
             except:
                 return 0
-    
+
+
     def get_txids_sum(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -243,6 +247,7 @@ class VoteTXIDs():
                 cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}';")
             return cursor.fetchone()[0]
 
+
     def get_txids_before(self, blockheight):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -256,7 +261,8 @@ class VoteTXIDs():
             else:
                 cursor.execute(f"SELECT * FROM voting WHERE coin='{self.coin}' AND blockheight < {blockheight};")
             return cursor.fetchall()
-    
+
+
     def get_txids_count_before(self, blockheight):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -270,7 +276,8 @@ class VoteTXIDs():
             else:
                 cursor.execute(f"SELECT COUNT(txid) FROM voting WHERE coin='{self.coin}' AND blockheight < {blockheight};")
             return cursor.fetchone()[0]
-    
+
+
     def get_txids_sum_before(self, blockheight):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -284,14 +291,16 @@ class VoteTXIDs():
             else:
                 cursor.execute(f"SELECT SUM(amount) FROM voting WHERE coin='{self.coin}' AND blockheight < {blockheight};")
             return cursor.fetchone()[0]
-    
+
+
     def get_sum_by_address(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             cursor.execute(f"SELECT address, SUM(amount) as votes FROM voting WHERE coin='{self.coin}' GROUP BY address;")
             return cursor.fetchall()
-    
+
+
     def get_candidate_rows(self, candidate, region):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -299,6 +308,7 @@ class VoteTXIDs():
             sql = f"SELECT * from voting WHERE coin='{self.coin}' AND category='{region}' AND option='{candidate}';"
             cursor.execute(sql)
             return cursor.fetchall()
+
 
     def get_addresses_list(self):
         with sqlite3.connect(DB_PATH) as conn:
@@ -313,6 +323,7 @@ class VoteTXIDs():
             except:
                 return []
 
+
     def get_txids_list(self):
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
@@ -324,6 +335,45 @@ class VoteTXIDs():
                 return txids
             except:
                 return []
+
+
+    def rescan(self, candidates):
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            sql = f"SELECT * from voting WHERE coin='{self.coin}';"
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            for i in data:
+                x = dict(i)
+                row = VoteRow()
+                row.coin = x['coin']
+                row.address = x['address']
+                row.txid = x['txid']
+                row.blockheight = x['blockheight']
+                row.amount = x['amount']
+                row.blocktime = x['blocktime']
+                logger.query(x)
+                address_owner = get_address_owner(candidates, x['address'])
+                region = get_address_region(candidates, x['address'])
+                row.category = region
+                row.option = address_owner
+                row.update_tx()
+                logger.loop(f"{address_owner} {region}")
+
+
+
+def get_address_owner(candidates, address):
+    for region in candidates:
+        for i in candidates[region]:
+            if i["address"] == address:
+                return i["candidate"]
+
+def get_address_region(candidates, address):
+    for region in candidates:
+        for i in candidates[region]:
+            if i["address"] == address:
+                return region
     
 
 
@@ -353,10 +403,13 @@ class VoteRow():
             # logger.warning(e)
                     
 
-    def update(self):
+    def update_tx(self):
+        if None in [self.blockheight, self.category, self.option, self.amount, self.blocktime, self.coin, self.txid]:
+            logger.warning("Not enough info to update tx!")
+            return
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
-            cursor.execute(f"UPDATE voting SET blockheight={self.blockheight}, amount={self.amount}, blocktime={self.blocktime} WHERE coin='{self.coin}' AND txid='{self.txid}';")
+            cursor.execute(f"UPDATE voting SET blockheight={self.blockheight}, category='{self.category}', option='{self.option}', amount={self.amount}, blocktime={self.blocktime} WHERE coin='{self.coin}' AND txid='{self.txid}';")
             conn.commit()
         
     def delete_txid(self):

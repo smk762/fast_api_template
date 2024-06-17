@@ -9,6 +9,7 @@ import lib_poll
 import const
 from lib_logger import logger
 
+
 script_path = os.path.realpath(os.path.dirname(__file__))
 
 def validate(poll_data, ticker):
@@ -18,6 +19,8 @@ def validate(poll_data, ticker):
         ticker.lower(),
         const.coin_info[ticker]["rpcport"]
     )
+    
+
     poll_data = lib_json.get_jsonfile_data(f"{script_path}/poll_config.json")
     final_ntx_block_height = poll_data[ticker]["final_ntx_block"]["height"]
     final_ntx_block_hash = poll_data[ticker]["final_ntx_block"]["hash"]
