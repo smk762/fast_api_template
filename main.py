@@ -72,8 +72,7 @@ def update_db():
 @repeat_every(seconds=3600)
 def update_coins_data():
     try:
-        url = "https://raw.githubusercontent.com/KomodoPlatform/coins/6914dbe31c71c9aa54851ae96350f542347f8f32/utils/coins_config_unfiltered.json"
-        # url = "https://komodoplatform.github.io/coins/utils/coins_config_unfiltered.json"
+        url = "https://komodoplatform.github.io/coins/utils/coins_config_unfiltered.json"
         data = requests.get(url).json()
         with open(f"{script_dir}/coins_config.json", "w+") as f:
             json.dump(data, f, indent=2)
@@ -113,11 +112,14 @@ def get_coins_status(coin: str = None):
                 "TCP": False,
                 "SSL": False,
                 "WSS": False,
-                "blockheight": blockheight
+                "blockheight": 0
             }})
         if result == "Passed":
             resp[_coin][protocol] = True
-            resp[_coin]["blockheight"] = blockheight
+            if blockheight > resp[_coin]["blockheight"]:
+                resp[_coin]["blockheight"] = blockheight
+            if protocol == "SSL":
+                resp[_coin]["TCP"] = True
     if coin is not None:
         resp = [i for i in resp.values() if i['coin'] == coin] 
         scan.cache(f"coins_status_{coin}_cache", resp, 60)
