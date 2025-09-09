@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import os
 import sys
+import json
 import sqlite3
 from dotenv import load_dotenv
 from datetime import timezone
 from lib_logger import logger
 import sqlite3
+import time
 
 
 script_dir = os.path.abspath( os.path.dirname( __file__ ) )
@@ -83,16 +85,17 @@ class StatusDB():
                 data['protocol'],
                 data['result'],
                 int(data['blockheight']),
-                int(data['last_connection'])
+                int(data['last_connection']),
+                json.dumps(data['contact'])
             )
             sql = f"INSERT INTO electrum_status \
-                        (coin, category, server, protocol, result, blockheight, last_connection) \
-                    VALUES (?, ?, ?, ?, ?, ?, ?) \
+                        (coin, category, server, protocol, result, blockheight, last_connection, contact) \
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?) \
                     ON CONFLICT (coin, server, protocol) DO UPDATE \
-                    SET result='{row[4]}', blockheight='{row[5]}', last_connection='{row[6]}';"
+                    SET result=excluded.result, blockheight=excluded.blockheight, last_connection=excluded.last_connection, contact=excluded.contact;"
             self.cursor.execute(sql, row)
             self.conn.commit()
-            # logger.loop(f"{row} added to database")
+            logger.loop(f"{row} added to database")
         except Exception as e:
             logger.error(f"{sql} | {e}")
 
@@ -109,22 +112,40 @@ class StatusDB():
                 data['protocol'],
                 data['result'],
                 int(data['blockheight']),
-                int(data['last_connection'])
+                int(data['last_connection']),
+                json.dumps(data['contact'])
             )
             sql = f"INSERT INTO electrum_status    \
-                        (coin, category, server, protocol, result, blockheight, last_connection) \
-                    VALUES (?, ?, ?, ?, ?, ?, ?) \
+                        (coin, category, server, protocol, result, blockheight, last_connection, contact) \
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?) \
                     ON CONFLICT (coin, server, protocol) DO UPDATE \
-                    SET result='{row[4]}';"
+                    SET result=excluded.result, contact=excluded.contact;"
             self.cursor.execute(sql, row)
             self.conn.commit()
             logger.warning(f"{row} added to database FAILED")
         except Exception as e:
             logger.error(f"{sql} | {e}")
 
+    def purge_old_rows(self, days=7):
+        try:
+            cutoff_ts = int(time.time()) - (int(days) * 86400)
+            sql = "DELETE FROM electrum_status WHERE last_connection IS NOT NULL AND last_connection > 0 AND last_connection < ?;"
+            self.cursor.execute(sql, (cutoff_ts,))
+            deleted = self.cursor.rowcount
+            self.conn.commit()
+            logger.info(f"Purged {deleted} rows older than {days} days")
+        except Exception as e:
+            logger.warning(f"{sql} | {e}")
+
     def get_electrum_status_data(self):
         sql = "SELECT * FROM electrum_status ORDER BY coin"
-        return self.cursor.execute(sql).fetchall()
+        r = self.cursor.execute(sql).fetchall()
+        resp = []
+        for i in r:
+            i = dict(i)
+            i['contact'] = json.loads(i['contact'])
+            resp.append(i)
+        return resp
 
     def create_tables(self):
         try:
@@ -137,6 +158,7 @@ class StatusDB():
                 result TEXT,                        \
                 blockheight INTEGER,                \
                 last_connection INTEGER,            \
+                contact TEXT,                       \
                 UNIQUE(coin, server, protocol));"
             self.cursor.execute(sql)
         except:
