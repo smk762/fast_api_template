@@ -13,10 +13,13 @@ class RampAPI:
         self.key = self.config.API_KEYS["RAMP_PROD"]
         self.test_url = self.config.API_URLS["RAMP"]
         self.test_key = self.config.API_KEYS["RAMP"]
-        
-    def get_headers(self, endpoint, request, payload=None):
-        return {"Content-Type": "application/json"}
+        self.headers = {"Content-Type": "application/json"}
 
+    def get_params(self, request):
+        return "&".join(
+                [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
+            )
+        
     def sendGetRequest(self, request):
         url = self.url
         key = self.key
@@ -28,19 +31,15 @@ class RampAPI:
         endpoint = request.query_params["endpoint"]
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
-        headers = self.get_headers(endpoint, request)
+            
         url = url + endpoint
-        print(url)
-        url += (
-            "?hostApiKey="
-            + key + "&"
-            + "&".join(
-                [f"{k}={v}" for k, v in request.query_params.items() if k not in ["endpoint", "is_test_mode"]]
-            )
-        )
+        url_params = self.get_params(request)
+        if endpoint not in ["/currencies"]:
+            url += "?hostApiKey=" + key + '&' + url_params
+        else:
+            url += "?" + url_params
 
-        print(url)
-        response = requests.get(url=url, headers=self.get_headers(endpoint, request))
+        response = requests.get(url=url, headers=self.headers)
         try:
             resp = response.json()
             if "message" in resp:
@@ -61,14 +60,19 @@ class RampAPI:
                 url = self.test_url
                 key = self.test_key
         endpoint = request.query_params["endpoint"]
+
+
+
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
-        url = url + endpoint + "?hostApiKey=" + key
+        url = url + endpoint
+        if endpoint not in ["/currencies"]:
+            url += "?hostApiKey=" + key
         print(url)
         response = requests.post(
             url=url,
             json=payload,
-            headers=self.get_headers(endpoint, request, payload),
+            headers=self.headers,
         )
         try:
             resp = response.json()
