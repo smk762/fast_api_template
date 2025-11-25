@@ -1,0 +1,82 @@
+
+server {
+    listen 80;
+    server_name moralis-proxy.komodo.earth;
+    location /.well-known {
+        root /home/admin/fastapi;
+    }
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+
+server {
+  listen 443 ssl;
+  root /home/admin/fastapi;
+  server_name moralis-proxy.komodo.earth;
+
+  ssl_certificate   /etc/letsencrypt/live/moralis-proxy.komodo.earth/fullchain.pem;
+  ssl_certificate_key   /etc/letsencrypt/live/moralis-proxy.komodo.earth/privkey.pem;
+
+  access_log /home/admin/logs/moralis-proxy.komodo.earth-access.log;
+  error_log  /home/admin/logs/moralis-proxy.komodo.earth-error.log;
+
+  location / {
+        limit_req zone=moralis_api burst=10 nodelay;
+        proxy_pass https://deep-index.moralis.io;
+        proxy_ssl_server_name on;
+        proxy_set_header Upgrade $http_upgrade;
+
+        proxy_set_header Host deep-index.moralis.io;
+        proxy_set_header X-Api-Key "Add your Moralis API key here";
+
+        add_header 'Access-Control-Max-Age' '3600'  always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' '*' always;
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass_request_headers      on;
+    }
+
+    location /.well-known {
+        # Note that a request for /.well-known/test.html will
+        # look for /home/admin/fastapi/.well-known/test.html
+        # and not /home/admin/fastapi/test.html
+        root /home/admin/fastapi;
+    }
+
+    location /openapi.json {
+        proxy_pass http://127.0.0.1:8000/openapi.json;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP  $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+    location /docs {
+        proxy_pass http://127.0.0.1:8000/docs;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP  $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+    location /api/blocklist/ {
+        proxy_pass http://127.0.0.1:8000/api/blocklist/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP  $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+}
+# ---
