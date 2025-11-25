@@ -12,7 +12,7 @@ config = ConfigFastAPI()
 print(config.as_dict)
 
 # https://moralisweb3.github.io/Moralis-Python-SDK/evm_api/nft.html#get_wallet_nfts
-def get_wallet_nfts(chain, address, format="decimal", limit=100, disable_total=True,
+def get_wallet_nfts(chain, address, format="decimal", limit=100,
                     token_addresses=None, cursor="", normalizeMetadata=True, media_items=True):
     if not token_addresses:
         token_addresses = []
@@ -22,13 +22,12 @@ def get_wallet_nfts(chain, address, format="decimal", limit=100, disable_total=T
         "chain": chain.lower(), 
         "format": format, 
         "limit": limit, 
-        "disable_total": disable_total, 
         "token_addresses": token_addresses, 
         "cursor": cursor, 
         "normalizeMetadata": normalizeMetadata, 
         "media_items": media_items
     }
-    print(config.MORALIS_API_KEY)
+    logger.info(params)
     result = evm_api.nft.get_wallet_nfts(
         api_key=config.MORALIS_API_KEY,
         params=params
@@ -54,7 +53,7 @@ def get_wallet_nft_transfers(chain, address, format="decimal", limit=100, disabl
         params.update({"to_block": to_block})
     if from_block:
         params.update({"from_block": from_block})
-    print(config.MORALIS_API_KEY)
+    logger.info(params)
     result = evm_api.nft.get_wallet_nft_transfers(
         api_key=config.MORALIS_API_KEY,
         params=params
@@ -76,7 +75,7 @@ def get_nft_metadata(chain, address,  token_id="", format="decimal",
         "normalizeMetadata": normalizeMetadata, 
         "media_items": media_items
     }
-    print(config.MORALIS_API_KEY)
+    logger.info(params)
     result = evm_api.nft.get_nft_metadata(
         api_key=config.MORALIS_API_KEY,
         params=params
