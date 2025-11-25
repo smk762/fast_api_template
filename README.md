@@ -1,10 +1,58 @@
-Deps:
-- `sudo apt install python3-pip`
-- `pip3 install -r requirements.txt`
+## FastAPI Electrum/EVM/Tendermint Scanner
 
-Run `python3 lib_scan.py scan` to manually scan the electrums (if API is running, this will happen ever 10 minutes).
+FastAPI service that scans Electrum, EVM, and Tendermint endpoints on a schedule, caches recent results in Memcached, and persists status to SQLite. The API exposes aggregated status for use by dashboards and tools.
 
-Run `docker compose up -d` to launch memcache.
+### Features
+- Periodic scans:
+  - Servers status every 300s
+  - Database update every 60s (writes cached results)
+  - Coins config refresh every 3600s
+- Automatic purge of rows older than 7 days at the start of each `update_db()` cycle
+- SQLite persistence (`electrum_status.db`) in repo directory
+- Memcached for short-lived caches
 
-### TODO
-Dockerise it all with poetry.
+---
+
+## Requirements
+- Python 3.10+ (tested with 3.11)
+- pip
+- Docker with Compose v2 (`docker compose`)
+
+## Setup
+1) Install Python deps
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+2) Start Memcached (required)
+```bash
+docker compose up -d memcached
+```
+
+3) Optional: configure TLS/port via `.env`
+Create a `.env` file (same directory as `main.py`) with:
+```
+SSL_KEY=/path/to/key.pem   # optional
+SSL_CERT=/path/to/cert.pem # optional
+API_PORT=8999              # default 8999
+```
+
+## Run
+```bash
+python3 main.py
+```
+The service will start on `0.0.0.0:<API_PORT>` (HTTP by default, HTTPS if `SSL_KEY` and `SSL_CERT` are provided).
+
+Memcached must be running (see Compose step above).
+
+## API Endpoints
+- `GET /api/v1/electrums_status?coin=<symbol>`: raw records per server/protocol
+- `GET /api/v1/coins_status?coin=<symbol>`: aggregated coin status (TCP/SSL/WSS, best blockheight)
+
+## Data
+- Database file: `electrum_status.db` (SQLite) in the project root
+- Rows with `last_connection` older than 7 days are purged automatically at the start of `update_db()`
+
+## Production
+See `docs/production.md` for a production-ready `docker compose` deployment, reverse proxy, backups, and operational guidance.
+
