@@ -11,3 +11,26 @@ services:
       nofile:
         soft: 65535
         hard: 65535
+  app:
+    build:
+      context: .
+    image: electrum-status-api:latest
+    container_name: electrum-status-api
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MEMCACHE_HOST=memcached
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/electrum_status.db:/app/electrum_status.db
+    depends_on:
+      - memcached
+    restart: unless-stopped
+    ports:
+      # Expose only if not behind a reverse proxy
+      - "8999:8999"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:${API_PORT:-8999}/api/v1/coins_status || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5

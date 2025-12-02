@@ -32,14 +32,20 @@ class JsonSerde(object):  # pragma: no cover
         raise Exception("Unknown serialization format")
 
 
+MEMCACHE_HOST = os.getenv("MEMCACHE_HOST", "127.0.0.1")
+MEMCACHE_PORT = int(os.getenv("MEMCACHE_PORT", "11211"))
+
 MEMCACHE = PooledClient(
-    ("127.0.0.1", 11211),
+    (MEMCACHE_HOST, MEMCACHE_PORT),
     serde=JsonSerde(),
     timeout=10,
     max_pool_size=50,
     ignore_exc=True,
 )
-MEMCACHE.flush_all()
+try:
+    MEMCACHE.flush_all()
+except Exception as exc:
+    logger.warning(f"Memcache flush failed ({MEMCACHE_HOST}:{MEMCACHE_PORT}): {exc}")
 
 def cache(key, value, expiry):
     MEMCACHE.set(key, value, expiry)

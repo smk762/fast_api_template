@@ -50,23 +50,18 @@ Create `docker-compose.prod.yml` in the project root:
 ```yaml
 services:
   app:
-    image: python:3.11-slim
+    build:
+      context: .
+    image: electrum-status-api:latest
     container_name: electrum-status-api
-    working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
+      - MEMCACHE_HOST=memcached
     env_file:
       - ./.env
     volumes:
-      # Mount the application code (read-only) and persist the SQLite DB on host
-      - ./:/app:ro
       # Persist the DB file (bind-mount a host file path)
       - ./data/electrum_status.db:/app/electrum_status.db
-    command: >
-      sh -c "
-        pip install --no-cache-dir -r requirements.txt &&
-        python3 main.py
-      "
     depends_on:
       - memcached
     restart: unless-stopped
@@ -95,34 +90,14 @@ services:
 
 Run:
 ```bash
-docker compose -f docker-compose.prod.yml up -d
+mkdir -p data
+touch data/electrum_status.db
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 Notes:
-- The SQLite DB file is bind-mounted at `./data/electrum_status.db`. Create the `data/` directory before running:
-  ```bash
-  mkdir -p data
-  ```
-- If you prefer building an immutable image, add a `Dockerfile` and switch the `app` service to `build: .`. Example `Dockerfile`:
-  ```Dockerfile
-  FROM python:3.11-slim
-  WORKDIR /app
-  COPY requirements.txt .
-  RUN pip install --no-cache-dir -r requirements.txt
-  COPY . .
-  EXPOSE 8999
-  CMD ["python3", "main.py"]
-  ```
-  Then update compose:
-  ```yaml
-  services:
-    app:
-      build: .
-      # remove the pip install from command and the code bind-mount
-      volumes:
-        - ./data/electrum_status.db:/app/electrum_status.db
-      command: ["python3", "main.py"]
-  ```
+- The SQLite DB file is bind-mounted at `./data/electrum_status.db`. Create both the directory and an empty file (Docker expects the host path to exist and match the container path type) before booting.
+- `docker compose ... --build` ensures the image is rebuilt whenever dependencies change; subsequent restarts can omit `--build` if no app changes were made.
 
 ---
 

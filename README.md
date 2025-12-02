@@ -35,6 +35,9 @@ Create a `.env` file (same directory as `main.py`) with:
 SSL_KEY=/path/to/key.pem   # optional
 SSL_CERT=/path/to/cert.pem # optional
 API_PORT=8999              # default 8999
+# Optional overrides
+# MEMCACHE_HOST=127.0.0.1
+# MEMCACHE_PORT=11211
 ```
 
 ## Run
@@ -44,6 +47,23 @@ python3 main.py
 The service will start on `0.0.0.0:<API_PORT>` (HTTP by default, HTTPS if `SSL_KEY` and `SSL_CERT` are provided).
 
 Memcached must be running (see Compose step above).
+
+## Docker Compose
+The included `docker-compose.yml` builds a slim image with dependencies baked in.
+
+```bash
+mkdir -p data
+touch data/electrum_status.db   # host file that will be bind-mounted
+docker compose up -d --build
+```
+
+The compose file injects `MEMCACHE_HOST=memcached` so the app reaches the bundled Memcached service; override via `.env` if you are pointing at an external cache.
+
+Restart without rebuilding once the image exists:
+
+```bash
+docker compose up -d
+```
 
 ## API Endpoints
 - `GET /api/v1/electrums_status?coin=<symbol>`: raw records per server/protocol
